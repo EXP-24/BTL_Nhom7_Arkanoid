@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 
+import javafx.scene.input.KeyEvent;
 import org.example.btl.game.GameManager;
 
 
@@ -21,7 +22,25 @@ public class GameController {
         gc = canvas.getGraphicsContext2D();
         gameManager = new GameManager(gc);
 
-        gameManager.renderGame();
+        canvas.setFocusTraversable(true);
+
+        canvas.setOnKeyPressed(event -> handleKeyPressed(event));
+        canvas.setOnKeyReleased(event -> handleKeyRealesed(event));
+
+        new AnimationTimer() {
+            @Override
+            public void handle(long now) {
+                gameManager.updateGame();
+                gameManager.renderGame();
+            }
+        }.start();
+    }
+
+    private void handleKeyPressed(KeyEvent event) {
+        gameManager.handleKeyPressed(event);
+    }
+    private void handleKeyRealesed(KeyEvent event) {
+        gameManager.handleKeyRealesed(event);
     }
 }
 

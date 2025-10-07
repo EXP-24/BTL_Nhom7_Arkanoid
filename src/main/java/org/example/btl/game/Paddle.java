@@ -6,7 +6,7 @@ import javafx.scene.image.Image;
 import static org.example.btl.GameApplication.maxWidth;
 
 public class Paddle extends MovableObject {
-    private double speed = 10;
+    private double speed = 3;
     private Image image;
 
     public Paddle(double x, double y, double width, double height) {
@@ -22,11 +22,11 @@ public class Paddle extends MovableObject {
     }
 
     public void moveRight() {
-        setX(getX() + speed);
-        if (getX() + getWidth() > maxWidth) {
-            setX(maxWidth - getWidth());
+        if (getX() + getWidth() < maxWidth) {
+            setX(getX() + speed);
         }
     }
+
 
     public void update() {
         move();

@@ -21,7 +21,7 @@ public class GameApplication extends Application {
         Parent root = FXMLLoader.load(getClass().getResource("/org/example/btl/Game.fxml"));
         Scene scene = new Scene(root,maxHeight, maxWidth, Color.LIGHTSKYBLUE);
 
-        Image icon = new Image("arkanoid_512.png");
+        Image icon = new Image(getClass().getResource("/org/example/btl/images/arkanoid_512.png").toExternalForm());
         stage.getIcons().add(icon);
         stage.setTitle("Arkanoid!");
         stage.setResizable(false);

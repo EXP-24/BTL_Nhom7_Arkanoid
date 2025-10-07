@@ -24,6 +24,6 @@ public class GameManager {
         objects = new ArrayList<>();
         objects.add(paddle);
         objects.add(ball);
-        renderer.renderALL(objects);
+        renderer.renderAll(objects);
     }
 }

@@ -15,7 +15,7 @@ public class Renderer {
         gc.clearRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
     }
 
-    public void renderALL(List<GameObject> objects) {
+    public void renderAll(List<GameObject> objects) {
         for (GameObject object : objects) {
             object.render(gc);
         }

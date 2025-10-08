@@ -30,7 +30,8 @@ public class GameController {
         new AnimationTimer() {
             @Override
             public void handle(long now) {
-                gameManager.updateGame();
+                gameManager.updatePaddle();
+                gameManager.updateBall();
                 gameManager.renderGame();
             }
         }.start();

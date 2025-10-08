@@ -21,7 +21,7 @@ public class GameApplication extends Application {
     public void start(Stage stage) throws IOException {
 
         Parent root = FXMLLoader.load(getClass().getResource("/org/example/btl/Game.fxml"));
-        Scene scene = new Scene(root,maxWidth, maxHeight, Color.LIGHTSKYBLUE);
+        Scene scene = new Scene(root, maxWidth, maxHeight, Color.LIGHTSKYBLUE);
 
         Image icon = new Image(getClass().getResource("/org/example/btl/images/arkanoid_512.png").toExternalForm());
         stage.getIcons().add(icon);

@@ -6,6 +6,9 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
+import static org.example.btl.GameApplication.maxHeight;
+import static org.example.btl.GameApplication.maxWidth;
+
 public class GameManager {
     private Renderer renderer;
     private Paddle paddle;
@@ -20,8 +23,8 @@ public class GameManager {
     }
 
     private void initGame() {
-        paddle = new Paddle(350, 550, 96, 32);
-        ball = new Ball(350, 526, 24, 24);
+        paddle = new Paddle(350, 550, 96, 32, 3);
+        ball = new Ball(374, 526, 24, 24, 3, -3, 3);
     }
 
     public void handleKeyPressed(KeyEvent event) {
@@ -40,13 +43,17 @@ public class GameManager {
         }
     }
 
-    public void updateGame() {
+    public void updatePaddle() {
         if (leftPressed) {
             paddle.moveLeft();
         }
         if (rightPressed) {
             paddle.moveRight();
         }
+    }
+
+    public void updateBall() {
+        ball.bounceOff();
     }
 
     public void renderGame() {

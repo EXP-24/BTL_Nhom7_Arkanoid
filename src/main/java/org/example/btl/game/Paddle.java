@@ -6,11 +6,12 @@ import javafx.scene.image.Image;
 import static org.example.btl.GameApplication.maxWidth;
 
 public class Paddle extends MovableObject {
-    private double speed = 3;
+    private double speed;
     private Image image;
 
-    public Paddle(double x, double y, double width, double height) {
+    public Paddle(double x, double y, double width, double height, double speed) {
         super(x, y, width, height);
+        this.speed = speed;
         image = new Image(getClass().getResource("/org/example/btl/images/paddle.png").toExternalForm());
     }
 

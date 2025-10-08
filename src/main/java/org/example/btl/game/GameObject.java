@@ -1,5 +1,6 @@
 package org.example.btl.game;
 
+import javafx.scene.paint.Color;
 import javafx.scene.canvas.GraphicsContext;
 
 public abstract class GameObject {

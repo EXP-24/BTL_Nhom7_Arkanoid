@@ -2,6 +2,8 @@ package org.example.btl.game;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import static org.example.btl.GameApplication.maxHeight;
+import static org.example.btl.GameApplication.maxWidth;
 
 public class Ball extends MovableObject {
 
@@ -9,6 +11,7 @@ public class Ball extends MovableObject {
     private double directionX;
     private double directionY;
     private Image image;
+    private boolean attached = true;
 
     public Ball(double x, double y, double width, double height,
                 double directionX, double directionY, double speed) {
@@ -31,12 +34,28 @@ public class Ball extends MovableObject {
         return directionY;
     }
 
-    public void bounceOff() {
+    //Kiem tra ball nam tren Paddle khong
+    public boolean isAttached() {
+        return attached;
+    }
 
+    public void setAttached(boolean attached) {
+        this.attached = attached;
+    }
+
+    //Ball va cham voi gioi han man hinh
+    public void bounceOff() {
+        if (getX() <= 0 || getX() + getWidth() >= maxWidth ) {
+            directionX *= -1;
+        }
+        if (getY() <= 0 || getY() + getHeight() >= maxHeight) {
+            directionY *= -1;
+        }
     }
 
     public void update() {
-
+        setX(getX() + directionX * speed);
+        setY(getY() + directionY * speed);
     }
 
     @Override

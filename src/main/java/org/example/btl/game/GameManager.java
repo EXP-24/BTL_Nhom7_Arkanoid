@@ -23,8 +23,8 @@ public class GameManager {
     }
 
     private void initGame() {
-        paddle = new Paddle(350, 550, 96, 32, 3);
-        ball = new Ball(374, 526, 24, 24, 3, -3, 3);
+        paddle = new Paddle(300, 550, 86, 24, 3);
+        ball = new Ball(0, 0, 16, 16, 2, -2, 1);
     }
 
     public void handleKeyPressed(KeyEvent event) {
@@ -32,6 +32,8 @@ public class GameManager {
             leftPressed = true;
         } else if (event.getCode() == KeyCode.D) {
             rightPressed = true;
+        } else if (event.getCode() == KeyCode.SPACE) {
+            ball.setAttached(false);
         }
     }
 
@@ -53,7 +55,14 @@ public class GameManager {
     }
 
     public void updateBall() {
-        ball.bounceOff();
+        if (ball.isAttached()) {
+            ball.setX(paddle.getX() + (paddle.getWidth() / 2) - ball.getWidth()/2);
+            ball.setY(paddle.getY() - ball.getHeight());
+        }
+        else {
+            ball.update();
+            ball.bounceOff();
+        }
     }
 
     public void renderGame() {

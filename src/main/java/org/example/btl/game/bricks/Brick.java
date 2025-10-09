@@ -1,3 +1,6 @@
+package org.example.btl.game.bricks;
+
+import org.example.btl.game.GameObject;
 package org.example.btl.game;
 
 import javafx.scene.canvas.GraphicsContext;

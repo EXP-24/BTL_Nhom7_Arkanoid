@@ -5,7 +5,7 @@ import java.util.List;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import org.example.btl.game.Brick;
+import org.example.btl.game.bricks.Brick;
 
 
 public class GameManager {

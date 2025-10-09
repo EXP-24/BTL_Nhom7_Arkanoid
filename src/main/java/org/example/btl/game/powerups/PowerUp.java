@@ -24,4 +24,5 @@ public abstract class PowerUp extends GameObject {
     public abstract void applyEffect(Paddle paddle);
 
     public abstract void removeEffect(Paddle paddle);
+public class PowerUp {
 }

@@ -22,3 +22,5 @@ public abstract class ExpandPaddlePowerUp extends PowerUp {
     }
 }
 
+public class ExpandPaddlePowerUp {
+}

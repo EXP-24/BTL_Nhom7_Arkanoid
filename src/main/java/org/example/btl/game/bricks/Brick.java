@@ -1,4 +1,6 @@
-package org.example.btl.game;
+package org.example.btl.game.bricks;
+
+import org.example.btl.game.GameObject;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -9,7 +11,7 @@ public class Brick extends GameObject {
 
     public Brick(double x, double y, double width, double height) {
         super(x, y, width, height);
-        loadImage("/org/example/btl/images/Brick_Blue.jpg");
+        loadImage("/org/example/btl/images/Brick_Blue.png");
     }
 
     private void loadImage(String imagePath) {
@@ -27,6 +29,9 @@ public class Brick extends GameObject {
 
     @Override
     public void render(GraphicsContext gc) {
+        if (brickImage != null) {
             gc.drawImage(brickImage, getX(), getY(), getWidth(), getHeight());
+        } else {
+        }
     }
 }

@@ -22,13 +22,8 @@ public class Ball extends MovableObject {
         image = new Image(getClass().getResource("/org/example/btl/images/ball.png").toExternalForm());
     }
 
-
     public double getSpeed() {
         return speed;
-    }
-
-    public void setSpeed(double speed) {
-        this.speed = speed;
     }
 
     public double getDirectionX() {

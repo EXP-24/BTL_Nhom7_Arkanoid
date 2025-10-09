@@ -28,6 +28,5 @@ public class Brick extends GameObject {
     @Override
     public void render(GraphicsContext gc) {
             gc.drawImage(brickImage, getX(), getY(), getWidth(), getHeight());
-
     }
 }

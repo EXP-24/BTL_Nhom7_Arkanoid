@@ -6,8 +6,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import org.example.btl.game.Brick;
-import static org.example.btl.GameApplication.maxHeight;
-import static org.example.btl.GameApplication.maxWidth;
+
 
 public class GameManager {
     private Renderer renderer;

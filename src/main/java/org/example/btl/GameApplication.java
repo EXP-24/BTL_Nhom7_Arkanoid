@@ -25,7 +25,7 @@ public class GameApplication extends Application {
                 getClass().getResource("/org/example/btl/Game.fxml"),
                 "Cannot find Game.fxml"
         );
-        
+
         Parent root = FXMLLoader.load(fxmlUrl);
         Scene scene = new Scene(root, maxWidth, maxHeight, Color.LIGHTSKYBLUE);
 

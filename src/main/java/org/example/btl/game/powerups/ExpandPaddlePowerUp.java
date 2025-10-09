@@ -21,4 +21,3 @@ public abstract class ExpandPaddlePowerUp extends PowerUp {
         paddle.setWidth((int) (paddle.getWidth() / SCALE_FACTOR));
     }
 }
-

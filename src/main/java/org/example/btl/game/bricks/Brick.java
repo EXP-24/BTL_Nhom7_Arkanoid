@@ -11,7 +11,7 @@ public class Brick extends GameObject {
 
     public Brick(double x, double y, double width, double height) {
         super(x, y, width, height);
-        loadImage("/org/example/btl/images/Brick_Blue.png");
+        loadImage("/org/example/btl/images/Brick_Blue.jpg");
     }
 
     private void loadImage(String imagePath) {
@@ -29,9 +29,6 @@ public class Brick extends GameObject {
 
     @Override
     public void render(GraphicsContext gc) {
-        if (brickImage != null) {
             gc.drawImage(brickImage, getX(), getY(), getWidth(), getHeight());
-        } else {
-        }
     }
 }

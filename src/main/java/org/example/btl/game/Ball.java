@@ -26,6 +26,10 @@ public class Ball extends MovableObject {
         return speed;
     }
 
+    public void setSpeed(double speed) {
+        this.speed = speed;
+    }
+
     public double getDirectionX() {
         return directionX;
     }

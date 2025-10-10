@@ -70,7 +70,7 @@ public class GameManager {
     public void updateBall() {
         if (ball.isAttached()) {
             ball.setX(paddle.getX() + (paddle.getWidth() / 2) - ball.getWidth()/2);
-            ball.setY(paddle.getY() - ball.getHeight());
+            ball.setY(paddle.getY() - 14);
         }
         else {
             ball.update();

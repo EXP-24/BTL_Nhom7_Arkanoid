@@ -15,6 +15,10 @@ public class Paddle extends MovableObject {
         image = new Image(getClass().getResource("/org/example/btl/images/paddle.png").toExternalForm());
     }
 
+    public void setSpeed(double speed) {
+        this.speed = speed;
+    }
+
     public void moveLeft() {
         setX(getX() - speed);
         if (getX() < 0) {
@@ -27,7 +31,6 @@ public class Paddle extends MovableObject {
             setX(getX() + speed);
         }
     }
-
 
     public void update() {
         move();

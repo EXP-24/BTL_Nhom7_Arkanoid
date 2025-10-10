@@ -22,7 +22,6 @@ public class Ball extends MovableObject {
         image = new Image(getClass().getResource("/org/example/btl/images/ball.png").toExternalForm());
     }
 
-
     public double getSpeed() {
         return speed;
     }
@@ -64,7 +63,18 @@ public class Ball extends MovableObject {
     }
 
     @Override
+
     public void render(GraphicsContext gc) {
         gc.drawImage(image, getX(), getY(), getHeight(), getWidth());
     }
+    public Ball clone() {
+        Ball copy = new Ball(getX(), getY(), getWidth(), getHeight(), directionX, directionY, speed);
+        copy.setAttached(false);
+        return copy;
+    }
+    public void setDirection(double dx, double dy) {
+        this.directionX = dx;
+        this.directionY = dy;
+    }
+
 }

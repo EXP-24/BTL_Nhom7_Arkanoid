@@ -1,31 +1,43 @@
 package org.example.btl.game;
 
+import java.io.InputStream;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import org.example.btl.game.Brick;
+import org.example.btl.game.bricks.MapBrick;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import org.example.btl.game.bricks.Brick;
 
+import static org.example.btl.GameApplication.maxHeight;
+import static org.example.btl.GameApplication.maxWidth;
 
 public class GameManager {
     private Renderer renderer;
     private Paddle paddle;
     private Ball ball;
-    private Brick brick;
+    private MapBrick map;
     private List<GameObject> objects;
     private boolean leftPressed = false;
     private boolean rightPressed = false;
 
+    private GraphicsContext gc;
+
     public GameManager(GraphicsContext gc) {
         this.renderer = new Renderer(gc);
+        this.gc = gc;
         initGame();
     }
 
     private void initGame() {
         paddle = new Paddle(300, 550, 86, 24, 3);
         ball = new Ball(0, 0, 16, 16, 2, -2, 1);
-        brick = new Brick(0, 0, 32, 16);
+        map = new MapBrick();
+        int[][] level1Layout = MapBrick.loadMap("/org/example/btl/Map/Map1.txt");
+
+        map.createMap(level1Layout);
     }
 
     public void handleKeyPressed(KeyEvent event) {
@@ -70,7 +82,9 @@ public class GameManager {
         objects = new ArrayList<>();
         objects.add(paddle);
         objects.add(ball);
-        objects.add(brick);
+        for (Brick brick : map.getBricks()) {
+            objects.add(brick);
+        }
         renderer.clear();
         renderer.renderAll(objects);
     }

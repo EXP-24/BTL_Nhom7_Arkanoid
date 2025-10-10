@@ -9,8 +9,5 @@
         <module name="BTL" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="BTL_Nhom7_Arkanoid" target="25" />
-    </bytecodeTargetLevel>
   </component>
 </project>

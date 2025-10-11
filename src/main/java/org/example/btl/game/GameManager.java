@@ -4,7 +4,10 @@ import java.io.InputStream;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+
+import javafx.scene.image.Image;
 import org.example.btl.game.Brick;
 import org.example.btl.game.bricks.MapBrick;
 import javafx.scene.canvas.GraphicsContext;
@@ -20,6 +23,7 @@ public class GameManager {
     private Ball ball;
     private MapBrick map;
     private List<GameObject> objects;
+    private Image background;
     private boolean leftPressed = false;
     private boolean rightPressed = false;
 
@@ -32,11 +36,11 @@ public class GameManager {
     }
 
     private void initGame() {
-        paddle = new Paddle(300, 550, 86, 24, 3);
-        ball = new Ball(0, 0, 16, 16, 2, -2, 1);
+        paddle = new Paddle(540, 614, 64, 24, 3);
+        ball = new Ball(0, 0, 12, 12, 2, -2, 1);
         map = new MapBrick();
         int[][] level1Layout = MapBrick.loadMap("/org/example/btl/Map/Map1.txt");
-
+        background = new Image(getClass().getResource("/org/example/btl/images/background.png").toExternalForm());
         map.createMap(level1Layout);
     }
 
@@ -70,11 +74,25 @@ public class GameManager {
     public void updateBall() {
         if (ball.isAttached()) {
             ball.setX(paddle.getX() + (paddle.getWidth() / 2) - ball.getWidth()/2);
-            ball.setY(paddle.getY() - 14);
+            ball.setY(paddle.getY() - 10);
         }
         else {
             ball.update();
             ball.bounceOff();
+            if (ball.isColliding(paddle)) {
+                ball.bounce(paddle);
+            }
+        }
+    }
+
+    public void checkBrickCollisions() {
+        Iterator<Brick> brickIterator = map.getBricks().iterator();
+        while (brickIterator.hasNext()) {
+            Brick brick = brickIterator.next();
+            if (ball.isColliding(brick)) {
+                ball.bounce(brick);
+                brickIterator.remove();
+            }
         }
     }
 
@@ -86,6 +104,7 @@ public class GameManager {
             objects.add(brick);
         }
         renderer.clear();
+        renderer.renderBackground(background);
         renderer.renderAll(objects);
     }
 }

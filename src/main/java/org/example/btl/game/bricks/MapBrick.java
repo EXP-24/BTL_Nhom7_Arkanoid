@@ -1,19 +1,19 @@
 package org.example.btl.game.bricks;
 
 import javafx.scene.canvas.GraphicsContext;
-import java.io.InputStream;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import org.example.btl.game.Brick;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
-
-
 
 public class MapBrick {
 
     private List<Brick> bricks;
-    private int type;
+    private int mapLevel;
 
     public static final int BRICK_WIDTH = 32;
     public static final int BRICK_HEIGHT = 16;
@@ -22,12 +22,12 @@ public class MapBrick {
         bricks = new ArrayList<>();
     }
 
-    public int getType() {
-        return type;
+    public void setMapLevel(int level) {
+        this.mapLevel = level;
     }
 
-    public void setType(int type) {
-        this.type = 0;
+    public int getMapLevel() {
+        return mapLevel;
     }
 
     public void createMap(int[][] mapLayout) {
@@ -47,12 +47,15 @@ public class MapBrick {
             }
         }
     }
+
     public void render(GraphicsContext gc) {
         for (Brick brick : bricks) {
             brick.render(gc);
         }
     }
+
     public void update() {
+
     }
 
     public List<Brick> getBricks() {
@@ -60,55 +63,38 @@ public class MapBrick {
     }
 
     public static int[][] loadMap(String filePath) {
-        List<List<Integer>> mapList = new ArrayList<>();
+        List<int[]> mapList = new ArrayList<>();
 
         try (InputStream is = MapBrick.class.getResourceAsStream(filePath);
              BufferedReader reader = new BufferedReader(new InputStreamReader(is))) {
 
             if (is == null) {
                 System.err.println("Không tìm thấy file map tại: " + filePath);
-                return null;
+                return new int[0][0]; // Trả về mảng trống
             }
 
             String line;
             while ((line = reader.readLine()) != null) {
-                // Bỏ qua các dòng trống
-                if (line.trim().isEmpty()) {
+                line = line.trim();
+                if (line.isEmpty()) {
                     continue;
                 }
 
-                List<Integer> row = new ArrayList<>();
-                // Tách dòng thành các chuỗi số dựa trên một hoặc nhiều dấu cách
-                String[] numbers = line.trim().split("\\s+");
-
-                for (String numberStr : numbers) {
-                    row.add(Integer.parseInt(numberStr));
+                String[] numbers = line.split("\\s+");
+                int[] row = new int[numbers.length];
+                for (int i = 0; i < numbers.length; i++) {
+                    row[i] = Integer.parseInt(numbers[i]);
                 }
                 mapList.add(row);
             }
 
-        } catch (Exception e) {
+        } catch (IOException | NumberFormatException e) {
             System.err.println("Lỗi khi đọc file map: " + filePath);
             e.printStackTrace();
-            return null;
+            return new int[0][0]; // Trả về mảng trống khi có lỗi
         }
 
-        // Chuyển từ List<List<Integer>> sang mảng int[][]
-        if (mapList.isEmpty()) {
-            return new int[0][0];
-        }
-
-        int numRows = mapList.size();
-        int numCols = mapList.get(0).size();
-        int[][] mapArray = new int[numRows][numCols];
-
-        for (int i = 0; i < numRows; i++) {
-            for (int j = 0; j < numCols; j++) {
-                mapArray[i][j] = mapList.get(i).get(j);
-            }
-        }
-
-        return mapArray;
+        // Chuyển List<int[]> thành int[][]
+        return mapList.toArray(new int[0][]);
     }
 }
-

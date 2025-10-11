@@ -34,18 +34,9 @@ public class Brick extends GameObject {
 
 
         String imagePath = "/org/example/btl/images/Brick_" + colorName + ".jpg";
-
-        loadImage(imagePath);
+        brickImage = loadImage(imagePath);
     }
 
-    private void loadImage(String imagePath) {
-        try {
-            brickImage = new Image(getClass().getResourceAsStream(imagePath));
-        } catch (Exception e) {
-            System.err.println("Không thể tải được ảnh tại đường dẫn: " + imagePath);
-            brickImage = null;
-        }
-    }
 
     @Override
     public void update() {

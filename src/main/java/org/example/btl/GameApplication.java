@@ -15,8 +15,12 @@ import java.util.Objects;
 
 public class GameApplication extends Application {
 
-    public static final double maxWidth = 800;
-    public static final double maxHeight = 600;
+    public static final double maxWidth = 1152;
+    public static final double maxHeight = 704;
+    public static final double PLAY_AREA_X = 288;
+    public static final double PLAY_AREA_Y = 64;
+    public static final double PLAY_AREA_WIDTH = 544;
+    public static final double PLAY_AREA_HEIGHT = 608;
 
     @Override
     public void start(Stage stage) throws IOException {

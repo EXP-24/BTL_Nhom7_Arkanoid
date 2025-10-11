@@ -3,7 +3,8 @@ package org.example.btl.game;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
-import static org.example.btl.GameApplication.maxWidth;
+import static org.example.btl.GameApplication.PLAY_AREA_WIDTH;
+import static org.example.btl.GameApplication.PLAY_AREA_X;
 
 public class Paddle extends MovableObject {
     private double speed;
@@ -12,7 +13,7 @@ public class Paddle extends MovableObject {
     public Paddle(double x, double y, double width, double height, double speed) {
         super(x, y, width, height);
         this.speed = speed;
-        image = new Image(getClass().getResource("/org/example/btl/images/paddle.png").toExternalForm());
+        image = loadImage("/org/example/btl/images/paddle.png");
     }
 
     public void setSpeed(double speed) {
@@ -21,13 +22,13 @@ public class Paddle extends MovableObject {
 
     public void moveLeft() {
         setX(getX() - speed);
-        if (getX() < 0) {
-            setX(0);
+        if (getX() < PLAY_AREA_X) {
+            setX(PLAY_AREA_X);
         }
     }
 
     public void moveRight() {
-        if (getX() + getWidth() < maxWidth) {
+        if (getX() + getWidth() <PLAY_AREA_X + PLAY_AREA_WIDTH) {
             setX(getX() + speed);
         }
     }

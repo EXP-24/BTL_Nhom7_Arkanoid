@@ -32,6 +32,7 @@ public class GameController {
             public void handle(long now) {
                 gameManager.updatePaddle();
                 gameManager.updateBall();
+                gameManager.checkBrickCollisions();
                 gameManager.renderGame();
             }
         }.start();

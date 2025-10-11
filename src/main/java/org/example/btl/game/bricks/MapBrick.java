@@ -41,7 +41,7 @@ public class MapBrick {
                     double brickX = col * BRICK_WIDTH;
                     double brickY = row * BRICK_HEIGHT;
 
-                    Brick brick = new Brick(brickX, brickY, BRICK_WIDTH, BRICK_HEIGHT, brickType);
+                    Brick brick = new Brick(brickX, brickY,BRICK_WIDTH, BRICK_HEIGHT, brickType);
                     bricks.add(brick);
                 }
             }

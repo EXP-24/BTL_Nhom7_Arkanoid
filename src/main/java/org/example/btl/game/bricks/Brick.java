@@ -45,7 +45,9 @@ public class Brick extends GameObject {
     public void render(GraphicsContext gc) {
         if (brickImage != null) {
             gc.drawImage(brickImage, getX(), getY(), getWidth(), getHeight());
-        } else {
+        }
+        else {
+            System.err.println("Ảnh chưa được tải.");
         }
     }
 }

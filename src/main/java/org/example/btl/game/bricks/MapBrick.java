@@ -1,6 +1,5 @@
 package org.example.btl.game.bricks;
 
-import javafx.scene.canvas.GraphicsContext;
 import org.example.btl.game.Brick;
 
 import java.io.BufferedReader;

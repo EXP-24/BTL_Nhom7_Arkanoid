@@ -2,6 +2,7 @@ package org.example.btl.game;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 
@@ -29,6 +30,13 @@ public class Ball extends MovableObject {
         this.directionY = directionY;
         this.speed = speed;
         image = loadImage("/org/example/btl/images/ball.png");
+
+        updateVelocity();
+    }
+
+    public void updateVelocity() {
+        this.dx = this.directionX * this.speed;
+        this.dy = this.directionY * this.speed;
     }
 
     public double getSpeed() {
@@ -37,6 +45,7 @@ public class Ball extends MovableObject {
 
     public void setSpeed(double speed) {
         this.speed = speed;
+        updateVelocity();
     }
 
     public double getDirectionX() {
@@ -79,11 +88,12 @@ public class Ball extends MovableObject {
             setY(PLAY_AREA_Y);
             directionY *= -1;
         }
+        updateVelocity();
     }
 
-    public void bounce(GameObject object) {
-        Rectangle ballBounds = getBounds();
-        Rectangle objectBounds = object.getBounds();
+    public void bounce(@NotNull GameObject object) {
+        Rectangle ballBounds = getRec();
+        Rectangle objectBounds = object.getRec();
 
         if (!ballBounds.intersects(objectBounds)) {
             return;
@@ -102,13 +112,14 @@ public class Ball extends MovableObject {
             }
             directionX *= -1;
         }
+        updateVelocity();
     }
 
+    @Override
     public void update() {
         oldX = getX();
         oldY = getY();
-        setX(getX() + directionX * speed);
-        setY(getY() + directionY * speed);
+        move();
     }
 
     @Override

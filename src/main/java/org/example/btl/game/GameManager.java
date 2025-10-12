@@ -1,12 +1,12 @@
 package org.example.btl.game;
 
+import org.example.btl.game.Brick;
+import org.example.btl.game.bricks.MapBrick;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 import javafx.scene.image.Image;
-import org.example.btl.game.Brick;
-import org.example.btl.game.bricks.MapBrick;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -59,12 +59,14 @@ public class GameManager {
     }
 
     public void updatePaddle() {
-        if (leftPressed) {
-            paddle.moveLeft();
+        if (leftPressed && !rightPressed) {
+            paddle.startMovingLeft();
+        } else if (rightPressed && !leftPressed) {
+            paddle.startMovingRight();
+        } else {
+            paddle.stop();
         }
-        if (rightPressed) {
-            paddle.moveRight();
-        }
+        paddle.update();
     }
 
     public void updateBall() {

@@ -20,21 +20,26 @@ public class Paddle extends MovableObject {
         this.speed = speed;
     }
 
-    public void moveLeft() {
-        setX(getX() - speed);
-        if (getX() < PLAY_AREA_X) {
-            setX(PLAY_AREA_X);
-        }
+    public void startMovingLeft() {
+        this.dx = -speed;
     }
 
-    public void moveRight() {
-        if (getX() + getWidth() <PLAY_AREA_X + PLAY_AREA_WIDTH) {
-            setX(getX() + speed);
-        }
+    public void startMovingRight() {
+        this.dx = speed;
     }
 
+    public void stop() {
+        this.dx = 0;
+    }
+
+    @Override
     public void update() {
         move();
+        if (getX() <= PLAY_AREA_X) {
+            setX(PLAY_AREA_X);
+        } else if (getX() + getWidth() >= PLAY_AREA_X + PLAY_AREA_WIDTH) {
+            setX(PLAY_AREA_X + PLAY_AREA_WIDTH - getWidth());
+        }
     }
 
     @Override

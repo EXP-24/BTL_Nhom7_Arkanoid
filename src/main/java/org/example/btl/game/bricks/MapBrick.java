@@ -30,7 +30,7 @@ public class MapBrick {
         return mapLevel;
     }
 
-    public void createMap(int[][] mapLayout) {
+    public void createMap(int[][] mapLayout, double offsetX, double offsetY) {
         bricks.clear();
 
         for (int row = 0; row < mapLayout.length; row++) {
@@ -38,19 +38,13 @@ public class MapBrick {
                 int brickType = mapLayout[row][col];
 
                 if (brickType > 0) {
-                    double brickX = col * BRICK_WIDTH;
-                    double brickY = row * BRICK_HEIGHT;
+                    double brickX = offsetX + col * BRICK_WIDTH;
+                    double brickY = offsetY + row * BRICK_HEIGHT;
 
-                    Brick brick = new Brick(brickX, brickY,BRICK_WIDTH, BRICK_HEIGHT, brickType);
+                    Brick brick = new Brick(brickX, brickY, BRICK_WIDTH, BRICK_HEIGHT, brickType);
                     bricks.add(brick);
                 }
             }
-        }
-    }
-
-    public void render(GraphicsContext gc) {
-        for (Brick brick : bricks) {
-            brick.render(gc);
         }
     }
 

@@ -2,11 +2,14 @@ package org.example.btl.game;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-import static org.example.btl.GameApplication.maxHeight;
-import static org.example.btl.GameApplication.maxWidth;
+import javafx.scene.paint.Color;
+import org.example.btl.game.bricks.MapBrick;
 
 
 import java.util.List;
+import java.util.Map;
+
+import static org.example.btl.GameApplication.*;
 
 public class Renderer {
 
@@ -31,6 +34,13 @@ public class Renderer {
             gc.drawImage(background, 0, 0, maxWidth, maxHeight);
         } else {
             System.err.println("Ảnh nền chưa được tải, đang vẽ nền đen mặc định.");
+        }
+    }
+
+    public void renderMap(MapBrick map) {
+        if (map == null) return;
+        for (Brick brick : map.getBricks()) {
+            brick.render(gc);
         }
     }
 }

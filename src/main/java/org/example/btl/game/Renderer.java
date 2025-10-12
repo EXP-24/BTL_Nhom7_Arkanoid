@@ -2,12 +2,10 @@ package org.example.btl.game;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-import javafx.scene.paint.Color;
+import org.example.btl.game.Brick;
 import org.example.btl.game.bricks.MapBrick;
-
-
 import java.util.List;
-import java.util.Map;
+
 
 import static org.example.btl.GameApplication.*;
 
@@ -33,7 +31,7 @@ public class Renderer {
         if (background != null) {
             gc.drawImage(background, 0, 0, maxWidth, maxHeight);
         } else {
-            System.err.println("Ảnh nền chưa được tải, đang vẽ nền đen mặc định.");
+            System.err.println("Ảnh nền chưa được tải.");
         }
     }
 

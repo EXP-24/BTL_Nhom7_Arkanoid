@@ -14,8 +14,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
-import static org.example.btl.GameApplication.maxHeight;
-import static org.example.btl.GameApplication.maxWidth;
+import static org.example.btl.GameApplication.*;
 
 public class GameManager {
     private Renderer renderer;
@@ -41,7 +40,7 @@ public class GameManager {
         map = new MapBrick();
         int[][] level1Layout = MapBrick.loadMap("/org/example/btl/Map/Map1.txt");
         background = new Image(getClass().getResource("/org/example/btl/images/background.png").toExternalForm());
-        map.createMap(level1Layout);
+        map.createMap(level1Layout, PLAY_AREA_X, PLAY_AREA_Y);
     }
 
     public void handleKeyPressed(KeyEvent event) {
@@ -100,11 +99,9 @@ public class GameManager {
         objects = new ArrayList<>();
         objects.add(paddle);
         objects.add(ball);
-        for (Brick brick : map.getBricks()) {
-            objects.add(brick);
-        }
         renderer.clear();
         renderer.renderBackground(background);
+        renderer.renderMap(map);
         renderer.renderAll(objects);
     }
 }

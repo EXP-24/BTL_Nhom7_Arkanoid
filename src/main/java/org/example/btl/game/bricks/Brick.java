@@ -6,7 +6,6 @@ import javafx.scene.image.Image;
 public class Brick extends GameObject {
 
     private Image brickImage;
-    private int color;
 
     public Brick(double x, double y, double width, double height, int brickType) {
         super(x, y, width, height);
@@ -33,7 +32,7 @@ public class Brick extends GameObject {
         }
 
 
-        String imagePath = "/org/example/btl/images/Brick_" + colorName + ".jpg";
+        String imagePath = "/org/example/btl/images/Brick_" + colorName + ".png";
         brickImage = loadImage(imagePath);
     }
 

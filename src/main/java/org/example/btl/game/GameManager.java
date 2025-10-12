@@ -10,6 +10,8 @@ import javafx.scene.image.Image;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import org.example.btl.game.powerups.ExpandPaddlePowerUp;
+import org.example.btl.game.powerups.PowerUp;
 
 import static org.example.btl.GameApplication.*;
 
@@ -19,6 +21,7 @@ public class GameManager {
     private Ball ball;
     private MapBrick map;
     private List<GameObject> objects;
+    private List<PowerUp> activePowerUps;
     private Image background;
     private boolean leftPressed = false;
     private boolean rightPressed = false;
@@ -36,6 +39,7 @@ public class GameManager {
         ball = new Ball(0, 0, 12, 12, 2, -2, 1);
         map = new MapBrick();
         int[][] level1Layout = MapBrick.loadMap("/org/example/btl/Map/Map1.txt");
+        activePowerUps = new ArrayList<>();
         background = new Image(getClass().getResource("/org/example/btl/images/background.png").toExternalForm());
         map.createMap(level1Layout, PLAY_AREA_X, PLAY_AREA_Y);
     }
@@ -89,7 +93,33 @@ public class GameManager {
             Brick brick = brickIterator.next();
             if (ball.isColliding(brick)) {
                 ball.bounce(brick);
+
+                if (brick.getBrickType() > 0) {
+                    switch (brick.getBrickType()) {
+                        case 2:
+                            PowerUp powerUp = new ExpandPaddlePowerUp(brick.getX(), brick.getY());
+                            activePowerUps.add(powerUp);
+                            break;
+                    }
+                }
+
                 brickIterator.remove();
+            }
+        }
+    }
+
+    public void updatePowerUp() {
+        Iterator<PowerUp> powerUpIterator = activePowerUps.iterator();
+        while(powerUpIterator.hasNext()) {
+            PowerUp powerUp = powerUpIterator.next();
+            powerUp.update();
+
+            if (powerUp.isColliding(paddle)) {
+                powerUp.applyEffect(paddle);
+                powerUpIterator.remove();
+            }
+            if (powerUp.getY() > PLAY_AREA_Y + PLAY_AREA_HEIGHT) {
+                powerUpIterator.remove();
             }
         }
     }
@@ -98,6 +128,7 @@ public class GameManager {
         objects = new ArrayList<>();
         objects.add(paddle);
         objects.add(ball);
+        objects.addAll(activePowerUps);
         renderer.clear();
         renderer.renderBackground(background);
         renderer.renderMap(map);

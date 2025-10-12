@@ -32,6 +32,10 @@ public class Paddle extends MovableObject {
         this.dx = 0;
     }
 
+    public void setImage(Image image) {
+        this.image = image;
+    }
+
     @Override
     public void update() {
         move();

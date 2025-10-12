@@ -6,10 +6,12 @@ import javafx.scene.image.Image;
 public class Brick extends GameObject {
 
     private Image brickImage;
+    private int brickType;
 
     public Brick(double x, double y, double width, double height, int brickType) {
         super(x, y, width, height);
         String colorName = "";
+        this.brickType = brickType;
         switch (brickType) {
             case 1:
                 colorName = "Blue";
@@ -36,6 +38,9 @@ public class Brick extends GameObject {
         brickImage = loadImage(imagePath);
     }
 
+    public int getBrickType() {
+        return brickType;
+    }
 
     @Override
     public void update() {

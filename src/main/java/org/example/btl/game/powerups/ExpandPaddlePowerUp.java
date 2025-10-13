@@ -1,15 +1,15 @@
 package org.example.btl.game.powerups;
 
 import javafx.scene.image.Image;
+import org.example.btl.game.GameObject;
 import  org.example.btl.game.Paddle;
-import  org.example.btl.game.powerups.PowerUp;
 
 
 public class ExpandPaddlePowerUp extends PowerUp {
     private static final double SCALE_FACTOR = 1.5;
 
     public ExpandPaddlePowerUp(double x, double y) {
-        super(x, y, "Expand", 0);
+        super(x, y, "Expand", 10000);
     }
 
     @Override
@@ -23,6 +23,10 @@ public class ExpandPaddlePowerUp extends PowerUp {
 
     @Override
     public void removeEffect(Paddle paddle) {
-        paddle.setWidth((paddle.getWidth() / SCALE_FACTOR));
+        if (paddle.getWidth() > 64) {
+            paddle.setWidth((paddle.getWidth() / SCALE_FACTOR));
+            Image imagePaddleNormal = loadImage("/org/example/btl/images/paddle.png");
+            paddle.setImage(imagePaddleNormal);
+        }
     }
 }

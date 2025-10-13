@@ -1,31 +1,37 @@
 package org.example.btl.game;
 
-import org.example.btl.game.Brick;
 import org.example.btl.game.bricks.MapBrick;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 
 import javafx.scene.image.Image;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import org.example.btl.game.powerups.ExpandPaddlePowerUp;
+import org.example.btl.game.powerups.FastBallPowerUp;
 import org.example.btl.game.powerups.PowerUp;
+import org.example.btl.lives.Life;
+import org.example.btl.game.Brick;
+import org.example.btl.lives.LifeManage;
 
 import static org.example.btl.GameApplication.*;
 
 public class GameManager {
+
     private Renderer renderer;
     private Paddle paddle;
     private Ball ball;
     private MapBrick map;
+    private LifeManage lifeManage;
     private List<GameObject> objects;
     private List<PowerUp> activePowerUps;
+    private List<PowerUp> appliedPowerUps;
     private Image background;
     private boolean leftPressed = false;
     private boolean rightPressed = false;
-
     private GraphicsContext gc;
 
     public GameManager(GraphicsContext gc) {
@@ -40,7 +46,9 @@ public class GameManager {
         map = new MapBrick();
         int[][] level1Layout = MapBrick.loadMap("/org/example/btl/Map/Map1.txt");
         activePowerUps = new ArrayList<>();
-        background = new Image(getClass().getResource("/org/example/btl/images/background.png").toExternalForm());
+        appliedPowerUps = new ArrayList<>();
+        lifeManage = new LifeManage(3);
+        background = new Image(Objects.requireNonNull(getClass().getResource("/org/example/btl/images/background.png")).toExternalForm());
         map.createMap(level1Layout, PLAY_AREA_X, PLAY_AREA_Y);
     }
 
@@ -94,11 +102,16 @@ public class GameManager {
             if (ball.isColliding(brick)) {
                 ball.bounce(brick);
 
-                if (brick.getBrickType() > 0) {
-                    switch (brick.getBrickType()) {
+                if (brick.getBrickType() == 2) {
+                    PowerUp newPowerUp;
+                    switch (brick.getPowerUpType()) {
+                        case 1:
+                            newPowerUp = new ExpandPaddlePowerUp(brick.getX(), brick.getY());
+                            activePowerUps.add(newPowerUp);
+                            break;
                         case 2:
-                            PowerUp powerUp = new ExpandPaddlePowerUp(brick.getX(), brick.getY());
-                            activePowerUps.add(powerUp);
+                            newPowerUp = new FastBallPowerUp(brick.getX(), brick.getY(), ball);
+                            activePowerUps.add(newPowerUp);
                             break;
                     }
                 }
@@ -115,7 +128,20 @@ public class GameManager {
             powerUp.update();
 
             if (powerUp.isColliding(paddle)) {
-                powerUp.applyEffect(paddle);
+                boolean effectExist = false;
+
+                for(PowerUp existingEffect : appliedPowerUps) {
+                    if (existingEffect.getType().equals(powerUp.getType())) {
+                        existingEffect.active();
+                        effectExist = true;
+                        break;
+                    }
+                }
+                if (!effectExist) {
+                    powerUp.applyEffect(paddle);
+                    powerUp.active();
+                    appliedPowerUps.add(powerUp);
+                }
                 powerUpIterator.remove();
             }
             if (powerUp.getY() > PLAY_AREA_Y + PLAY_AREA_HEIGHT) {
@@ -124,8 +150,20 @@ public class GameManager {
         }
     }
 
+    public void updateAppliedPowerUp() {
+        Iterator<PowerUp> powerUpIterator = appliedPowerUps.iterator();
+        while (powerUpIterator.hasNext()) {
+            PowerUp powerUp = powerUpIterator.next();
+            if (powerUp.isExpired()) {
+                powerUp.removeEffect(paddle);
+                powerUpIterator.remove();
+            }
+        }
+    }
+
     public void renderGame() {
         objects = new ArrayList<>();
+        objects.addAll(lifeManage.getLiveIcons());
         objects.add(paddle);
         objects.add(ball);
         objects.addAll(activePowerUps);

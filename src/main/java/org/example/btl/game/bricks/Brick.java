@@ -7,11 +7,13 @@ public class Brick extends GameObject {
 
     private Image brickImage;
     private int brickType;
+    private int powerUpType;
 
-    public Brick(double x, double y, double width, double height, int brickType) {
+    public Brick(double x, double y, double width, double height, int brickType, int powerUpType) {
         super(x, y, width, height);
         String colorName = "";
         this.brickType = brickType;
+        this.powerUpType = powerUpType;
         switch (brickType) {
             case 1:
                 colorName = "Blue";
@@ -40,6 +42,10 @@ public class Brick extends GameObject {
 
     public int getBrickType() {
         return brickType;
+    }
+
+    public int getPowerUpType() {
+        return powerUpType;
     }
 
     @Override

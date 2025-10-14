@@ -1,11 +1,15 @@
 package org.example.btl.lives;
 
+import org.example.btl.game.Ball;
+
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import static org.example.btl.GameApplication.*;
 
 public class LifeManage {
+
     private List<Life> liveIcons;
     private int lives;
 
@@ -25,6 +29,17 @@ public class LifeManage {
             double iconY = PLAY_AREA_HEIGHT + 36;
 
             liveIcons.add(new Life(iconX, iconY, iconWidth, iconHeight));
+        }
+    }
+
+    public void loseLife(Ball ball) {
+        if (ball.getY() + ball.getHeight() >= PLAY_AREA_Y + PLAY_AREA_HEIGHT) {
+            if (lives > 0) {
+                lives--;
+                if (!liveIcons.isEmpty()) {
+                    liveIcons.remove(liveIcons.size() - 1);
+                }
+            }
         }
     }
 

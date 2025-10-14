@@ -82,6 +82,7 @@ public class Ball extends MovableObject {
             setX(PLAY_AREA_X + PLAY_AREA_WIDTH - getWidth());
             directionX *= -1;
         } else if (getY() + getHeight() >= PLAY_AREA_Y + PLAY_AREA_HEIGHT) {
+            setAttached(true);
             setY(PLAY_AREA_Y + PLAY_AREA_HEIGHT - getHeight());
             directionY *= -1;
         } else if (getY() <= PLAY_AREA_Y) {

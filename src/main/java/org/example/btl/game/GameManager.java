@@ -47,7 +47,7 @@ public class GameManager {
         int[][] level1Layout = MapBrick.loadMap("/org/example/btl/Map/Map1.txt");
         activePowerUps = new ArrayList<>();
         appliedPowerUps = new ArrayList<>();
-        lifeManage = new LifeManage(3);
+        lifeManage = new LifeManage(5);
         background = new Image(Objects.requireNonNull(getClass().getResource("/org/example/btl/images/background.png")).toExternalForm());
         map.createMap(level1Layout, PLAY_AREA_X, PLAY_AREA_Y);
     }
@@ -93,6 +93,7 @@ public class GameManager {
                 ball.bounce(paddle);
             }
         }
+        lose();
     }
 
     public void checkBrickCollisions() {
@@ -159,6 +160,10 @@ public class GameManager {
                 powerUpIterator.remove();
             }
         }
+    }
+
+    public void lose() {
+        lifeManage.loseLife(ball);
     }
 
     public void renderGame() {

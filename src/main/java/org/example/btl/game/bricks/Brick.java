@@ -4,6 +4,8 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import org.example.btl.game.GameObject;
 
+import java.security.PublicKey;
+
 public class Brick extends GameObject {
 
     private Image brickImage;
@@ -11,7 +13,7 @@ public class Brick extends GameObject {
     private int powerUpType;
     public  int healthBrick = 1;
 
-    public Brick(double x, double y, double width, double height, int brickType) {
+    public Brick(double x, double y, double width, double height, int brickType, int powerUpType) {
         super(x, y, width, height);
         String colorName = "";
         this.brickType = brickType;

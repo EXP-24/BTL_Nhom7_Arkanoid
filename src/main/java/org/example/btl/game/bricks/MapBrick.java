@@ -8,18 +8,23 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class MapBrick {
 
     private List<Brick> bricks;
     private int mapLevel;
+    private Random randomGenerator;
+
 
     public static final int BRICK_WIDTH = 32;
     public static final int BRICK_HEIGHT = 16;
 
 
     public MapBrick() {
+
         bricks = new ArrayList<>();
+        randomGenerator = new Random();
     }
 
     public void setMapLevel(int level) {
@@ -41,7 +46,14 @@ public class MapBrick {
                     double brickX = offsetX + col * BRICK_WIDTH;
                     double brickY = offsetY + row * BRICK_HEIGHT;
 
-                    Brick brick = new Brick(brickX, brickY, BRICK_WIDTH, BRICK_HEIGHT, brickType);
+                    int powerUpType = 0;
+
+                    if (brickType == 2) {
+                        int numberOfPowerUpType = 2;
+                        powerUpType = randomGenerator.nextInt(numberOfPowerUpType) + 1;
+                    }
+
+                    Brick brick = new Brick(brickX, brickY, BRICK_WIDTH, BRICK_HEIGHT, brickType, powerUpType);
                     bricks.add(brick);
                 }
             }

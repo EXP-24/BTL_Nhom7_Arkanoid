@@ -62,7 +62,7 @@ public class GameManager {
         }
     }
 
-    public void handleKeyRealesed(KeyEvent event) {
+    public void handleKeyRealeased(KeyEvent event) {
         if (event.getCode() == KeyCode.A) {
             leftPressed = false;
         } else if (event.getCode() == KeyCode.D) {

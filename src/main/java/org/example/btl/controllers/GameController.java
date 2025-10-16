@@ -2,6 +2,7 @@ package org.example.btl.controllers;
 
 import javafx.animation.AnimationTimer;
 import javafx.fxml.FXML;
+import javafx.scene.Cursor;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 
@@ -22,10 +23,11 @@ public class GameController {
         gc = canvas.getGraphicsContext2D();
         gameManager = new GameManager(gc);
 
-        canvas.setFocusTraversable(true);
+        canvas.setCursor(Cursor.NONE);
 
+        canvas.setFocusTraversable(true);
         canvas.setOnKeyPressed(event -> handleKeyPressed(event));
-        canvas.setOnKeyReleased(event -> handleKeyRealesed(event));
+        canvas.setOnKeyReleased(event -> handleKeyRealeased(event));
 
         new AnimationTimer() {
             @Override
@@ -43,8 +45,8 @@ public class GameController {
     private void handleKeyPressed(KeyEvent event) {
         gameManager.handleKeyPressed(event);
     }
-    private void handleKeyRealesed(KeyEvent event) {
-        gameManager.handleKeyRealesed(event);
+    private void handleKeyRealeased(KeyEvent event) {
+        gameManager.handleKeyRealeased(event);
     }
 }
 

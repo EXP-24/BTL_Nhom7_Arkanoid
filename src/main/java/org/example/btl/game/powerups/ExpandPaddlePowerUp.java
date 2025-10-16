@@ -14,7 +14,7 @@ public class ExpandPaddlePowerUp extends PowerUp {
 
     @Override
     public void applyEffect(Paddle paddle) {
-        if (paddle.getWidth() < 96) { // Set a max width
+        if (paddle.getWidth() < 96) {
             paddle.setWidth(paddle.getWidth() * SCALE_FACTOR);
             Image imagePaddleExpland = loadImage("/org/example/btl/images/paddleExpland.png");
             paddle.setImage(imagePaddleExpland);

@@ -16,10 +16,13 @@ public class MapBrick {
     private int mapLevel;
     private Random randomGenerator;
 
+
     public static final int BRICK_WIDTH = 32;
     public static final int BRICK_HEIGHT = 16;
 
+
     public MapBrick() {
+
         bricks = new ArrayList<>();
         randomGenerator = new Random();
     }
@@ -39,15 +42,17 @@ public class MapBrick {
             for (int col = 0; col < mapLayout[row].length; col++) {
                 int brickType = mapLayout[row][col];
 
-                if (brickType > 0) {
+                if (brickType > 0 ) {
                     double brickX = offsetX + col * BRICK_WIDTH;
                     double brickY = offsetY + row * BRICK_HEIGHT;
+
                     int powerUpType = 0;
 
                     if (brickType == 2) {
                         int numberOfPowerUpType = 2;
                         powerUpType = randomGenerator.nextInt(numberOfPowerUpType) + 1;
                     }
+
                     Brick brick = new Brick(brickX, brickY, BRICK_WIDTH, BRICK_HEIGHT, brickType, powerUpType);
                     bricks.add(brick);
                 }
@@ -63,8 +68,11 @@ public class MapBrick {
         return bricks;
     }
 
-    public static int[][] loadMap(String filePath) {
+    public static int[][] loadMap(int level) {
+
         List<int[]> mapList = new ArrayList<>();
+
+        String filePath = "/org/example/btl/Map/Map" + level + ".txt";
 
         try (InputStream is = MapBrick.class.getResourceAsStream(filePath);
              BufferedReader reader = new BufferedReader(new InputStreamReader(is))) {

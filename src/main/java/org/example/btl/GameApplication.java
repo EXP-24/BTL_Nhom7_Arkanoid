@@ -26,12 +26,12 @@ public class GameApplication extends Application {
     public void start(Stage stage) throws IOException {
 
         URL fxmlUrl = Objects.requireNonNull(
-                getClass().getResource("/org/example/btl/Menu.fxml"),
+                getClass().getResource("/org/example/btl/Game.fxml"),
                 "Cannot find Game.fxml"
         );
 
         Parent root = FXMLLoader.load(fxmlUrl);
-        Scene scene = new Scene(root, maxWidth, maxHeight);
+        Scene scene = new Scene(root, maxWidth, maxHeight, Color.LIGHTSKYBLUE);
 
         URL iconUrl = Objects.requireNonNull(
                 getClass().getResource("/org/example/btl/images/arkanoid_512.png"),

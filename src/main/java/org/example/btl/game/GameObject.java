@@ -1,7 +1,10 @@
 package org.example.btl.game;
 
-import javafx.scene.paint.Color;
+import javafx.scene.image.Image;
 import javafx.scene.canvas.GraphicsContext;
+
+import java.awt.*;
+import java.util.Objects;
 
 public abstract class GameObject {
 
@@ -15,11 +18,6 @@ public abstract class GameObject {
         this.y = y;
         this.width = width;
         this.height = height;
-    }
-
-    public GameObject(double x, double y) {
-        this.x = x;
-        this.y = y;
     }
 
     public double getX() {
@@ -52,6 +50,25 @@ public abstract class GameObject {
 
     public void setHeight(double height) {
         this.height = height;
+    }
+
+    public Rectangle getRec() {
+        return new Rectangle((int) x, (int) y, (int) width, (int) height);
+    }
+
+    public boolean isColliding(GameObject orther) {
+        return getRec().intersects(orther.getRec());
+    }
+
+    public Image loadImage(String imagePath) {
+        Image image;
+        try {
+            image = new Image(Objects.requireNonNull(getClass().getResourceAsStream(imagePath)));
+        } catch (Exception e) {
+            System.err.println("Không thể tải được ảnh tại đường dẫn: " + imagePath);
+            image = null;
+        }
+        return image;
     }
 
     public abstract void update();

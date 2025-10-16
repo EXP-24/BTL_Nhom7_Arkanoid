@@ -12,6 +12,7 @@ module org.example.btl {
     requires com.almasb.fxgl.all;
     requires java.desktop;
     requires javafx.graphics;
+    requires annotations;
 
     opens org.example.btl to javafx.fxml;
     exports org.example.btl;

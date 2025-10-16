@@ -2,8 +2,15 @@ package org.example.btl.game;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-import static org.example.btl.GameApplication.maxHeight;
-import static org.example.btl.GameApplication.maxWidth;
+import org.jetbrains.annotations.NotNull;
+
+import java.awt.*;
+
+import static org.example.btl.GameApplication.PLAY_AREA_X;
+import static org.example.btl.GameApplication.PLAY_AREA_Y;
+import static org.example.btl.GameApplication.PLAY_AREA_WIDTH;
+import static org.example.btl.GameApplication.PLAY_AREA_HEIGHT;
+
 
 public class Ball extends MovableObject {
 
@@ -11,6 +18,9 @@ public class Ball extends MovableObject {
     private double directionX;
     private double directionY;
     private Image image;
+    private double oldX;
+    private double oldY;
+
     private boolean attached = true;
 
     public Ball(double x, double y, double width, double height,
@@ -19,7 +29,14 @@ public class Ball extends MovableObject {
         this.directionX = directionX;
         this.directionY = directionY;
         this.speed = speed;
-        image = new Image(getClass().getResource("/org/example/btl/images/ball.png").toExternalForm());
+        image = loadImage("/org/example/btl/images/ball.png");
+
+        updateVelocity();
+    }
+
+    public void updateVelocity() {
+        this.dx = this.directionX * this.speed;
+        this.dy = this.directionY * this.speed;
     }
 
     public double getSpeed() {
@@ -28,6 +45,7 @@ public class Ball extends MovableObject {
 
     public void setSpeed(double speed) {
         this.speed = speed;
+        updateVelocity();
     }
 
     public double getDirectionX() {
@@ -36,6 +54,14 @@ public class Ball extends MovableObject {
 
     public double getDirectionY() {
         return directionY;
+    }
+
+    public double getOldX() {
+        return oldX;
+    }
+
+    public double getOldY() {
+        return oldY;
     }
 
     //Kiem tra ball nam tren Paddle khong
@@ -49,32 +75,58 @@ public class Ball extends MovableObject {
 
     //Ball va cham voi gioi han man hinh
     public void bounceOff() {
-        if (getX() <= 0 || getX() + getWidth() >= maxWidth ) {
+        if (getX() <= PLAY_AREA_X) {
+            setX(PLAY_AREA_X);
             directionX *= -1;
-        }
-        if (getY() <= 0 || getY() + getHeight() >= maxHeight) {
+        } else if (getX() + getWidth() >= PLAY_AREA_X + PLAY_AREA_WIDTH) {
+            setX(PLAY_AREA_X + PLAY_AREA_WIDTH - getWidth());
+            directionX *= -1;
+        } else if (getY() + getHeight() >= PLAY_AREA_Y + PLAY_AREA_HEIGHT) {
+            setAttached(true);
+            setY(PLAY_AREA_Y + PLAY_AREA_HEIGHT - getHeight());
+            directionY *= -1;
+        } else if (getY() <= PLAY_AREA_Y) {
+            setY(PLAY_AREA_Y);
             directionY *= -1;
         }
+        updateVelocity();
     }
 
+    public void bounce(@NotNull GameObject object) {
+        Rectangle ballBounds = getRec();
+        Rectangle objectBounds = object.getRec();
+
+        if (!ballBounds.intersects(objectBounds)) {
+            return;
+        }
+
+        double ballOldBottom = getOldY() + getHeight();
+
+        if (ballOldBottom <= object.getY() || getOldY() >= object.getY() + object.getHeight()) {
+            setY(getOldY());
+            directionY *= -1;
+        } else {
+            if (getX() < object.getX()) {
+                setX(getOldX() - 5);
+            } else {
+                setX(getOldX() + 5);
+            }
+            directionX *= -1;
+        }
+        updateVelocity();
+    }
+
+    @Override
     public void update() {
-        setX(getX() + directionX * speed);
-        setY(getY() + directionY * speed);
+        oldX = getX();
+        oldY = getY();
+        move();
     }
 
     @Override
 
     public void render(GraphicsContext gc) {
         gc.drawImage(image, getX(), getY(), getHeight(), getWidth());
-    }
-    public Ball clone() {
-        Ball copy = new Ball(getX(), getY(), getWidth(), getHeight(), directionX, directionY, speed);
-        copy.setAttached(false);
-        return copy;
-    }
-    public void setDirection(double dx, double dy) {
-        this.directionX = dx;
-        this.directionY = dy;
     }
 
 }

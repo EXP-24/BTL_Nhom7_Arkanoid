@@ -32,8 +32,6 @@ public class GameManager {
     private Image background;
     private boolean leftPressed = false;
     private boolean rightPressed = false;
-    private int currentLevel;
-    private boolean gameWon = false;
     private GraphicsContext gc;
 
     public GameManager(GraphicsContext gc) {
@@ -135,7 +133,6 @@ public class GameManager {
             Brick brick = brickIterator.next();
             if (ball.isColliding(brick)) {
                 ball.bounce(brick);
-                brick.takeDamage();
 
                 if (brick.getBrickType() == 2) {
                     PowerUp newPowerUp;

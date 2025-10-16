@@ -40,16 +40,47 @@ public class GameManager {
         initGame();
     }
 
+    private void nextLevel() {
+        this.currentLevel++;
+        loadLevel(this.currentLevel);
+    }
+
+
+    private void checkLevelCompletion() {
+        for (Brick brick : map.getBricks()) {
+            if (brick.getBrickType() != 9) {
+                return;
+            }
+        }
+        if (!map.getBricks().isEmpty()) {
+            nextLevel();
+        } else {
+            nextLevel();
+        }
+    }
+
+    private void loadLevel(int levelNumber) {
+
+        int[][] layout = MapBrick.loadMap(levelNumber);
+
+        if (layout != null) {
+            map.createMap(layout, PLAY_AREA_X, PLAY_AREA_Y);
+            //resetLevelState();
+        } else {
+            this.gameWon = true;
+        }
+    }
+
     private void initGame() {
         paddle = new Paddle(540, 614, 64, 24, 3);
         ball = new Ball(0, 0, 12, 12, 2, -2, 1);
         map = new MapBrick();
-        int[][] level1Layout = MapBrick.loadMap("/org/example/btl/Map/Map1.txt");
+        this.currentLevel = 5;
+        loadLevel(currentLevel);
         activePowerUps = new ArrayList<>();
         appliedPowerUps = new ArrayList<>();
         lifeManage = new LifeManage(5);
         background = new Image(Objects.requireNonNull(getClass().getResource("/org/example/btl/images/background.png")).toExternalForm());
-        map.createMap(level1Layout, PLAY_AREA_X, PLAY_AREA_Y);
     }
 
     public void handleKeyPressed(KeyEvent event) {
@@ -116,8 +147,9 @@ public class GameManager {
                             break;
                     }
                 }
-
-                brickIterator.remove();
+                if (brick.isDestroyed()) {
+                    brickIterator.remove();
+                }
             }
         }
     }
@@ -167,6 +199,17 @@ public class GameManager {
     }
 
     public void renderGame() {
+        if (gameWon) {
+            checkLevelCompletion();
+        }
+        else if (currentLevel == 10) {
+            // hien map boss
+            //
+        }
+        else if (currentLevel == 11 && gameWon) {
+            // hien chien thang
+            return;
+        }
         objects = new ArrayList<>();
         objects.addAll(lifeManage.getLiveIcons());
         objects.add(paddle);
@@ -176,5 +219,6 @@ public class GameManager {
         renderer.renderBackground(background);
         renderer.renderMap(map);
         renderer.renderAll(objects);
+        checkLevelCompletion();
     }
 }

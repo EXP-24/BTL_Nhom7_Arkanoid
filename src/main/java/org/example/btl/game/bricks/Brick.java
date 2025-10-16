@@ -60,8 +60,9 @@ public class Brick extends GameObject {
         brickImage = loadImage(imagePath);
     }
 
+
     public void takeDamage() {
-        if (this.healthBrick > 0 && this.healthBrick < 999999) { // Gạch không thể phá vỡ sẽ không bị giảm máu
+        if (this.healthBrick > 0 && this.healthBrick < 999999) {
             this.healthBrick--;
         }
     }

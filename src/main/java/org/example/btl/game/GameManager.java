@@ -32,8 +32,8 @@ public class GameManager {
     private Image background;
     private boolean leftPressed = false;
     private boolean rightPressed = false;
-    private int level = 9;
-
+    private int currentLevel;
+    private boolean gameWon = false;
     private GraphicsContext gc;
 
     public GameManager(GraphicsContext gc) {
@@ -46,12 +46,31 @@ public class GameManager {
         paddle = new Paddle(540, 614, 64, 24, 3);
         ball = new Ball(0, 0, 12, 12, 2, -2, 1);
         map = new MapBrick();
-        int[][] level1Layout = MapBrick.loadMap(level);
+        this.currentLevel = 5;
+        loadLevel(currentLevel);
         activePowerUps = new ArrayList<>();
         appliedPowerUps = new ArrayList<>();
         lifeManage = new LifeManage(5);
         background = new Image(Objects.requireNonNull(getClass().getResource("/org/example/btl/images/background.png")).toExternalForm());
-        map.createMap(level1Layout, PLAY_AREA_X, PLAY_AREA_Y);
+    }
+
+    private void nextLevel() {
+        this.currentLevel++;
+        loadLevel(this.currentLevel);
+    }
+
+
+    private void checkLevelCompletion() {
+        for (Brick brick : map.getBricks()) {
+            if (brick.getBrickType() != 9) {
+                return;
+            }
+        }
+        if (!map.getBricks().isEmpty()) {
+            nextLevel();
+        } else {
+            nextLevel();
+        }
     }
 
     public void handleKeyPressed(KeyEvent event) {
@@ -167,19 +186,43 @@ public class GameManager {
         }
     }
 
+    private void loadLevel(int levelNumber) {
+
+        int[][] layout = MapBrick.loadMap(levelNumber);
+
+        if (layout != null) {
+            map.createMap(layout, PLAY_AREA_X, PLAY_AREA_Y);
+            //resetLevelState();
+        } else {
+            this.gameWon = true;
+        }
+    }
+
     public void lose() {
         lifeManage.loseLife(ball);
     }
 
     public void renderGame() {
-        objects = new ArrayList<>();
-        objects.addAll(lifeManage.getLiveIcons());
-        objects.add(paddle);
-        objects.add(ball);
-        objects.addAll(activePowerUps);
-        renderer.clear();
-        renderer.renderBackground(background);
-        renderer.renderMap(map);
-        renderer.renderAll(objects);
+            if (gameWon) {
+                checkLevelCompletion();
+            }
+            else if (currentLevel == 10) {
+                // hien map boss
+                //
+            }
+            else if (currentLevel == 11 && gameWon) {
+                // hien chien thang
+                return;
+            }
+            objects = new ArrayList<>();
+            objects.addAll(lifeManage.getLiveIcons());
+            objects.add(paddle);
+            objects.add(ball);
+            objects.addAll(activePowerUps);
+            renderer.clear();
+            renderer.renderBackground(background);
+            renderer.renderMap(map);
+            renderer.renderAll(objects);
+            checkLevelCompletion();
     }
 }

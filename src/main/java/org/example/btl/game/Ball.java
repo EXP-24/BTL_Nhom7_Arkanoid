@@ -124,9 +124,7 @@ public class Ball extends MovableObject {
     }
 
     @Override
-
     public void render(GraphicsContext gc) {
         gc.drawImage(image, getX(), getY(), getHeight(), getWidth());
     }
-
 }

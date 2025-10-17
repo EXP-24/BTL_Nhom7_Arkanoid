@@ -8,29 +8,25 @@ import java.util.List;
 
 public class MagnetPowerUp extends PowerUp {
     private List<Ball> balls;
-
     public MagnetPowerUp(double x, double y, List<Ball> balls) {
-        super(x, y, "Magnet", 10000); // Hiệu ứng kéo dài 10 giây
+        super(x, y, "Magnet", 10000);
         this.balls = balls;
     }
 
     @Override
     public void applyEffect(Paddle paddle) {
+
         Image magnetImage = loadImage("/org/example/btl/images/paddleMagnet.png");
         paddle.setImage(magnetImage);
     }
 
     @Override
     public void removeEffect(Paddle paddle) {
-        // Khi hết hiệu ứng, đổi lại hình paddle gốc
+
         Image normalImage = loadImage("/org/example/btl/images/paddle.png");
         paddle.setImage(normalImage);
     }
 
-    /**
-     * Gọi hàm này trong GameManager khi bóng chạm paddle.
-     * Nếu hiệu ứng Magnet đang hoạt động, bóng sẽ dính vào paddle.
-     */
     public void attractBalls(Paddle paddle) {
         if (balls == null) return;
 

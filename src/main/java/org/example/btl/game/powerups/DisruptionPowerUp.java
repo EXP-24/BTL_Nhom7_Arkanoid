@@ -7,7 +7,6 @@ import java.util.List;
 
 public class DisruptionPowerUp extends PowerUp {
     private List<Ball> balls;
-
     public DisruptionPowerUp(double x, double y, List<Ball> balls) {
         super(x, y, "Disruption", 0);
         this.balls = balls;
@@ -16,6 +15,7 @@ public class DisruptionPowerUp extends PowerUp {
     @Override
     public void applyEffect(Paddle paddle) {
         if (balls == null || balls.isEmpty()) return;
+
         Ball mainBall = balls.get(0);
         if (balls.size() == 1) {
             Ball ballLeft = cloneBall(mainBall, -0.7, -0.7);
@@ -42,5 +42,6 @@ public class DisruptionPowerUp extends PowerUp {
 
     @Override
     public void removeEffect(Paddle paddle) {
+
     }
 }

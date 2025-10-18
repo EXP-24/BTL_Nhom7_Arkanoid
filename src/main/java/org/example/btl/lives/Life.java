@@ -3,6 +3,7 @@ package org.example.btl.lives;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import org.example.btl.game.GameObject;
+import org.example.btl.game.SkinManager;
 
 public class Life extends GameObject {
 
@@ -10,7 +11,8 @@ public class Life extends GameObject {
 
     public Life(double x, double y, double width, double height) {
         super(x, y, width, height);
-        image = loadImage("/org/example/btl/images/life1.png");
+        int skinIndexSelected = SkinManager.getSkinIndex();
+        image = loadImage("/org/example/btl/images/lives/live" + skinIndexSelected + ".png");
     }
 
     @Override

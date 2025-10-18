@@ -43,6 +43,7 @@ public class GameManager {
     }
 
     private void nextLevel() {
+        ball.setAttached(true);
         this.currentLevel++;
         loadLevel(this.currentLevel);
     }

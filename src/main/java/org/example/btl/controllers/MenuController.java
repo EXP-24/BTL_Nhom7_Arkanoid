@@ -28,9 +28,13 @@ public class MenuController {
     @FXML
     private ImageView exitButton;
 
+    @FXML
+    private ImageView creditsButton;
+
     private Image playButtonImage, playButtonHover;
     private Image exitButtonImage, exitButtonHover;
     private Image collectionButtonImage, collectionButtonHover;
+    private Image creditsButtonImage, creditsButtonHover;
     private Image mouseImage;
 
     @FXML
@@ -45,14 +49,18 @@ public class MenuController {
         exitButtonHover = loadImage("exitHover");
         collectionButtonImage = loadImage("collection");
         collectionButtonHover = loadImage("collectionHover");
+        creditsButtonImage = loadImage("credits");
+        creditsButtonHover = loadImage("creditsHover");
 
         setHoverEffect(playButton, playButtonImage, playButtonHover);
         setHoverEffect(exitButton, exitButtonImage, exitButtonHover);
         setHoverEffect(collectionButton, collectionButtonImage, collectionButtonHover);
+        setHoverEffect(creditsButton, creditsButtonImage, creditsButtonHover);
 
         playButton.setOnMouseClicked(e -> startgame());
         exitButton.setOnMouseClicked(e -> System.exit(0));
         collectionButton.setOnMouseClicked(e -> openCollection());
+        creditsButton.setOnMouseClicked(e -> openCredits());
 
     }
 
@@ -77,11 +85,22 @@ public class MenuController {
         }
     }
 
-    private  void openCollection() {
+    private void openCollection() {
         try {
             Parent gameroot = FXMLLoader.load(Objects.requireNonNull(
                     getClass().getResource("/org/example/btl/Collections.fxml")));
             Stage stage = (Stage) collectionButton.getScene().getWindow();
+            stage.setScene(new Scene(gameroot, MAX_WIDTH, MAX_HEIGHT));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void openCredits() {
+        try {
+            Parent gameroot = FXMLLoader.load(Objects.requireNonNull(
+                    getClass().getResource("/org/example/btl/Credits.fxml")));
+            Stage stage = (Stage) creditsButton.getScene().getWindow();
             stage.setScene(new Scene(gameroot, MAX_WIDTH, MAX_HEIGHT));
         } catch (IOException e) {
             e.printStackTrace();

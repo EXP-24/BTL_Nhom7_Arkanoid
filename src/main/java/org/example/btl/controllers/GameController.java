@@ -6,6 +6,7 @@ import javafx.scene.Cursor;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import org.example.btl.game.GameManager;
 
@@ -14,8 +15,8 @@ public class GameController {
 
     @FXML
     private Canvas canvas;
-    private GameManager gameManager;
 
+    private GameManager gameManager;
     private GraphicsContext gc;
 
     @FXML

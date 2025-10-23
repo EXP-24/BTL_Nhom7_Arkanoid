@@ -13,6 +13,7 @@ module org.example.btl {
     requires java.desktop;
     requires javafx.graphics;
     requires annotations;
+    requires javafx.media;
 
     opens org.example.btl to javafx.fxml;
     exports org.example.btl;

@@ -28,7 +28,6 @@ public class GameManager {
     private List<GameObject> objects;
     private List<PowerUp> activePowerUps;
     private List<PowerUp> appliedPowerUps;
-    private Image background;
     private boolean leftPressed = false;
     private boolean rightPressed = false;
     private int currentLevel;
@@ -86,7 +85,6 @@ public class GameManager {
         activePowerUps = new ArrayList<>();
         appliedPowerUps = new ArrayList<>();
         lifeManage = new LifeManage(5);
-        background = new Image(Objects.requireNonNull(getClass().getResource("/org/example/btl/images/background.png")).toExternalForm());
     }
 
     public void handleKeyPressed(KeyEvent event) {
@@ -258,7 +256,6 @@ public class GameManager {
         objects.addAll(balls);
         objects.addAll(activePowerUps);
         renderer.clear();
-        renderer.renderBackground(background);
         renderer.renderMap(map);
         renderer.renderAll(objects);
         checkLevelCompletion();

@@ -172,11 +172,11 @@ public class GameManager {
                         PowerUp newPowerUp;
                         switch (brick.getPowerUpType()) {
                             case 1:
-                                newPowerUp = new TinyBallPowerUp(brick.getX(), brick.getY(), balls);
+                                newPowerUp = new ShrinkPaddlePowerUp(brick.getX(), brick.getY());
                                 activePowerUps.add(newPowerUp);
                                 break;
                             case 2:
-                                newPowerUp = new FastBallPowerUp(brick.getX(), brick.getY(), balls);
+                                newPowerUp = new ExpandPaddlePowerUp(brick.getX(), brick.getY());
                                 activePowerUps.add(newPowerUp);
                                 break;
                             case 3:

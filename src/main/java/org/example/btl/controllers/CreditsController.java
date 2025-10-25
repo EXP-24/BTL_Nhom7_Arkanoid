@@ -38,7 +38,7 @@ public class CreditsController {
                Developed by: TEAM 7
                
                
-               Leader, Game Logic, Menu & Audio Developer
+               Leader, Game Logic, Menu & Sound Effects
                Phạm Đức Cường 
                
                
@@ -50,7 +50,7 @@ public class CreditsController {
                
                
                
-               Score and Power-up System Developer
+               Score & Paddle Power-up System Developer
                Nguyễn Tuấn Anh
                
                

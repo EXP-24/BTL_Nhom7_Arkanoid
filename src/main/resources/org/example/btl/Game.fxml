@@ -10,5 +10,5 @@
          <Image url="@images/background.png" />
       </image>
    </ImageView>
-    <Canvas fx:id="canvas" height="704.0" layoutX="49.0" width="1152.0" />
+    <Canvas fx:id="canvas" height="704.0" width="1152.0" />
 </AnchorPane>

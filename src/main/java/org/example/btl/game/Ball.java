@@ -29,7 +29,7 @@ public class Ball extends MovableObject {
         this.directionX = directionX;
         this.directionY = directionY;
         this.speed = speed;
-        image = loadImage("/org/example/btl/images/ball.png");
+        image = loadImage("/org/example/btl/images/powerups/ball.png");
 
         updateVelocity();
     }

@@ -184,7 +184,7 @@ public class GameManager {
                                 activePowerUps.add(newPowerUp);
                                 break;
                             case 4:
-                                newPowerUp = new ExpandPaddlePowerUp(brick.getX(), brick.getY());
+                                newPowerUp = new FastBallPowerUp(brick.getX(), brick.getY(), balls);
                                 activePowerUps.add(newPowerUp);
                                 break;
                             case 5:

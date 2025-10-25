@@ -58,7 +58,7 @@ public class Brick extends GameObject {
         }
 
 
-        String imagePath = "/org/example/btl/images/Brick_" + colorName + ".png";
+        String imagePath = "/org/example/btl/images/bricks/Brick_" + colorName + ".png";
         brickImage = loadImage(imagePath);
     }
 

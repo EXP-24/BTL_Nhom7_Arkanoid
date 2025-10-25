@@ -3,6 +3,8 @@ package org.example.btl.game.powerups;
 import javafx.scene.canvas.GraphicsContext;
 import org.example.btl.game.*;
 import org.example.btl.game.Brick;
+import org.example.btl.game.sounds.SoundManager;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -47,7 +49,11 @@ public class GunPowerUp extends PowerUp {
             while (brickIterator.hasNext()) {
                 Brick brick = brickIterator.next();
                 if (b.isColliding(brick)) {
-                    brickIterator.remove();
+                    brick.takeDamage();
+                    if (brick.isDestroyed()) {
+                        SoundManager.playGunFire();
+                        brickIterator.remove();
+                    }
                     b.deactivate();
 
                     if (brick.getBrickType() == 2) {

@@ -23,7 +23,6 @@ public class FastBallPowerUp extends PowerUp {
                     ball.setSpeed(1.0);
                 } else if (speed < 1.5) {
                     ball.setSpeed(speed * SPEED_MULTIPLIER);
-                    // Giới hạn tốc độ tối đa
                     if (ball.getSpeed() > 1.5) {
                         ball.setSpeed(1.5);
                     }

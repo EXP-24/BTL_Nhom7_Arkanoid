@@ -183,6 +183,14 @@ public class GameManager {
                                 newPowerUp = new TripleBallPowerUp(brick.getX(), brick.getY(), balls);
                                 activePowerUps.add(newPowerUp);
                                 break;
+                            case 4:
+                                newPowerUp = new FastBallPowerUp(brick.getX(), brick.getY(), balls);
+                                activePowerUps.add(newPowerUp);
+                                break;
+                            case 5:
+                                newPowerUp = new GunPowerUp(brick.getX(), brick.getY());
+                                activePowerUps.add(newPowerUp);
+                                break;
                         }
                     }
                 }
@@ -231,6 +239,11 @@ public class GameManager {
                 powerUp.removeEffect(paddle);
                 powerUpIterator.remove();
             }
+            else if (powerUp instanceof GunPowerUp) {
+                GunPowerUp gun = (GunPowerUp) powerUp;
+                gun.updateWhileActive(paddle, map.getBricks(), balls);
+                activePowerUps.addAll(gun.consumePendingDrops());
+            }
         }
     }
 
@@ -259,5 +272,11 @@ public class GameManager {
         renderer.renderMap(map);
         renderer.renderAll(objects);
         checkLevelCompletion();
+
+        for (PowerUp powerUp : appliedPowerUps) {
+            if (powerUp instanceof GunPowerUp) {
+                ((GunPowerUp) powerUp).render(gc);
+            }
+        }
     }
 }

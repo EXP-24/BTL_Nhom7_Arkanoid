@@ -49,7 +49,7 @@ public class MapBrick {
                     int powerUpType = 0;
 
                     if (brickType == 2) {
-                        int numberOfPowerUpType = 3;
+                        int numberOfPowerUpType = 5;
                         powerUpType = randomGenerator.nextInt(numberOfPowerUpType) + 1;
                     }
 

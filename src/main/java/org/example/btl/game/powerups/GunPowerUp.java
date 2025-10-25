@@ -1,56 +1,87 @@
 package org.example.btl.game.powerups;
 
-
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.image.Image;
-import org.example.btl.game.Bullet;
-import org.example.btl.game.Paddle;
-import org.example.btl.game.GameManager;
-
+import org.example.btl.game.*;
+import org.example.btl.game.Brick;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class GunPowerUp extends PowerUp {
-    private static final long FIRE_INTERVAL = 300; // thời gian giữa hai viên đạn (ms)
+    private static final long FIRE_INTERVAL = 300;
     private long lastFireTime;
-    private List<Bullet> bullets;
-    private Image bulletImage;
+    private final List<Bullet> bullets;
+    private boolean isPickedUp = false;
+
+    private final List<PowerUp> pendingDrops = new ArrayList<>();
 
     public GunPowerUp(double x, double y) {
-        super(x, y, "Gun", 10000);
+        super(x, y, "Gun", 5000);
         this.bullets = new ArrayList<>();
-        this.bulletImage = loadImage("/org/example/btl/images/Bullet.png");// 10 giây
     }
 
     @Override
     public void applyEffect(Paddle paddle) {
+        isPickedUp = true;
         lastFireTime = System.currentTimeMillis();
     }
 
     @Override
     public void removeEffect(Paddle paddle) {
-        System.out.println("GunPowerUp expired!");
         bullets.clear();
     }
 
-    public void renderBullets(GraphicsContext gc) {
-            for (Bullet b : bullets) {
-                b.render(gc);
-            }
-    }
+    public void updateBullets(List<Brick> bricks, List<Ball> balls) {
+        Iterator<Bullet> bulletIterator = bullets.iterator();
 
-    public  void updateBullets() {
-        List<Bullet> toRemove = new ArrayList<>();
-        for (Bullet b : bullets) {
+        while (bulletIterator.hasNext()) {
+            Bullet b = bulletIterator.next();
             b.update();
+
             if (!b.isActive()) {
-                toRemove.add(b);
+                bulletIterator.remove();
+                continue;
+            }
+
+            Iterator<Brick> brickIterator = bricks.iterator();
+            while (brickIterator.hasNext()) {
+                Brick brick = brickIterator.next();
+                if (b.isColliding(brick)) {
+                    brickIterator.remove();
+                    b.deactivate();
+
+                    if (brick.getBrickType() == 2) {
+                        PowerUp newPowerUp = null;
+                        switch (brick.getPowerUpType()) {
+                            case 1:
+                                newPowerUp = new TinyBallPowerUp(brick.getX(), brick.getY(), balls);
+                                break;
+                            case 2:
+                                newPowerUp = new FastBallPowerUp(brick.getX(), brick.getY(), balls);
+                                break;
+                            case 3:
+                                newPowerUp = new TripleBallPowerUp(brick.getX(), brick.getY(), balls);
+                                break;
+                            case 4:
+                                newPowerUp = new ExpandPaddlePowerUp(brick.getX(), brick.getY());
+                                break;
+                            case 5:
+                                newPowerUp = new GunPowerUp(brick.getX(), brick.getY());
+                                break;
+                        }
+                        if (newPowerUp != null) {
+                            pendingDrops.add(newPowerUp);
+                        }
+                    }
+                    break;
+                }
             }
         }
-        bullets.removeAll(toRemove);
     }
 
-    public void updateWhileActive(Paddle paddle) {
+    public void updateWhileActive(Paddle paddle, List<Brick> bricks, List<Ball> balls) {
+        if (!isPickedUp) return;
+
         long now = System.currentTimeMillis();
         if (now - lastFireTime > FIRE_INTERVAL) {
             double xLeft = paddle.getX() + 5;
@@ -62,5 +93,35 @@ public class GunPowerUp extends PowerUp {
 
             lastFireTime = now;
         }
+
+        updateBullets(bricks, balls);
     }
+
+    /** Trả về các powerup được sinh ra khi đạn phá gạch */
+    public List<PowerUp> consumePendingDrops() {
+        if (pendingDrops.isEmpty()) return List.of();
+        List<PowerUp> result = new ArrayList<>(pendingDrops);
+        pendingDrops.clear();
+        return result;
+    }
+
+    @Override
+    public void render(GraphicsContext gc) {
+        if (!isPickedUp) {
+            super.render(gc);
+        }
+        for (Bullet b : bullets) {
+            b.render(gc);
+        }
+    }
+
+    public boolean isPickedUp() {
+        return isPickedUp;
+    }
+
+    public List<Bullet> getBullets() {
+        return bullets;
+    }
+
+
 }

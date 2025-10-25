@@ -14,11 +14,13 @@ public class ShrinkPaddlePowerUp extends PowerUp {
 
     @Override
     public void applyEffect(Paddle paddle) {
-        if (originalWidth < 0) originalWidth = paddle.getWidth();
-        double newWidth = paddle.getWidth() / SCALE_FACTOR;
-        paddle.setWidth(newWidth);
-        Image img = loadImage("/org/example/btl/images/paddleShrink.png");
-        paddle.setImage(img);
+        if (originalWidth < 0) {
+            originalWidth = paddle.getWidth();
+            double newWidth = paddle.getWidth() / SCALE_FACTOR;
+            paddle.setWidth(newWidth);
+            Image img = loadImage("/org/example/btl/images/paddleShrink.png");
+            paddle.setImage(img);
+        }
     }
 
     @Override

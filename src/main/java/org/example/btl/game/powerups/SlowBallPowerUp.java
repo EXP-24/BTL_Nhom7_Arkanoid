@@ -3,26 +3,39 @@ package org.example.btl.game.powerups;
 import org.example.btl.game.Ball;
 import org.example.btl.game.Paddle;
 
-public class SlowBallPowerUp extends PowerUp {
-    private static final double SPEED_MULTIPLIER = 0.7;
-    private Ball ball;
+import java.util.List;
 
-    public SlowBallPowerUp(double x, double y, Ball ball) {
+public class SlowBallPowerUp extends PowerUp {
+    private static final double SPEED_MULTIPLIER = 0.75;
+    private List<Ball> balls;
+
+
+    public SlowBallPowerUp(double x, double y, List<Ball> balls) {
         super(x, y, "SlowBall", 10000);
-        this.ball = ball;
+        this.balls = balls;
     }
 
     @Override
     public void applyEffect(Paddle paddle) {
-        if (ball != null && ball.getSpeed() > 0.8) {
-            ball.setSpeed(ball.getSpeed() * SPEED_MULTIPLIER);
+        for (Ball ball : balls) {
+            if (ball != null) {
+                double speed = ball.getSpeed();
+                if (speed > 1.0) {
+                    ball.setSpeed(1.0);
+                }
+                else if (speed > 0.75) {
+                    ball.setSpeed(speed * SPEED_MULTIPLIER);
+                }
+            }
         }
     }
 
     @Override
     public void removeEffect(Paddle paddle) {
-        if (ball != null) {
-            ball.setSpeed(ball.getSpeed() / SPEED_MULTIPLIER);
+        for (Ball ball : balls) {
+            if (ball != null && ball.getSpeed() < 1.0) {
+                ball.setSpeed(1.0);
+            }
         }
     }
 }

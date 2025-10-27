@@ -1,14 +1,140 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.canvas.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.canvas.Canvas?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="704.0" prefWidth="1152.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.btl.controllers.GameController">
+<AnchorPane prefHeight="704.0" prefWidth="1152.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.btl.controllers.GameController">
    <ImageView fitHeight="704.0" fitWidth="1152.0" pickOnBounds="true" preserveRatio="true">
       <image>
          <Image url="@images/background.png" />
       </image>
    </ImageView>
-    <Canvas fx:id="canvas" height="704.0" width="1152.0" />
+    <Canvas fx:id="canvas" height="714.0" width="1152.0" />
+    <Label fx:id="scoreLabel" layoutX="961.0" layoutY="89.0" style="-fx-text-fill: yellow; -fx-font-size: 24px; -fx-font-weight: bold;" text="Score: 0" />
+
+    <Label fx:id="topScoreLabel" layoutX="936.0" layoutY="253.0" style="-fx-text-fill: cyan; -fx-font-size: 24px; -fx-font-weight: bold;" text="Top Score: 0" />
+
+    <VBox fx:id="scoreBoardBox" layoutX="29.0" layoutY="61.0" prefHeight="419.0" prefWidth="166.0" spacing="5" AnchorPane.bottomAnchor="235.00000000000006" AnchorPane.leftAnchor="29.0" AnchorPane.rightAnchor="956.5999999999999" AnchorPane.topAnchor="61.0">
+      <children>
+         <Label alignment="BASELINE_CENTER" contentDisplay="CENTER" prefHeight="6.0" prefWidth="164.0" text="Score Board" textFill="#e5fa04">
+            <font>
+               <Font name=".VnArial Bold" size="14.0" />
+            </font>
+         </Label>
+         <Label alignment="BASELINE_LEFT" prefHeight="0.0" prefWidth="22.0" text="#1 " textFill="#d5ec05">
+            <font>
+               <Font name=".VnArial Bold Italic" size="13.0" />
+            </font>
+         </Label>
+         <Label fx:id="score1" prefHeight="15.0" prefWidth="154.0" text="0" textFill="#a5ea03">
+            <font>
+               <Font name=".VnArial Bold Italic" size="12.0" />
+            </font>
+         </Label>
+         <Label alignment="BASELINE_LEFT" prefHeight="11.0" prefWidth="22.0" text="#2 " textFill="#d5ec05">
+            <font>
+               <Font name=".VnArial Bold Italic" size="13.0" />
+            </font>
+         </Label>
+         <Label fx:id="score2" prefHeight="15.0" prefWidth="147.0" text="0" textFill="#a5ea03">
+            <font>
+               <Font name=".VnArial Bold Italic" size="12.0" />
+            </font>
+         </Label>
+         <Label alignment="BASELINE_LEFT" prefHeight="10.0" prefWidth="22.0" text="#3 " textFill="#d5ec05">
+            <font>
+               <Font name=".VnArial Bold Italic" size="13.0" />
+            </font>
+         </Label>
+         <Label fx:id="score3" prefHeight="16.0" prefWidth="152.0" text="0" textFill="#a5ea03">
+            <font>
+               <Font name=".VnArial Bold Italic" size="12.0" />
+            </font>
+         </Label>
+         <Label alignment="BASELINE_LEFT" prefHeight="5.0" prefWidth="22.0" text="#4 " textFill="#d5ec05">
+            <font>
+               <Font name=".VnArial Bold Italic" size="13.0" />
+            </font>
+         </Label>
+         <Label fx:id="score4" prefHeight="15.0" prefWidth="146.0" text="0" textFill="#a5ea03">
+            <font>
+               <Font name=".VnArial Bold Italic" size="12.0" />
+            </font>
+         </Label>
+         <Label alignment="BASELINE_LEFT" prefHeight="0.0" prefWidth="22.0" text="#5 " textFill="#d5ec05">
+            <font>
+               <Font name=".VnArial Bold Italic" size="13.0" />
+            </font>
+         </Label>
+         <Label fx:id="score5" prefHeight="15.0" prefWidth="147.0" text="0" textFill="#a5ea03">
+            <font>
+               <Font name=".VnArial Bold Italic" size="12.0" />
+            </font>
+         </Label>
+         <Label alignment="BASELINE_LEFT" prefHeight="0.0" prefWidth="22.0" text="#6 " textFill="#d5ec05">
+            <font>
+               <Font name=".VnArial Bold Italic" size="13.0" />
+            </font>
+         </Label>
+         <Label fx:id="score6" prefHeight="15.0" prefWidth="152.0" text="0" textFill="#a5ea03">
+            <font>
+               <Font name=".VnArial Bold Italic" size="12.0" />
+            </font>
+         </Label>
+         <Label alignment="BASELINE_LEFT" prefHeight="0.0" prefWidth="22.0" text="#7 " textFill="#d5ec05">
+            <font>
+               <Font name=".VnArial Bold Italic" size="13.0" />
+            </font>
+         </Label>
+         <Label fx:id="score7" prefHeight="15.0" prefWidth="150.0" text="0" textFill="#a5ea03">
+            <font>
+               <Font name=".VnArial Bold Italic" size="12.0" />
+            </font>
+         </Label>
+         <Label alignment="BASELINE_LEFT" prefHeight="3.0" prefWidth="22.0" text="#8 " textFill="#d5ec05">
+            <font>
+               <Font name=".VnArial Bold Italic" size="13.0" />
+            </font>
+         </Label>
+         <Label fx:id="score8" prefHeight="15.0" prefWidth="150.0" text="0" textFill="#a5ea03">
+            <font>
+               <Font name=".VnArial Bold Italic" size="12.0" />
+            </font>
+         </Label>
+         <Label alignment="BASELINE_LEFT" prefHeight="0.0" prefWidth="22.0" text="#9 " textFill="#d5ec05">
+            <font>
+               <Font name=".VnArial Bold Italic" size="13.0" />
+            </font>
+         </Label>
+         <Label fx:id="score9" prefHeight="15.0" prefWidth="156.0" text="0" textFill="#a5ea03">
+            <font>
+               <Font name=".VnArial Bold Italic" size="12.0" />
+            </font>
+         </Label>
+         <Label alignment="BASELINE_LEFT" prefHeight="6.0" prefWidth="38.0" text="#10 " textFill="#d5ec05">
+            <font>
+               <Font name=".VnArial Bold Italic" size="13.0" />
+            </font>
+         </Label>
+         <Label fx:id="score10" prefHeight="15.0" prefWidth="155.0" text="0" textFill="#a5ea03">
+            <font>
+               <Font name=".VnArial Bold Italic" size="12.0" />
+            </font>
+         </Label>
+      </children></VBox>
+   <Label alignment="TOP_CENTER" layoutX="992.0" layoutY="597.0" prefHeight="20.0" prefWidth="42.0" text="Level" textFill="#efd404">
+      <font>
+         <Font name=".VnArial Bold Italic" size="16.0" />
+      </font>
+   </Label>
+   <Label fx:id="levelLabel" alignment="CENTER" layoutX="999.0" layoutY="616.0" prefHeight="20.0" prefWidth="28.0" text="1" textFill="#fccf05">
+      <font>
+         <Font name=".VnArial Bold Italic" size="16.0" />
+      </font>
+   </Label>
 </AnchorPane>

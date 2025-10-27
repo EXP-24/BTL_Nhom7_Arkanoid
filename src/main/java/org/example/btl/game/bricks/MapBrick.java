@@ -68,39 +68,56 @@ public class MapBrick {
         return bricks;
     }
 
+    // Trong file MapBrick.java
     public static int[][] loadMap(int level) {
 
         List<int[]> mapList = new ArrayList<>();
+        String filePath = "/org/example/btl/Map/Map" + level + ".txt"; // Đường dẫn này CÓ VẺ ĐÚNG
+        InputStream is = null;
 
-        String filePath = "/org/example/btl/Map/Map" + level + ".txt";
-
-        try (InputStream is = MapBrick.class.getResourceAsStream(filePath);
-             BufferedReader reader = new BufferedReader(new InputStreamReader(is))) {
+        try {
+            is = MapBrick.class.getResourceAsStream(filePath);
 
             if (is == null) {
                 System.err.println("Không tìm thấy file map tại: " + filePath);
-                return new int[0][0]; // Trả về mảng trống
+                return null; // <--- SỬA 1: Trả về null
             }
 
-            String line;
-            while ((line = reader.readLine()) != null) {
-                line = line.trim();
-                if (line.isEmpty()) {
-                    continue;
-                }
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(is))) {
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    line = line.trim();
+                    if (line.isEmpty()) {
+                        continue;
+                    }
 
-                String[] numbers = line.split("\\s+");
-                int[] row = new int[numbers.length];
-                for (int i = 0; i < numbers.length; i++) {
-                    row[i] = Integer.parseInt(numbers[i]);
+                    String[] numbers = line.split("\\s+");
+                    int[] row = new int[numbers.length];
+                    for (int i = 0; i < numbers.length; i++) {
+                        row[i] = Integer.parseInt(numbers[i]);
+                    }
+                    mapList.add(row);
                 }
-                mapList.add(row);
             }
 
-        } catch (IOException | NumberFormatException e) {
+        } catch (IOException | NumberFormatException | NullPointerException e) { // Bắt cả NullPointer (nếu is null)
             System.err.println("Lỗi khi đọc file map: " + filePath);
             e.printStackTrace();
-            return new int[0][0]; // Trả về mảng trống khi có lỗi
+            return null; // <--- SỬA 2: Trả về null
+        } finally {
+            if (is != null) {
+                try {
+                    is.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        // THÊM KIỂM TRA NÀY: Nếu file có tồn tại nhưng trống rỗng
+        if (mapList.isEmpty()) {
+            System.err.println("File map rỗng: " + filePath);
+            return null; // <--- SỬA 3: Trả về null
         }
 
         // Chuyển List<int[]> thành int[][]

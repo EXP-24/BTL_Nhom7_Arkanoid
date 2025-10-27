@@ -1,5 +1,6 @@
 package org.example.btl.game;
 
+import org.example.btl.controllers.GameController;
 import org.example.btl.game.bricks.MapBrick;
 import org.example.btl.game.Brick;
 import java.util.ArrayList;
@@ -7,6 +8,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 
+import javafx.application.Platform;
 import javafx.scene.image.Image;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
@@ -19,6 +21,7 @@ import static org.example.btl.GameApplication.*;
 
 public class GameManager {
 
+    private static GameController controller;
     private Renderer renderer;
     private Paddle paddle;
     private Ball ball;
@@ -34,10 +37,26 @@ public class GameManager {
     private boolean gameWon = false;
     private GraphicsContext gc;
 
-    public GameManager(GraphicsContext gc) {
+    private static int score = 0;
+    private static int topScore = 0;
+
+    public int getScore() {
+        return score;
+    }
+
+    public int getTopScore() {
+        return topScore;
+    }
+
+    public GameManager(GraphicsContext gc, GameController controller) {
         this.renderer = new Renderer(gc);
         this.gc = gc;
+        this.controller = controller;
         initGame();
+    }
+
+    public static void setController(GameController controllerRef) {
+        controller = controllerRef;
     }
 
     private void nextLevel() {
@@ -45,11 +64,17 @@ public class GameManager {
             currentBall.setAttached(true);
         }
         this.currentLevel++;
+        if (controller != null) {
+            Platform.runLater(() -> controller.updateLevel(this.currentLevel));
+        }
         loadLevel(this.currentLevel);
     }
 
 
     private void checkLevelCompletion() {
+        if (gameWon) {
+            return;
+        }
         for (Brick brick : map.getBricks()) {
             if (brick.getBrickType() != 9) {
                 return;
@@ -80,7 +105,10 @@ public class GameManager {
         balls = new ArrayList<>();
         balls.add(ball);
         map = new MapBrick();
-        this.currentLevel = 5;
+        this.currentLevel = 1;
+        if (controller != null) {
+            Platform.runLater(() -> controller.updateLevel(this.currentLevel));
+        }
         loadLevel(currentLevel);
         activePowerUps = new ArrayList<>();
         appliedPowerUps = new ArrayList<>();
@@ -151,6 +179,7 @@ public class GameManager {
         }
     }
 
+
     public void checkBrickCollisions() {
         Iterator<Brick> brickIterator = map.getBricks().iterator();
         while (brickIterator.hasNext()) {
@@ -163,8 +192,7 @@ public class GameManager {
                     brick.takeDamage();
                     if (brick.isDestroyed()) {
                         SoundManager.playBrickDestroySound();
-                    }
-                    else {
+                    } else {
                         SoundManager.playBrickHitSound();
                     }
 
@@ -188,15 +216,31 @@ public class GameManager {
                                 activePowerUps.add(newPowerUp);
                                 break;
                             case 5:
-                                newPowerUp = new GunPowerUp(brick.getX(), brick.getY());
+                                newPowerUp = new GunPowerUp(brick.getX(), brick.getY(), this);
                                 activePowerUps.add(newPowerUp);
                                 break;
                         }
                     }
                 }
                 if (brick.isDestroyed()) {
-                    brickIterator.remove();
-                    break;
+                    if(brick.getBrickType() == 7 || brick.getBrickType() == 8) {
+                        brickIterator.remove();
+                        score += 6;
+                        if(score > topScore) {
+                            topScore = score;
+                        }
+                        controller.updateScore(score, topScore);
+                        break;
+                    }
+                    else {
+                        brickIterator.remove();
+                        score += 3;
+                        if(score > topScore) {
+                            topScore = score;
+                        }
+                        controller.updateScore(score, topScore);
+                        break;
+                    }
                 }
             }
         }
@@ -247,13 +291,24 @@ public class GameManager {
         }
     }
 
+    public static void addScore(int amount) {
+        score += amount;
+        if (score > topScore) topScore = score;
+
+        if (controller != null) {
+            controller.updateScore(score, topScore);
+        }
+    }
+
     public void lose() {
         lifeManage.loseLife(ball);
+        if (lifeManage.getLives() <= 0 && controller != null) {
+            Platform.runLater(() -> controller.updateScoreBoard());
+        }
     }
 
     public void renderGame() {
         if (gameWon) {
-            checkLevelCompletion();
         }
         else if (currentLevel == 10) {
             // hien map boss

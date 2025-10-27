@@ -13,7 +13,8 @@ public class Paddle extends MovableObject {
     public Paddle(double x, double y, double width, double height, double speed) {
         super(x, y, width, height);
         this.speed = speed;
-        image = loadImage("/org/example/btl/images/paddle.png");
+        int skinIndexSelected = SkinManager.getSkinIndex();
+        image = loadImage("/org/example/btl/images/paddles/Paddle"+ skinIndexSelected + ".png");
     }
 
     public void setSpeed(double speed) {

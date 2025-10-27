@@ -1,8 +1,8 @@
 package org.example.btl.game;
 
+import org.example.btl.game.Brick;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-import org.example.btl.game.Brick;
 import org.example.btl.game.bricks.MapBrick;
 import java.util.List;
 
@@ -29,7 +29,7 @@ public class Renderer {
 
     public void renderBackground(Image background) {
         if (background != null) {
-            gc.drawImage(background, 0, 0, maxWidth, maxHeight);
+            gc.drawImage(background, 0, 0, MAX_WIDTH, MAX_HEIGHT);
         } else {
             System.err.println("Ảnh nền chưa được tải.");
         }

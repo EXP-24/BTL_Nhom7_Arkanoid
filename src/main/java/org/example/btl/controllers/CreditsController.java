@@ -10,7 +10,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
-import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
@@ -30,7 +29,6 @@ public class CreditsController {
 
     @FXML
     private void initialize() {
-        Font.loadFont(Objects.requireNonNull(getClass().getResource("/org/example/btl/fonts/PixelPurl.ttf")).toExternalForm(), 30);
 
         Text creditsText = new Text("""
                GAME: ARKANOID!
@@ -40,26 +38,26 @@ public class CreditsController {
                Developed by: TEAM 7
                
                
-               Leader, Game Logic, Menu & Sound Effects
-               Pham Duc Cuong 
+               Leader, Game Logic, Menu & Audio Developer
+               Phạm Đức Cường 
                
                
                
                
                Level Designer & Map System Developer
-               Do Trong An 
+               Đỗ Trọng An 
                
                
                
                
-               Score & Paddle Power-up System Developer
-               Nguyen Tuan Anh
+               Score and Power-up System Developer
+               Nguyễn Tuấn Anh
                
                
                
                
                Pause Menu & Game Over System Developer
-               Khuong Tuan Anh
+               Khương Tuấn Anh
                 
                 
                 
@@ -97,7 +95,7 @@ public class CreditsController {
         thanksText.setStyle("""
             -fx-font-size: 36px;
             -fx-fill: white;
-            -fx-font-family: 'PixelPurl';
+            -fx-font-family: 'Consolas';
         """);
 
         thanksText.setWrappingWidth(1152);
@@ -106,11 +104,11 @@ public class CreditsController {
         thanksText.setLayoutY(MAX_HEIGHT / 2.0);
         thanksText.setVisible(false);
 
-        Text guideText = new Text("Press ENTER to return to Menu");
+        Text guideText = new Text("Nhấn ENTER để quay lại Menu");
         guideText.setStyle("""
             -fx-font-size: 20px;
             -fx-fill: gray;
-            -fx-font-family: 'PixelPurl';
+            -fx-font-family: 'Consolas';
         """);
         guideText.setWrappingWidth(1152);
         guideText.setTextAlignment(TextAlignment.CENTER);

@@ -1,3 +1,4 @@
+
 package org.example.btl.game;
 
 import org.example.btl.game.Brick;

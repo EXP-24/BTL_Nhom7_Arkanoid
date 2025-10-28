@@ -46,7 +46,6 @@ public class GameController {
     private void handleKeyPressed(KeyEvent event) {
         gameManager.handleKeyPressed(event);
     }
-
     private void handleKeyRealeased(KeyEvent event) {
         gameManager.handleKeyRealeased(event);
     }

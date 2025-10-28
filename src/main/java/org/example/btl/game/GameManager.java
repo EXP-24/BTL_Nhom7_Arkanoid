@@ -46,7 +46,7 @@ public class GameManager {
         balls = new ArrayList<>();
         balls.add(ball);
         map = new MapBrick();
-        this.currentLevel = 5;
+        this.currentLevel = 8;
         loadLevel(currentLevel);
         activePowerUps = new ArrayList<>();
         appliedPowerUps = new ArrayList<>();

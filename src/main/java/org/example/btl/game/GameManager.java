@@ -120,8 +120,6 @@ public class GameManager {
         appliedPowerUps = new ArrayList<>();
         lifeManage = new LifeManage(5);
 
-        this.gameWon = true;
-
         try {
             String imagePath = "/org/example/btl/images/winDemo.png";
             winnerImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream(imagePath)));

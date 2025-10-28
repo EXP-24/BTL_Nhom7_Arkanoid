@@ -44,11 +44,20 @@ public class GameController {
     private final List<Integer> scoreBoard = new ArrayList<>();
 
     private static final String SCORE_FILE = "score.txt";
+    private boolean isWinnerScreenActive;
 
     @FXML
     public void initialize() {
         loadScoresFromFile();
         displayScoresOnBoard();
+        if (!scoreBoard.isEmpty()) {
+            int highestScore = scoreBoard.get(0);
+            GameManager.setTopScore(highestScore);
+            topScoreLabel.setText("Top Score: " + highestScore);
+        } else {
+            GameManager.setTopScore(0);
+            topScoreLabel.setText("Top Score: 0");
+        }
         gc = canvas.getGraphicsContext2D();
         gameManager = new GameManager(gc, this);
 
@@ -61,11 +70,13 @@ public class GameController {
         new AnimationTimer() {
             @Override
             public void handle(long now) {
-                gameManager.updatePaddle();
-                gameManager.updateBall();
-                gameManager.checkBrickCollisions();
-                gameManager.updatePowerUp();
-                gameManager.updateAppliedPowerUp();
+                if (!gameManager.win()) {
+                    gameManager.updatePaddle();
+                    gameManager.updateBall();
+                    gameManager.checkBrickCollisions();
+                    gameManager.updatePowerUp();
+                    gameManager.updateAppliedPowerUp();
+                }
                 gameManager.renderGame();
             }
         }.start();
@@ -150,6 +161,7 @@ public class GameController {
             e.printStackTrace();
         }
     }
+
 
     private void handleKeyPressed(KeyEvent event) {
         gameManager.handleKeyPressed(event);

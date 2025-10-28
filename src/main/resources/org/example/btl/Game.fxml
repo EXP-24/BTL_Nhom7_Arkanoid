@@ -127,14 +127,14 @@
             </font>
          </Label>
       </children></VBox>
-   <Label alignment="TOP_CENTER" layoutX="992.0" layoutY="597.0" prefHeight="20.0" prefWidth="42.0" text="Level" textFill="#efd404">
+   <Label alignment="TOP_CENTER" layoutX="954.0" layoutY="597.0" prefHeight="30.0" prefWidth="110.0" text="Level" textFill="#efd404">
       <font>
-         <Font name=".VnArial Bold Italic" size="16.0" />
+         <Font name=".VnArial Bold Italic" size="24.0" />
       </font>
    </Label>
-   <Label fx:id="levelLabel" alignment="CENTER" layoutX="999.0" layoutY="616.0" prefHeight="20.0" prefWidth="28.0" text="1" textFill="#fccf05">
+   <Label fx:id="levelLabel" alignment="CENTER" layoutX="995.0" layoutY="627.0" prefHeight="20.0" prefWidth="28.0" text="1" textFill="#fccf05">
       <font>
-         <Font name=".VnArial Bold Italic" size="16.0" />
+         <Font name=".VnArial Bold Italic" size="24.0" />
       </font>
    </Label>
 </AnchorPane>

@@ -36,12 +36,18 @@ public class GameManager {
     private int currentLevel;
     private boolean gameWon = false;
     private GraphicsContext gc;
+    private Image winnerImage;
+    private boolean isWinnerScreenActive = false;
 
     private static int score = 0;
     private static int topScore = 0;
 
     public int getScore() {
         return score;
+    }
+
+    public static void setTopScore(int score) {
+        topScore = score;
     }
 
     public int getTopScore() {
@@ -113,6 +119,16 @@ public class GameManager {
         activePowerUps = new ArrayList<>();
         appliedPowerUps = new ArrayList<>();
         lifeManage = new LifeManage(5);
+
+        this.gameWon = true;
+
+        try {
+            String imagePath = "/org/example/btl/images/winDemo.png";
+            winnerImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream(imagePath)));
+        } catch (Exception e) {
+            System.err.println("Không thể tải ảnh 'winner.png'");
+            e.printStackTrace();
+        }
     }
 
     public void handleKeyPressed(KeyEvent event) {
@@ -307,17 +323,40 @@ public class GameManager {
         }
     }
 
+    public boolean win() {
+        return isWinnerScreenActive || (lifeManage.getLives() <= 0);
+    }
+
     public void renderGame() {
         if (gameWon) {
-        }
-        else if (currentLevel == 10) {
-            // hien map boss
-            //
-        }
-        else if (currentLevel == 11 && gameWon) {
-            // hien chien thang
+            if (!isWinnerScreenActive) {
+                isWinnerScreenActive = true;
+
+                // Cập nhật bảng điểm lần cuối khi thắng
+                if (controller != null) {
+                    Platform.runLater(() -> controller.updateScoreBoard());
+                }
+            }
+
+            // Xóa toàn bộ màn hình game
+            renderer.clear();
+
+            // Vẽ màn hình chiến thắng
+            if (winnerImage != null) {
+                double x = (gc.getCanvas().getWidth() - winnerImage.getWidth()) / 2;
+                double y = (gc.getCanvas().getHeight() - winnerImage.getHeight()) / 2;
+                gc.drawImage(winnerImage, x, y);
+            }
+
+            // Ngăn không cho vẽ phần gameplay nữa
             return;
         }
+
+        // ----- Nếu chưa thắng -----
+        if (currentLevel == 10) {
+            // map boss
+        }
+
         objects = new ArrayList<>();
         objects.addAll(lifeManage.getLiveIcons());
         objects.add(paddle);
@@ -334,4 +373,5 @@ public class GameManager {
             }
         }
     }
+
 }

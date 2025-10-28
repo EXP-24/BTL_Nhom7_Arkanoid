@@ -53,20 +53,6 @@ public class GameManager {
         lifeManage = new LifeManage(5);
     }
 
-    public void handleKeyPressed(KeyEvent event) {
-        if (event.getCode() == KeyCode.A) {
-            leftPressed = true;
-        } else if (event.getCode() == KeyCode.D) {
-            rightPressed = true;
-        } else if (event.getCode() == KeyCode.SPACE) {
-            for (Ball b : balls) {
-                if (b.isAttached()) {
-                    b.setAttached(false);
-                }
-            }
-        }
-    }
-
     public void handleKeyRealeased(KeyEvent event) {
         if (event.getCode() == KeyCode.A) {
             leftPressed = false;
@@ -131,23 +117,6 @@ public class GameManager {
         }
     }
 
-    private void initGame() {
-        paddle = new Paddle(540, 614, 64, 24, 3);
-        ball = new Ball(0, 0, 12, 12, 2, -2, 1);
-        balls = new ArrayList<>();
-        balls.add(ball);
-        map = new MapBrick();
-
-
-        //chinh thu cong tesst
-        this.currentLevel = 5;
-
-        loadLevel(currentLevel);
-        activePowerUps = new ArrayList<>();
-        appliedPowerUps = new ArrayList<>();
-        lifeManage = new LifeManage(5);
-        background = new Image(Objects.requireNonNull(getClass().getResource("/org/example/btl/images/background.png")).toExternalForm());
-    }
 
     public void handleKeyPressed(KeyEvent event) {
         if (event.getCode() == KeyCode.A) {
@@ -160,14 +129,6 @@ public class GameManager {
                     b.setAttached(false);
                 }
             }
-        }
-    }
-
-    public void handleKeyRealeased(KeyEvent event) {
-        if (event.getCode() == KeyCode.A) {
-            leftPressed = false;
-        } else if (event.getCode() == KeyCode.D) {
-            rightPressed = false;
         }
     }
 
@@ -319,20 +280,6 @@ public class GameManager {
 
     public void lose() {
         lifeManage.loseLife(ball);
-    }
-
-    public void resetLevelState() {
-        for (PowerUp powerUp : appliedPowerUps) {
-            powerUp.removeEffect(paddle);
-        }
-        appliedPowerUps.clear();
-        activePowerUps.clear();
-        balls.clear();
-
-        Ball newBall;
-        newBall = new Ball(0, 0, 12, 12, 2, -2, 1);
-        newBall.setAttached(true);
-        balls.add(newBall);
     }
 
     public void renderGame() {

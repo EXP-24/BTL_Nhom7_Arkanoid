@@ -28,7 +28,6 @@ public class GameManager {
     private List<GameObject> objects;
     private List<PowerUp> activePowerUps;
     private List<PowerUp> appliedPowerUps;
-    private Image background;
     private boolean leftPressed = false;
     private boolean rightPressed = false;
     private int currentLevel;
@@ -39,6 +38,41 @@ public class GameManager {
         this.renderer = new Renderer(gc);
         this.gc = gc;
         initGame();
+    }
+
+    private void initGame() {
+        paddle = new Paddle(540, 614, 64, 24, 3);
+        ball = new Ball(0, 0, 12, 12, 2, -2, 1);
+        balls = new ArrayList<>();
+        balls.add(ball);
+        map = new MapBrick();
+        this.currentLevel = 8;
+        loadLevel(currentLevel);
+        activePowerUps = new ArrayList<>();
+        appliedPowerUps = new ArrayList<>();
+        lifeManage = new LifeManage(5);
+    }
+
+    public void handleKeyPressed(KeyEvent event) {
+        if (event.getCode() == KeyCode.A) {
+            leftPressed = true;
+        } else if (event.getCode() == KeyCode.D) {
+            rightPressed = true;
+        } else if (event.getCode() == KeyCode.SPACE) {
+            for (Ball b : balls) {
+                if (b.isAttached()) {
+                    b.setAttached(false);
+                }
+            }
+        }
+    }
+
+    public void handleKeyRealeased(KeyEvent event) {
+        if (event.getCode() == KeyCode.A) {
+            leftPressed = false;
+        } else if (event.getCode() == KeyCode.D) {
+            rightPressed = false;
+        }
     }
 
     private void nextLevel() {
@@ -155,7 +189,6 @@ public class GameManager {
             if (currentball.isAttached()) {
                 currentball.setX(paddle.getX() + (paddle.getWidth() / 2) - ball.getWidth()/2);
                 currentball.setY(paddle.getY() - 10);
-                continue;
             }
             else {
                 currentball.update();
@@ -208,15 +241,23 @@ public class GameManager {
                         PowerUp newPowerUp;
                         switch (brick.getPowerUpType()) {
                             case 1:
-                                newPowerUp = new TinyBallPowerUp(brick.getX(), brick.getY(), balls);
+                                newPowerUp = new ShrinkPaddlePowerUp(brick.getX(), brick.getY());
                                 activePowerUps.add(newPowerUp);
                                 break;
                             case 2:
-                                newPowerUp = new FastBallPowerUp(brick.getX(), brick.getY(), balls);
+                                newPowerUp = new ExpandPaddlePowerUp(brick.getX(), brick.getY());
                                 activePowerUps.add(newPowerUp);
                                 break;
                             case 3:
                                 newPowerUp = new TripleBallPowerUp(brick.getX(), brick.getY(), balls);
+                                activePowerUps.add(newPowerUp);
+                                break;
+                            case 4:
+                                newPowerUp = new FastBallPowerUp(brick.getX(), brick.getY(), balls);
+                                activePowerUps.add(newPowerUp);
+                                break;
+                            case 5:
+                                newPowerUp = new GunPowerUp(brick.getX(), brick.getY());
                                 activePowerUps.add(newPowerUp);
                                 break;
                         }
@@ -237,6 +278,7 @@ public class GameManager {
             powerUp.update();
 
             if (powerUp.isColliding(paddle)) {
+                SoundManager.playPowerUpSound();
                 boolean effectExist = false;
 
                 for(PowerUp existingEffect : appliedPowerUps) {
@@ -267,11 +309,30 @@ public class GameManager {
                 powerUp.removeEffect(paddle);
                 powerUpIterator.remove();
             }
+            else if (powerUp instanceof GunPowerUp) {
+                GunPowerUp gun = (GunPowerUp) powerUp;
+                gun.updateWhileActive(paddle, map.getBricks(), balls);
+                activePowerUps.addAll(gun.consumePendingDrops());
+            }
         }
     }
 
     public void lose() {
         lifeManage.loseLife(ball);
+    }
+
+    public void resetLevelState() {
+        for (PowerUp powerUp : appliedPowerUps) {
+            powerUp.removeEffect(paddle);
+        }
+        appliedPowerUps.clear();
+        activePowerUps.clear();
+        balls.clear();
+
+        Ball newBall;
+        newBall = new Ball(0, 0, 12, 12, 2, -2, 1);
+        newBall.setAttached(true);
+        balls.add(newBall);
     }
 
     public void renderGame() {
@@ -290,9 +351,14 @@ public class GameManager {
         objects.addAll(balls);
         objects.addAll(activePowerUps);
         renderer.clear();
-        renderer.renderBackground(background);
         renderer.renderMap(map);
         renderer.renderAll(objects);
         checkLevelCompletion();
+
+        for (PowerUp powerUp : appliedPowerUps) {
+            if (powerUp instanceof GunPowerUp) {
+                ((GunPowerUp) powerUp).render(gc);
+            }
+        }
     }
 }

@@ -27,14 +27,6 @@ public class Renderer {
         }
     }
 
-    public void renderBackground(Image background) {
-        if (background != null) {
-            gc.drawImage(background, 0, 0, MAX_WIDTH, MAX_HEIGHT);
-        } else {
-            System.err.println("Ảnh nền chưa được tải.");
-        }
-    }
-
     public void renderMap(MapBrick map) {
         if (map == null) return;
         for (Brick brick : map.getBricks()) {

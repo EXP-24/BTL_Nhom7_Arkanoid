@@ -76,7 +76,9 @@ public class GameManager {
     }
 
     private void nextLevel() {
-        resetLevelState();
+        for (Ball currentBall : balls) {
+            currentBall.setAttached(true);
+        }
         this.currentLevel++;
         loadLevel(this.currentLevel);
     }
@@ -95,7 +97,30 @@ public class GameManager {
         }
     }
 
+    private void resetLevelState(){
+        activePowerUps.clear();
+
+        for (PowerUp p : appliedPowerUps) {
+            p.removeEffect(paddle);
+        }
+        appliedPowerUps.clear();
+
+        paddle = new Paddle(540, 614, 64, 24, 3);
+
+        // Đặt lại bóng về mặc định
+        balls.clear();
+        ball = new Ball(0, 0, 12, 12, 2, -2, 1);
+        ball.setAttached(true);
+        balls.add(ball);
+
+    }
+
+
     private void loadLevel(int levelNumber) {
+        if (levelNumber == 11) {
+            map.createBossMap(1152, 704);
+            return;
+        }
 
         int[][] layout = MapBrick.loadMap(levelNumber);
 
@@ -103,6 +128,46 @@ public class GameManager {
             map.createMap(layout, PLAY_AREA_X, PLAY_AREA_Y);
         } else {
             this.gameWon = true;
+        }
+    }
+
+    private void initGame() {
+        paddle = new Paddle(540, 614, 64, 24, 3);
+        ball = new Ball(0, 0, 12, 12, 2, -2, 1);
+        balls = new ArrayList<>();
+        balls.add(ball);
+        map = new MapBrick();
+
+
+        //chinh thu cong tesst
+        this.currentLevel = 5;
+
+        loadLevel(currentLevel);
+        activePowerUps = new ArrayList<>();
+        appliedPowerUps = new ArrayList<>();
+        lifeManage = new LifeManage(5);
+        background = new Image(Objects.requireNonNull(getClass().getResource("/org/example/btl/images/background.png")).toExternalForm());
+    }
+
+    public void handleKeyPressed(KeyEvent event) {
+        if (event.getCode() == KeyCode.A) {
+            leftPressed = true;
+        } else if (event.getCode() == KeyCode.D) {
+            rightPressed = true;
+        } else if (event.getCode() == KeyCode.SPACE) {
+            for (Ball b : balls) {
+                if (b.isAttached()) {
+                    b.setAttached(false);
+                }
+            }
+        }
+    }
+
+    public void handleKeyRealeased(KeyEvent event) {
+        if (event.getCode() == KeyCode.A) {
+            leftPressed = false;
+        } else if (event.getCode() == KeyCode.D) {
+            rightPressed = false;
         }
     }
 
@@ -159,6 +224,14 @@ public class GameManager {
                     brick.takeDamage();
                     if (brick.isDestroyed()) {
                         SoundManager.playBrickDestroySound();
+
+                        if (brick.getBrickType() == 20) {
+
+                            // khi gạch boss vỡ
+                            currentLevel = 5;
+                            loadLevel(currentLevel);
+                            return;
+                        }
                     }
                     else {
                         SoundManager.playBrickHitSound();
@@ -265,12 +338,10 @@ public class GameManager {
     public void renderGame() {
         if (gameWon) {
             checkLevelCompletion();
+            resetLevelState();
         }
-        else if (currentLevel == 10) {
-            // hien map boss
-            //
-        }
-        else if (currentLevel == 11 && gameWon) {
+
+        if (currentLevel == 11 && gameWon) {
             // hien chien thang
             return;
         }

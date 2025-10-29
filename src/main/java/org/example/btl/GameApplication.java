@@ -45,4 +45,5 @@ public class GameApplication extends Application {
         stage.setScene(scene);
         stage.show();
     }
+
 }

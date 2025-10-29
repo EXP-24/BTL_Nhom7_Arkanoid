@@ -1,39 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="org.example.btl.controllers.PauseMenuController"
-            prefWidth="400" prefHeight="300"
-            style="-fx-background-color: rgba(0, 0, 0, 0.6);">
+<AnchorPane prefHeight="704.0" prefWidth="1152.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.btl.controllers.PauseMenuController">
 
-    <!-- Resume -->
-    <ImageView fx:id="resumeButton"
-               fitWidth="180"
-               fitHeight="50"
-               layoutX="110"
-               layoutY="60"
-               pickOnBounds="true"
-               preserveRatio="true" />
-
-    <!-- Restart -->
-    <ImageView fx:id="restartButton"
-               fitWidth="180"
-               fitHeight="50"
-               layoutX="110"
-               layoutY="130"
-               pickOnBounds="true"
-               preserveRatio="true" />
-
-    <!-- Exit -->
-    <ImageView fx:id="exitButton"
-               fitWidth="180"
-               fitHeight="50"
-               layoutX="110"
-               layoutY="200"
-               pickOnBounds="true"
-               preserveRatio="true" />
-
+    <children>
+        <ImageView fitHeight="704.0" fitWidth="1152.0" pickOnBounds="true" preserveRatio="true">
+            <image>
+                <Image url="@images/pausemenu.png" />
+            </image>
+        </ImageView>
+      <ImageView fx:id = "resumeButtom" fitHeight="150.0" fitWidth="200.0" layoutX="376.0" layoutY="288.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@images/texts/resume.png" />
+         </image>
+      </ImageView>
+      <ImageView  fx:id ="restartButtom" fitHeight="150.0" fitWidth="200.0" layoutX="368.0" layoutY="362.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@images/texts/restart.png" />
+         </image>
+      </ImageView>
+      <ImageView  fx:id ="quitButtom" fitHeight="75.0" fitWidth="263.0" layoutX="336.0" layoutY="443.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@images/texts/quit.png" />
+         </image>
+      </ImageView>
+    </children>
 </AnchorPane>

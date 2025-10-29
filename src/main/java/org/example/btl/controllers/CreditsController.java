@@ -26,7 +26,6 @@ import static org.example.btl.GameApplication.MAX_HEIGHT;
 import static org.example.btl.GameApplication.MAX_WIDTH;
 
 public class CreditsController {
-
     @FXML
     private Pane creditsPane;
 
@@ -35,45 +34,62 @@ public class CreditsController {
 
     @FXML
     private void initialize() {
-        // Load pixel font
+        // Nạp font pixel
         Font.loadFont(Objects.requireNonNull(
-                        getClass().getResource("/org/example/btl/fonts/PixelPurl.ttf"))
-                .toExternalForm(), 30);
+                getClass().getResource("/org/example/btl/fonts/PixelPurl.ttf")).toExternalForm(), 30);
 
-        // Start playing background music
+        // Bắt đầu phát nhạc
         playMusic();
 
-        // === CREDIT TEXT ===
+        // Text chính
         Text creditsText = new Text("""
-                GAME: ARKANOID!
-
-                Developed by: TEAM 7
-
-                Leader, Game Logic, Menu & Sound Effects
-                Pham Duc Cuong
-
-                Level Designer & Map System Developer
-                Do Trong An
-
-                Score & Paddle Power-up System Developer
-                Nguyen Tuan Anh
-
-                Pause Menu & Game Over System Developer
-                Khuong Tuan Anh
-
-                Course Project:
-                Object-Oriented Programming
-                Semester: 2025
-
-                Tools & Technologies:
-                JavaFX
-                Scene Builder
-                IntelliJ IDEA
-                Aseprite
-
-                Special Thanks:
-                Caffeine and Deadline
-                """);
+               GAME: ARKANOID!
+                
+                
+                
+               Developed by: TEAM 7
+               
+               
+               Leader, Game Logic, Menu & Sound Effects
+               Pham Duc Cuong 
+               
+               
+               
+               
+               Level Designer & Map System Developer
+               Do Trong An 
+               
+               
+               
+               
+               Score & Paddle Power-up System Developer
+               Nguyen Tuan Anh
+               
+               
+               
+               
+               Pause Menu & Game Over System Developer
+               Khuong Tuan Anh
+                
+                
+                
+               Course Project:
+               Object-Oriented Programming
+               Semester: 2025
+                
+                
+                
+               Tools & Technologies:
+               JavaFX
+               Scene Builder
+               IntelliJ IDEA
+               Aseprite
+                
+                
+                
+               Special Thanks:
+               Caffeine and Deadline
+               """);
 
         creditsText.setStyle("""
             -fx-font-size: 30px;
@@ -84,7 +100,7 @@ public class CreditsController {
         creditsText.setTextAlignment(TextAlignment.CENTER);
         creditsText.setLayoutX(0);
 
-        // === FINAL THANKS TEXT ===
+        // Text cảm ơn cuối
         Text thanksText = new Text("THANK YOU FOR PLAYING!");
         thanksText.setStyle("""
             -fx-font-size: 36px;
@@ -97,7 +113,7 @@ public class CreditsController {
         thanksText.setLayoutY(MAX_HEIGHT / 2.0);
         thanksText.setVisible(false);
 
-        // === GUIDE TEXT ===
+        // Hướng dẫn quay lại menu
         Text guideText = new Text("Click or Press ENTER to return to Menu");
         guideText.setStyle("""
             -fx-font-size: 20px;
@@ -111,7 +127,6 @@ public class CreditsController {
 
         creditsPane.getChildren().addAll(creditsText, thanksText, guideText);
 
-        // === SCROLL ANIMATION ===
         Platform.runLater(() -> {
             double paneHeight = creditsPane.getHeight();
             double textHeight = creditsText.getBoundsInLocal().getHeight();
@@ -134,7 +149,7 @@ public class CreditsController {
 
             timeline.play();
 
-            // Key + Mouse handler
+            // Quay lại menu bằng Enter hoặc click chuột
             creditsPane.requestFocus();
             creditsPane.setOnKeyPressed(event -> {
                 if (event.getCode() == KeyCode.ENTER) {
@@ -143,7 +158,6 @@ public class CreditsController {
                     returnToMenu();
                 }
             });
-
             creditsPane.setOnMouseClicked(e -> {
                 stopMusic();
                 timeline.stop();
@@ -152,7 +166,7 @@ public class CreditsController {
         });
     }
 
-    /** Play background music for credits screen */
+
     private void playMusic() {
         try {
             URL soundUrl = getClass().getResource("/org/example/btl/M&S/credits.mp3");
@@ -169,7 +183,6 @@ public class CreditsController {
         }
     }
 
-    /** Stop background music */
     private void stopMusic() {
         if (mediaPlayer != null) {
             mediaPlayer.stop();
@@ -178,7 +191,6 @@ public class CreditsController {
         }
     }
 
-    /** Return to the main menu */
     private void returnToMenu() {
         try {
             Parent menuRoot = FXMLLoader.load(Objects.requireNonNull(

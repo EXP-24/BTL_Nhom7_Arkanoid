@@ -8,114 +8,104 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.net.URL;
 import java.util.Objects;
 
 import static org.example.btl.GameApplication.MAX_HEIGHT;
 import static org.example.btl.GameApplication.MAX_WIDTH;
 
 public class PauseMenuController {
+    @FXML
+    private ImageView restartButtom;
 
     @FXML
-    private ImageView resumeButton;
-    @FXML
-    private ImageView restartButton;
-    @FXML
-    private ImageView exitButton;
+    private  ImageView resumeButtom;
 
-    private Image resumeImage, resumeHover;
-    private Image restartImage, restartHover;
-    private Image exitImage, exitHover;
+    @FXML
+    private ImageView quitButtom;
+
+    private Image restartButtomImage,restartButtomHover;
+    private Image resumeButtomImage,resumeButtomHover;
+    private Image quitButtomImage,quitButtomHover;
     private Image mouseImage;
-    private MediaPlayer mediaPlayer;
+    private GameController gameController;
 
     @FXML
     public void initialize() {
         mouseImage = loadImage("mouse");
-        Platform.runLater(() -> resumeButton.getScene().setCursor(new ImageCursor(mouseImage)));
+        Platform.runLater(() -> {
+            resumeButtom.getScene().setCursor(new ImageCursor(mouseImage));
+        });
+        restartButtomImage = loadImage("restart");
+        restartButtomHover = loadImage("restartHover");
+        quitButtomImage = loadImage("quit");
+        quitButtomHover = loadImage("quitHover");
+        resumeButtomImage = loadImage("resume");
+        resumeButtomHover = loadImage("resumeHover");
 
-        resumeImage = loadImage("back");
-        resumeHover = loadImage("backHover");
-        exitImage = loadImage("exit");
-        exitHover = loadImage("exitHover");
+        setHoverEffect(resumeButtom, resumeButtomImage, resumeButtomHover);
+        setHoverEffect(quitButtom, quitButtomImage, quitButtomHover);
+        setHoverEffect(restartButtom, restartButtomImage, restartButtomHover);
 
-        setHoverEffect(resumeButton, resumeImage, resumeHover);
-        setHoverEffect(restartButton, restartImage, restartHover);
-        setHoverEffect(exitButton, exitImage, exitHover);
+        restartButtom.setOnMouseClicked(e-> onRestart());
+        quitButtom.setOnMouseClicked(e -> onQuit());
+        resumeButtom.setOnMouseClicked(e -> onResume());
 
-        resumeButton.setOnMouseClicked(e -> resumeGame());
-        restartButton.setOnMouseClicked(e -> restartGame());
-        exitButton.setOnMouseClicked(e -> exitToMenu());
-
-        playPauseMusic();
     }
 
-    private Image loadImage(String name) {
+
+    private Image loadImage(String filename) {
         return new Image(Objects.requireNonNull(
-                getClass().getResourceAsStream("/org/example/btl/images/texts/" + name + ".png")));
+                getClass().getResourceAsStream("/org/example/btl/images/texts/" + filename + ".png")));
     }
 
+    /** Hiệu ứng đổi hình khi hover */
     private void setHoverEffect(ImageView button, Image normal, Image hover) {
         button.setOnMouseEntered(e -> button.setImage(hover));
         button.setOnMouseExited(e -> button.setImage(normal));
     }
-
-    private void playPauseMusic() {
-        try {
-            URL soundUrl = getClass().getResource("/org/example/btl/M&S/pause.mp3");
-            if (soundUrl != null) {
-                mediaPlayer = new MediaPlayer(new Media(soundUrl.toExternalForm()));
-                mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
-                mediaPlayer.setVolume(0.5);
-                mediaPlayer.play();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void stopMusic() {
-        if (mediaPlayer != null) {
-            mediaPlayer.stop();
-            mediaPlayer.dispose();
-            mediaPlayer = null;
-        }
-    }
-
-    private void resumeGame() {
-        stopMusic();
-        Stage stage = (Stage) resumeButton.getScene().getWindow();
-        stage.close();
-    }
-
-    private void restartGame() {
-        stopMusic();
-        try {
+    private void onRestart(){
+        try{
             Parent gameRoot = FXMLLoader.load(Objects.requireNonNull(
                     getClass().getResource("/org/example/btl/Game.fxml")));
-            Stage mainStage = (Stage) restartButton.getScene().getWindow();
-            mainStage.setScene(new Scene(gameRoot, MAX_WIDTH, MAX_HEIGHT));
-            mainStage.show();
+            Stage stage = (Stage) restartButtom.getScene().getWindow();
+            stage.setScene(new Scene(gameRoot,MAX_WIDTH,MAX_HEIGHT));
+
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private void exitToMenu() {
-        stopMusic();
-        try {
-            Parent menuRoot = FXMLLoader.load(Objects.requireNonNull(
+    private void onQuit(){
+        try{
+            Parent gameRoot = FXMLLoader.load(Objects.requireNonNull(
                     getClass().getResource("/org/example/btl/Menu.fxml")));
-            Stage mainStage = (Stage) exitButton.getScene().getWindow();
-            mainStage.setScene(new Scene(menuRoot, MAX_WIDTH, MAX_HEIGHT));
-            mainStage.show();
+            Stage stage = (Stage) restartButtom.getScene().getWindow();
+            stage.setScene(new Scene(gameRoot,MAX_WIDTH,MAX_HEIGHT));
+
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+    public void setGameController(GameController controller) {
+        this.gameController = controller;
+    }
+
+    private void onResume() {
+
+            try{
+                Parent gameRoot = FXMLLoader.load(Objects.requireNonNull(
+                        getClass().getResource("/org/example/btl/Game.fxml")));
+                Stage stage = (Stage) restartButtom.getScene().getWindow();
+                stage.setScene(new Scene(gameRoot,MAX_WIDTH,MAX_HEIGHT));
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+    }
+
+
 }

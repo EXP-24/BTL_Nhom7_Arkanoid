@@ -25,6 +25,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import static org.example.btl.GameApplication.MAX_HEIGHT;
+import static org.example.btl.GameApplication.MAX_WIDTH;
+
 public class GameController {
 
     @FXML
@@ -118,6 +121,17 @@ public class GameController {
             } else {
                 scoreLabels[i].setText("0");
             }
+        }
+    }
+
+    public void backToMenu() {
+        try {
+            Parent menuRoot = FXMLLoader.load(Objects.requireNonNull(
+                    getClass().getResource("/org/example/btl/Menu.fxml")));
+            Stage stage = (Stage) canvas.getScene().getWindow();
+            stage.setScene(new Scene(menuRoot, MAX_WIDTH, MAX_HEIGHT));
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

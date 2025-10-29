@@ -1,9 +1,14 @@
 package org.example.btl.game;
 
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import org.example.btl.controllers.GameController;
 import org.example.btl.game.bricks.MapBrick;
 import org.example.btl.game.Brick;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -115,6 +120,13 @@ public class GameManager {
 
     public void handleKeyPressed(KeyEvent event) {
         if (gameWon) {
+            if (event.getCode() == KeyCode.ENTER) {
+                if (controller != null) {
+                    Platform.runLater(() -> controller.backToMenu());
+                }
+            }
+
+            return;
         }
 
         if (event.getCode() == KeyCode.A) {
@@ -302,7 +314,21 @@ public class GameManager {
                 double y = (gc.getCanvas().getHeight() - winnerImage.getHeight()) / 2;
                 gc.drawImage(winnerImage, x, y);
             }
+            double canvasWidth = gc.getCanvas().getWidth();
+            double canvasHeight = gc.getCanvas().getHeight();
 
+            // 2. Thiết lập font và màu sắc y hệt
+            gc.setFont(Font.font("Consolas", 20)); // Dùng Font (cần import)
+            gc.setFill(Color.GRAY);                // Dùng Color (cần import)
+            gc.setTextAlign(TextAlignment.CENTER); // Dùng TextAlignment (cần import)
+
+            // 3. Chuẩn bị nội dung và vị trí
+            String text = "Nhấn ENTER để quay lại Menu";
+            double textX = canvasWidth / 2;      // Căn giữa theo chiều ngang
+            double textY = canvasHeight - 30;    // Đặt ở gần cuối màn hình
+
+            // 4. Vẽ văn bản lên canvas
+            gc.fillText(text, textX, textY);
             return;
         }
 

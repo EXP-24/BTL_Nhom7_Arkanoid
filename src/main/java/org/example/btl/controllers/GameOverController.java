@@ -16,18 +16,14 @@ import java.util.Objects;
 import static org.example.btl.Config.*;
 
 
-public class PauseMenuController {
+public class GameOverController {
     @FXML
     private ImageView restartButton;
-
-    @FXML
-    private  ImageView resumeButton;
 
     @FXML
     private ImageView quitButton;
 
     private Image restartButtonImage,restartButtonHover;
-    private Image resumeButtonImage,resumeButtonHover;
     private Image quitButtonImage,quitButtonHover;
     private Image mouseImage;
     private GameController gameController;
@@ -36,23 +32,18 @@ public class PauseMenuController {
     public void initialize() {
         mouseImage = loadImage("mouse");
         Platform.runLater(() -> {
-            resumeButton.getScene().setCursor(new ImageCursor(mouseImage));
+            restartButton.getScene().setCursor(new ImageCursor(mouseImage));
         });
         restartButtonImage = loadImage("restart");
         restartButtonHover = loadImage("restartHover");
         quitButtonImage = loadImage("quit");
         quitButtonHover = loadImage("quitHover");
-        resumeButtonImage = loadImage("resume");
-        resumeButtonHover = loadImage("resumeHover");
 
-        setHoverEffect(resumeButton, resumeButtonImage, resumeButtonHover);
         setHoverEffect(quitButton, quitButtonImage, quitButtonHover);
         setHoverEffect(restartButton, restartButtonImage, restartButtonHover);
 
         restartButton.setOnMouseClicked(e-> onRestart());
         quitButton.setOnMouseClicked(e -> onQuit());
-        resumeButton.setOnMouseClicked(e -> onResume());
-
     }
 
 

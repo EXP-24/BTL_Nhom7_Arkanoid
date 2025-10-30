@@ -91,5 +91,25 @@ public class GameController {
     private void handleKeyRealeased(KeyEvent event) {
         gameManager.handleKeyRealeased(event);
     }
+    public void gameOver() {
+        try {
+            gameLoop.stop();
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/btl/GameOverMenu.fxml"));
+            Parent gameOverRoot = loader.load();
+
+            GameOverController gameOverController = loader.getController();
+            gameOverController.setGameController(this);
+
+            Stage stage = (Stage) canvas.getScene().getWindow();
+            Scene gameOverScene = new Scene(gameOverRoot, MAX_WIDTH, MAX_HEIGHT);
+            stage.setScene(gameOverScene);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
 }
 

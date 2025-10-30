@@ -231,7 +231,15 @@ public class GameManager {
 
     public void lose() {
         lifeManage.loseLife(ball);
+
+        // Khi hết mạng, hiện GameOver
+        if (lifeManage.getLives() <= 0) {
+            gameController.gameOver();
+            return;
+        }
+
     }
+
 
     public void resetLevelState() {
         for (PowerUp powerUp : appliedPowerUps) {

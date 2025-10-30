@@ -15,17 +15,17 @@
             <Image url="@images/texts/frame.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="resumeButtom" fitHeight="34.0" fitWidth="250.0" layoutX="451.0" layoutY="259.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="resumeButton" fitHeight="34.0" fitWidth="250.0" layoutX="451.0" layoutY="259.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@images/texts/resume.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="restartButtom" fitHeight="34.0" fitWidth="250.0" layoutX="451.0" layoutY="338.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="restartButton" fitHeight="34.0" fitWidth="250.0" layoutX="451.0" layoutY="338.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@images/texts/restart.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="quitButtom" fitHeight="34.0" fitWidth="350.0" layoutX="411.0" layoutY="409.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="quitButton" fitHeight="34.0" fitWidth="350.0" layoutX="411.0" layoutY="409.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@images/texts/quit.png" />
          </image>

@@ -3,8 +3,7 @@ package org.example.btl.game;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
-import static org.example.btl.GameApplication.PLAY_AREA_WIDTH;
-import static org.example.btl.GameApplication.PLAY_AREA_X;
+import static org.example.btl.Config.*;
 
 public class Paddle extends MovableObject {
     private double speed;

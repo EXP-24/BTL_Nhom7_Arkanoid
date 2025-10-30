@@ -1,80 +1,44 @@
 package org.example.btl.controllers;
 
 import javafx.animation.AnimationTimer;
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Cursor;
+import javafx.scene.ImageCursor;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 
-import javafx.scene.control.Label;
-import javafx.scene.image.ImageView;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.example.btl.game.GameManager;
 
-import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.IOException;
 import java.util.Objects;
 
-import static org.example.btl.GameApplication.MAX_HEIGHT;
-import static org.example.btl.GameApplication.MAX_WIDTH;
+import static org.example.btl.Config.*;
 
 public class GameController {
 
     @FXML
     private Canvas canvas;
 
-    @FXML
-    private Label scoreLabel;
-
-    @FXML
-    private Label topScoreLabel;
-
-    @FXML
-    private Label levelLabel;
-
-    @FXML
-    private VBox scoreBoardBox;
-
-    @FXML
-    private Label score1, score2, score3, score4, score5, score6, score7, score8, score9, score10;
-
     private GameManager gameManager;
     private GraphicsContext gc;
-    private final List<Integer> scoreBoard = new ArrayList<>();
-
-    private static final String SCORE_FILE = "score.txt";
-    private boolean isWinnerScreenActive;
-
     private AnimationTimer gameLoop;
-    private boolean isPaused = false;
+    private Stage primaryStage;
+    private Scene previousScene;
 
     @FXML
     public void initialize() {
-        loadScoresFromFile();
-        displayScoresOnBoard();
-        if (!scoreBoard.isEmpty()) {
-            int highestScore = scoreBoard.get(0);
-            GameManager.setTopScore(highestScore);
-            topScoreLabel.setText("Top Score: " + highestScore);
-        } else {
-            GameManager.setTopScore(0);
-            topScoreLabel.setText("Top Score: 0");
-        }
         gc = canvas.getGraphicsContext2D();
         gameManager = new GameManager(gc, this);
 
-        canvas.setCursor(Cursor.NONE);
-
+        Image mouseImage = new Image(Objects.requireNonNull(
+                getClass().getResourceAsStream("/org/example/btl/images/texts/mouse.png")));
+        canvas.setCursor(new ImageCursor(mouseImage));
         canvas.setFocusTraversable(true);
         canvas.setOnKeyPressed(event -> handleKeyPressed(event));
         canvas.setOnKeyReleased(event -> handleKeyRealeased(event));
@@ -82,130 +46,70 @@ public class GameController {
         gameLoop = new AnimationTimer() {
             @Override
             public void handle(long now) {
-                if (!gameManager.win()) {
-                    gameManager.updatePaddle();
-                    gameManager.updateBall();
-                    gameManager.checkBrickCollisions();
-                    gameManager.updatePowerUp();
-                    gameManager.updateAppliedPowerUp();
-                }
+                gameManager.updatePaddle();
+                gameManager.updateBall();
+                gameManager.checkBrickCollisions();
+                gameManager.updatePowerUp();
+                gameManager.updateAppliedPowerUp();
                 gameManager.renderGame();
             }
         };
-         gameLoop.start();
-        Platform.runLater(() -> canvas.requestFocus());
-
+        gameLoop.start();
     }
 
-    public void updateScore(int score, int topScore) {
-        scoreLabel.setText("Score: " + gameManager.getScore());
-        topScoreLabel.setText("Top Score: " + gameManager.getTopScore());
-    }
-
-    public void updateScoreBoard() {
-        int score = gameManager.getScore();
-
-        List<Integer> scores = new ArrayList<>();
-        File file = new File(SCORE_FILE);
-
-        try {
-            if (file.exists()) {
-                try (BufferedReader br = new BufferedReader(new FileReader(file))) {
-                    String line;
-                    while ((line = br.readLine()) != null) {
-                        scores.add(Integer.parseInt(line.trim()));
-                    }
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        scores.add(score);
-
-        scores.sort((a, b) -> b - a);
-        if (scores.size() > 10) scores = scores.subList(0, 10);
-
-        try (PrintWriter pw = new PrintWriter(new FileWriter(file))) {
-            for (int s : scores) pw.println(s);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        scoreBoard.clear();
-        scoreBoard.addAll(scores);
-        displayScoresOnBoard();
-    }
-
-    public void updateLevel(int level) {
-        levelLabel.setText(String.valueOf(level));
-    }
-
-    private void loadScoresFromFile() {
-        try {
-            Path path = Paths.get(SCORE_FILE);
-            if (Files.exists(path)) {
-                List<String> lines = Files.readAllLines(path);
-                for (String line : lines) {
-                    scoreBoard.add(Integer.parseInt(line.trim()));
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void displayScoresOnBoard() {
-        Label[] labels = {score1, score2, score3, score4, score5,
-                score6, score7, score8, score9, score10};
-
-        for (int i = 0; i < labels.length; i++) {
-            if (i < scoreBoard.size()) {
-                labels[i].setText(String.valueOf(scoreBoard.get(i)));
-            } else {
-                labels[i].setText("0");
-            }
-        }
-    }
-
-    private void saveScoresToFile() {
-        try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(SCORE_FILE))) {
-            for (Integer s : scoreBoard) {
-                writer.write(s.toString());
-                writer.newLine();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void pauseGame(){
-        isPaused = true;
+    public void pauseGame() {
         gameLoop.stop();
+
+        primaryStage = (Stage) canvas.getScene().getWindow();
+        previousScene = primaryStage.getScene();
+
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/btl/PauseMenu.fxml"));
-            Parent pauseRoot = loader.load();
+            Parent pauseMenuRoot = loader.load();
 
             PauseMenuController pauseMenuController = loader.getController();
             pauseMenuController.setGameController(this);
 
             Stage stage = (Stage) canvas.getScene().getWindow();
-            stage.setScene(new Scene(pauseRoot, MAX_WIDTH , MAX_HEIGHT));
-        } catch(IOException e) {
+            stage.setScene(new Scene(pauseMenuRoot, MAX_WIDTH, MAX_HEIGHT));
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
-    public void resumeGame() {
-        isPaused = false;
-        gameLoop.start();
 
-        Stage stage = (Stage) canvas.getScene().getWindow();
-        stage.setScene(canvas.getScene());
+    public void resumeGame() {
+        if (primaryStage != null && previousScene != null) {
+            primaryStage.setScene(previousScene);
+        }
+        gameLoop.start();
     }
 
     private void handleKeyPressed(KeyEvent event) {
         gameManager.handleKeyPressed(event);
     }
+
     private void handleKeyRealeased(KeyEvent event) {
         gameManager.handleKeyRealeased(event);
     }
+    public void gameOver() {
+        try {
+            gameLoop.stop();
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/btl/GameOverMenu.fxml"));
+            Parent gameOverRoot = loader.load();
+
+            GameOverController gameOverController = loader.getController();
+            gameOverController.setGameController(this);
+
+            Stage stage = (Stage) canvas.getScene().getWindow();
+            Scene gameOverScene = new Scene(gameOverRoot, MAX_WIDTH, MAX_HEIGHT);
+            stage.setScene(gameOverScene);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
 }
+

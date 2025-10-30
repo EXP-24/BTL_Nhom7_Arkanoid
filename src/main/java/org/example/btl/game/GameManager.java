@@ -1,32 +1,28 @@
 package org.example.btl.game;
 
 import org.example.btl.controllers.GameController;
-import org.example.btl.game.bricks.MapBrick;
-import org.example.btl.game.Brick;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Objects;
 
-import javafx.application.Platform;
-import javafx.scene.image.Image;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import org.example.btl.game.powerups.*;
 import org.example.btl.game.sounds.SoundManager;
 import org.example.btl.lives.LifeManage;
+import org.example.btl.game.Brick;
 
-import static org.example.btl.GameApplication.*;
+import static org.example.btl.Config.*;
 
 public class GameManager {
 
-    private static GameController controller;
     private Renderer renderer;
     private Paddle paddle;
     private Ball ball;
     private List<Ball> balls;
-    private MapBrick map;
+    private LevelManager levelManager;
     private LifeManage lifeManage;
     private List<GameObject> objects;
     private List<PowerUp> activePowerUps;
@@ -34,35 +30,14 @@ public class GameManager {
     private boolean leftPressed = false;
     private boolean rightPressed = false;
     private int currentLevel;
-    private boolean gameWon = false;
     private GraphicsContext gc;
-    private Image winnerImage;
-    private boolean isWinnerScreenActive = false;
+    private GameController gameController;
 
-    private static int score = 0;
-    private static int topScore = 0;
-
-    public int getScore() {
-        return score;
-    }
-
-    public static void setTopScore(int score) {
-        topScore = score;
-    }
-
-    public int getTopScore() {
-        return topScore;
-    }
-
-    public GameManager(GraphicsContext gc, GameController controller) {
+    public GameManager(GraphicsContext gc, GameController gameController) {
         this.renderer = new Renderer(gc);
         this.gc = gc;
-        this.controller = controller;
+        this.gameController = gameController;
         initGame();
-    }
-
-    public static void setController(GameController controllerRef) {
-        controller = controllerRef;
     }
 
     private void initGame() {
@@ -70,23 +45,12 @@ public class GameManager {
         ball = new Ball(0, 0, 12, 12, 2, -2, 1);
         balls = new ArrayList<>();
         balls.add(ball);
-        map = new MapBrick();
-        this.currentLevel = 11;
-        if (controller != null) {
-            Platform.runLater(() -> controller.updateLevel(this.currentLevel));
-        }
-        loadLevel(currentLevel);
+        levelManager = new LevelManager();
+        currentLevel = 1;
+        levelManager.loadLevel(currentLevel);
         activePowerUps = new ArrayList<>();
         appliedPowerUps = new ArrayList<>();
         lifeManage = new LifeManage(5);
-
-        try {
-            String imagePath = "/org/example/btl/images/winDemo.png";
-            winnerImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream(imagePath)));
-        } catch (Exception e) {
-            System.err.println("Không thể tải ảnh 'winner.png'");
-            e.printStackTrace();
-        }
     }
 
     public void handleKeyPressed(KeyEvent event) {
@@ -100,9 +64,8 @@ public class GameManager {
                     b.setAttached(false);
                 }
             }
-        }
-        else if(event.getCode() == KeyCode.ESCAPE) {
-            controller.pauseGame();
+        } else if (event.getCode() == KeyCode.ESCAPE) {
+            gameController.pauseGame();
         }
     }
 
@@ -114,38 +77,10 @@ public class GameManager {
         }
     }
 
-    private void nextLevel() {
-        resetLevelState();
-        this.currentLevel++;
-        loadLevel(this.currentLevel);
-    }
-
-
     private void checkLevelCompletion() {
-        for (Brick brick : map.getBricks()) {
-            if (brick.getBrickType() != 9) {
-                return;
-            }
-        }
-        if (!map.getBricks().isEmpty()) {
-            nextLevel();
-        } else {
-            nextLevel();
-        }
-    }
-
-    private void loadLevel(int levelNumber) {
-        if (levelNumber == 11) {
-            map.createBossMap(1152, 704);
-            return;
-        }
-
-        int[][] layout = MapBrick.loadMap(levelNumber);
-
-        if (layout != null) {
-            map.createMap(layout, PLAY_AREA_X, PLAY_AREA_Y);
-        } else {
-            this.gameWon = true;
+        if (levelManager.isLevelCleared()) {
+            resetLevelState();
+            levelManager.nextLevel();
         }
     }
 
@@ -191,7 +126,7 @@ public class GameManager {
     }
 
     public void checkBrickCollisions() {
-        Iterator<Brick> brickIterator = map.getBricks().iterator();
+        Iterator<Brick> brickIterator = levelManager.getMap().getBricks().iterator();
         while (brickIterator.hasNext()) {
             Brick brick = brickIterator.next();
             if (brick.isDestroyed()) continue;
@@ -206,8 +141,7 @@ public class GameManager {
                         if (brick.getBrickType() == 20) {
 
                             // khi gạch boss vỡ
-                            currentLevel = 5;
-                            loadLevel(currentLevel);
+                            levelManager.setGameWon(true);
                             return;
                         }
                     }
@@ -235,31 +169,15 @@ public class GameManager {
                                 activePowerUps.add(newPowerUp);
                                 break;
                             case 5:
-                                newPowerUp = new GunPowerUp(brick.getX(), brick.getY(), this);
+                                newPowerUp = new GunPowerUp(brick.getX(), brick.getY());
                                 activePowerUps.add(newPowerUp);
                                 break;
                         }
                     }
                 }
                 if (brick.isDestroyed()) {
-                    if(brick.getBrickType() == 7 || brick.getBrickType() == 8) {
-                        brickIterator.remove();
-                        score += 6;
-                        if(score > topScore) {
-                            topScore = score;
-                        }
-                        controller.updateScore(score, topScore);
-                        break;
-                    }
-                    else {
-                        brickIterator.remove();
-                        score += 3;
-                        if(score > topScore) {
-                            topScore = score;
-                        }
-                        controller.updateScore(score, topScore);
-                        break;
-                    }
+                    brickIterator.remove();
+                    break;
                 }
             }
         }
@@ -305,11 +223,23 @@ public class GameManager {
             }
             else if (powerUp instanceof GunPowerUp) {
                 GunPowerUp gun = (GunPowerUp) powerUp;
-                gun.updateWhileActive(paddle, map.getBricks(), balls);
+                gun.updateWhileActive(paddle, levelManager.getMap().getBricks(), balls);
                 activePowerUps.addAll(gun.consumePendingDrops());
             }
         }
     }
+
+    public void lose() {
+        lifeManage.loseLife(ball);
+
+        // Khi hết mạng, hiện GameOver
+        if (lifeManage.getLives() <= 0) {
+            gameController.gameOver();
+            return;
+        }
+
+    }
+
 
     public void resetLevelState() {
         for (PowerUp powerUp : appliedPowerUps) {
@@ -325,63 +255,17 @@ public class GameManager {
         balls.add(newBall);
     }
 
-    public static void addScore(int amount) {
-        score += amount;
-        if (score > topScore) topScore = score;
-
-        if (controller != null) {
-            controller.updateScore(score, topScore);
-        }
-    }
-
-    public void lose() {
-        lifeManage.loseLife(ball);
-        if (lifeManage.getLives() <= 0 && controller != null) {
-            Platform.runLater(() -> controller.updateScoreBoard());
-        }
-    }
-
-    public boolean win() {
-        return isWinnerScreenActive || (lifeManage.getLives() <= 0);
-    }
-
     public void renderGame() {
-        if (gameWon) {
-            if (!isWinnerScreenActive) {
-                isWinnerScreenActive = true;
-
-                // Cập nhật bảng điểm lần cuối khi thắng
-                if (controller != null) {
-                    Platform.runLater(() -> controller.updateScoreBoard());
-                }
-            }
-
-            // Xóa toàn bộ màn hình game
-            renderer.clear();
-
-            // Vẽ màn hình chiến thắng
-            if (winnerImage != null) {
-                double x = (gc.getCanvas().getWidth() - winnerImage.getWidth()) / 2;
-                double y = (gc.getCanvas().getHeight() - winnerImage.getHeight()) / 2;
-                gc.drawImage(winnerImage, x, y);
-            }
-
-            // Ngăn không cho vẽ phần gameplay nữa
-            return;
+        if (levelManager.isGameWon()) {
+            System.out.println("You win");
         }
-
-        // ----- Nếu chưa thắng -----
-        if (currentLevel == 10) {
-            // map boss
-        }
-
         objects = new ArrayList<>();
         objects.addAll(lifeManage.getLiveIcons());
         objects.add(paddle);
         objects.addAll(balls);
         objects.addAll(activePowerUps);
         renderer.clear();
-        renderer.renderMap(map);
+        renderer.renderMap(levelManager.getMap());
         renderer.renderAll(objects);
         checkLevelCompletion();
 

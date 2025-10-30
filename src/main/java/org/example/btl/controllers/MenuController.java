@@ -8,16 +8,13 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
+import org.example.btl.game.sounds.MusicManager; // ✅ import MusicManager
 
 import java.io.IOException;
-import java.net.URL;
 import java.util.Objects;
 
-import static org.example.btl.GameApplication.MAX_HEIGHT;
-import static org.example.btl.GameApplication.MAX_WIDTH;
+import static org.example.btl.Config.*;
 
 public class MenuController {
 
@@ -39,17 +36,15 @@ public class MenuController {
     private Image creditsButtonImage, creditsButtonHover;
     private Image mouseImage;
 
-    private MediaPlayer mediaPlayer; // Thêm biến để quản lý nhạc
-
     @FXML
     public void initialize() {
-        // Nạp hình con trỏ chuột
+        MusicManager.playMusic("menu.mp3", true);
+
         mouseImage = loadImage("mouse");
         Platform.runLater(() -> {
             playButton.getScene().setCursor(new ImageCursor(mouseImage));
         });
 
-        // Nạp hình cho các nút
         playButtonImage = loadImage("start");
         playButtonHover = loadImage("startHover");
         exitButtonImage = loadImage("exit");
@@ -59,75 +54,32 @@ public class MenuController {
         creditsButtonImage = loadImage("credits");
         creditsButtonHover = loadImage("creditsHover");
 
-        // Hiệu ứng hover
         setHoverEffect(playButton, playButtonImage, playButtonHover);
         setHoverEffect(exitButton, exitButtonImage, exitButtonHover);
         setHoverEffect(collectionButton, collectionButtonImage, collectionButtonHover);
         setHoverEffect(creditsButton, creditsButtonImage, creditsButtonHover);
 
-        // Gán sự kiện click
-        playButton.setOnMouseClicked(e -> {
-            stopMusic();
-            startGame();
-        });
-        exitButton.setOnMouseClicked(e -> {
-            stopMusic();
-            System.exit(0);
-        });
-        collectionButton.setOnMouseClicked(e -> {
-            stopMusic();
-            openCollection();
-        });
-        creditsButton.setOnMouseClicked(e -> {
-            stopMusic();
-            openCredits();
-        });
-
-        // Phát nhạc menu khi mở
-        playMenuMusic();
+        playButton.setOnMouseClicked(e -> startGame());
+        exitButton.setOnMouseClicked(e -> exitGame());
+        collectionButton.setOnMouseClicked(e -> openCollection());
+        creditsButton.setOnMouseClicked(e -> openCredits());
     }
 
-    /** Tải hình ảnh theo tên */
     private Image loadImage(String filename) {
         return new Image(Objects.requireNonNull(
                 getClass().getResourceAsStream("/org/example/btl/images/texts/" + filename + ".png")));
     }
 
-    /** Hiệu ứng đổi hình khi hover */
     private void setHoverEffect(ImageView button, Image normal, Image hover) {
         button.setOnMouseEntered(e -> button.setImage(hover));
         button.setOnMouseExited(e -> button.setImage(normal));
     }
 
-    /** Phát nhạc nền menu */
-    private void playMenuMusic() {
-        try {
-            URL soundUrl = getClass().getResource("/org/example/btl/M&S/menu.mp3");
-            if (soundUrl != null) {
-                mediaPlayer = new MediaPlayer(new Media(soundUrl.toExternalForm()));
-                mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE); // Lặp vô hạn
-                mediaPlayer.setVolume(0.7);
-                mediaPlayer.play();
-            } else {
-                System.err.println("Không tìm thấy file nhạc menu.mp3");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    /** Dừng nhạc */
-    private void stopMusic() {
-        if (mediaPlayer != null) {
-            mediaPlayer.stop();
-            mediaPlayer.dispose();
-            mediaPlayer = null;
-        }
-    }
-
-    /** Mở game */
     private void startGame() {
         try {
+
+            MusicManager.stopMusic();
+
             Parent gameRoot = FXMLLoader.load(Objects.requireNonNull(
                     getClass().getResource("/org/example/btl/Game.fxml")));
             Stage stage = (Stage) playButton.getScene().getWindow();
@@ -137,27 +89,32 @@ public class MenuController {
         }
     }
 
-    /** Mở phần bộ sưu tập */
     private void openCollection() {
         try {
-            Parent collectionRoot = FXMLLoader.load(Objects.requireNonNull(
+            MusicManager.stopMusic();
+            Parent gameRoot = FXMLLoader.load(Objects.requireNonNull(
                     getClass().getResource("/org/example/btl/Collections.fxml")));
             Stage stage = (Stage) collectionButton.getScene().getWindow();
-            stage.setScene(new Scene(collectionRoot, MAX_WIDTH, MAX_HEIGHT));
+            stage.setScene(new Scene(gameRoot, MAX_WIDTH, MAX_HEIGHT));
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    /** Mở phần Credits */
     private void openCredits() {
         try {
-            Parent creditsRoot = FXMLLoader.load(Objects.requireNonNull(
+            MusicManager.stopMusic();
+            Parent gameRoot = FXMLLoader.load(Objects.requireNonNull(
                     getClass().getResource("/org/example/btl/Credits.fxml")));
             Stage stage = (Stage) creditsButton.getScene().getWindow();
-            stage.setScene(new Scene(creditsRoot, MAX_WIDTH, MAX_HEIGHT));
+            stage.setScene(new Scene(gameRoot, MAX_WIDTH, MAX_HEIGHT));
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private void exitGame() {
+        MusicManager.stopMusic();
+        System.exit(0);
     }
 }

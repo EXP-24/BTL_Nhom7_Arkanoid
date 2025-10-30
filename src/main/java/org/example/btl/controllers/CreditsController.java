@@ -10,38 +10,35 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import org.example.btl.game.sounds.MusicManager; // ✅ import thêm
 
 import java.io.IOException;
-import java.net.URL;
 import java.util.Objects;
 
-import static org.example.btl.GameApplication.MAX_HEIGHT;
-import static org.example.btl.GameApplication.MAX_WIDTH;
+import static org.example.btl.Config.*;
 
 public class CreditsController {
     @FXML
     private Pane creditsPane;
 
     private Timeline timeline;
-    private MediaPlayer mediaPlayer;
 
     @FXML
     private void initialize() {
-        // Nạp font pixel
-        Font.loadFont(Objects.requireNonNull(
-                getClass().getResource("/org/example/btl/fonts/PixelPurl.ttf")).toExternalForm(), 30);
+        // ✅ Phát nhạc nền credits (loop)
+        MusicManager.playMusic("credits.mp3", true);
 
-        // Bắt đầu phát nhạc
-        playMusic();
+        // Load font
+        Font.loadFont(Objects.requireNonNull(getClass()
+                        .getResource("/org/example/btl/fonts/PixelPurl.ttf"))
+                .toExternalForm(), 30);
 
-        // Text chính
+        // Nội dung credits
         Text creditsText = new Text("""
                GAME: ARKANOID!
                 
@@ -96,25 +93,27 @@ public class CreditsController {
             -fx-fill: white;
             -fx-font-family: 'PixelPurl';
         """);
+
         creditsText.setWrappingWidth(1152);
         creditsText.setTextAlignment(TextAlignment.CENTER);
         creditsText.setLayoutX(0);
 
-        // Text cảm ơn cuối
+        // Dòng cảm ơn cuối
         Text thanksText = new Text("THANK YOU FOR PLAYING!");
         thanksText.setStyle("""
             -fx-font-size: 36px;
             -fx-fill: white;
             -fx-font-family: 'PixelPurl';
         """);
+
         thanksText.setWrappingWidth(1152);
         thanksText.setTextAlignment(TextAlignment.CENTER);
         thanksText.setLayoutX(0);
         thanksText.setLayoutY(MAX_HEIGHT / 2.0);
         thanksText.setVisible(false);
 
-        // Hướng dẫn quay lại menu
-        Text guideText = new Text("Click or Press ENTER to return to Menu");
+        // Hướng dẫn bấm Enter
+        Text guideText = new Text("Press ENTER to return to Menu");
         guideText.setStyle("""
             -fx-font-size: 20px;
             -fx-fill: gray;
@@ -127,6 +126,7 @@ public class CreditsController {
 
         creditsPane.getChildren().addAll(creditsText, thanksText, guideText);
 
+        // Hiệu ứng chạy chữ
         Platform.runLater(() -> {
             double paneHeight = creditsPane.getHeight();
             double textHeight = creditsText.getBoundsInLocal().getHeight();
@@ -149,50 +149,21 @@ public class CreditsController {
 
             timeline.play();
 
-            // Quay lại menu bằng Enter hoặc click chuột
             creditsPane.requestFocus();
             creditsPane.setOnKeyPressed(event -> {
                 if (event.getCode() == KeyCode.ENTER) {
-                    stopMusic();
                     timeline.stop();
                     returnToMenu();
                 }
             });
-            creditsPane.setOnMouseClicked(e -> {
-                stopMusic();
-                timeline.stop();
-                returnToMenu();
-            });
         });
-    }
-
-
-    private void playMusic() {
-        try {
-            URL soundUrl = getClass().getResource("/org/example/btl/M&S/credits.mp3");
-            if (soundUrl != null) {
-                mediaPlayer = new MediaPlayer(new Media(soundUrl.toExternalForm()));
-                mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
-                mediaPlayer.setVolume(0.7);
-                mediaPlayer.play();
-            } else {
-                System.err.println("Không tìm thấy file nhạc credits.mp3");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void stopMusic() {
-        if (mediaPlayer != null) {
-            mediaPlayer.stop();
-            mediaPlayer.dispose();
-            mediaPlayer = null;
-        }
     }
 
     private void returnToMenu() {
         try {
+            // ✅ Dừng nhạc credits khi thoát
+            MusicManager.stopMusic();
+
             Parent menuRoot = FXMLLoader.load(Objects.requireNonNull(
                     getClass().getResource("/org/example/btl/Menu.fxml")));
             Stage stage = (Stage) creditsPane.getScene().getWindow();

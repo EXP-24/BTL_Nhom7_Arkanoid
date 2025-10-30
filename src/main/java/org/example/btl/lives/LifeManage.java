@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import static org.example.btl.GameApplication.*;
+import static org.example.btl.Config.*;
 
 public class LifeManage {
 

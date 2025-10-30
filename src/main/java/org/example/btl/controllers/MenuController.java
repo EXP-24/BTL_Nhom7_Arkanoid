@@ -9,7 +9,7 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
-import org.example.btl.game.sounds.MusicManager; // ✅ import MusicManager
+import org.example.btl.game.sounds.MusicManager;
 
 import java.io.IOException;
 import java.util.Objects;
@@ -67,7 +67,7 @@ public class MenuController {
 
     private Image loadImage(String filename) {
         return new Image(Objects.requireNonNull(
-                getClass().getResourceAsStream("/org/example/btl/images/texts/" + filename + ".png")));
+                getClass().getResourceAsStream("/org/example/btl/images/texts/" + filename +".png")));
     }
 
     private void setHoverEffect(ImageView button, Image normal, Image hover) {

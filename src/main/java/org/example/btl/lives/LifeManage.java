@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import static org.example.btl.GameApplication.*;
+import static org.example.btl.Config.*;
 
 public class LifeManage {
 
@@ -32,8 +32,8 @@ public class LifeManage {
         }
     }
 
-    public void loseLife(Ball ball) {
-        if (ball.getY() + ball.getHeight() >= PLAY_AREA_Y + PLAY_AREA_HEIGHT) {
+    public void loseLife(List<Ball> balls) {
+        if (balls.isEmpty()) {
             if (lives > 0) {
                 lives--;
                 if (!liveIcons.isEmpty()) {

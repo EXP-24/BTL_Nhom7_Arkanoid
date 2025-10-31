@@ -12,14 +12,14 @@ import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import org.example.btl.game.SkinManager;
+import org.example.btl.game.sounds.MusicManager;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import static org.example.btl.GameApplication.MAX_HEIGHT;
-import static org.example.btl.GameApplication.MAX_WIDTH;
+import static org.example.btl.Config.*;
 
 public class CollectionsController {
     @FXML
@@ -37,6 +37,7 @@ public class CollectionsController {
 
     @FXML
     public void initialize() {
+        MusicManager.playMusic("menu.mp3", true);
         paddles = new ArrayList<>();
         paddles.addAll(List.of(paddle0, paddle1, paddle2, paddle3, paddle4, paddle5, paddle6, paddle7, paddle8, paddle9));
         backImage = loadImage("texts/back");
@@ -87,6 +88,7 @@ public class CollectionsController {
 
     private void backToMainMenu() {
         try{
+            MusicManager.stopMusic();
             Parent gameroot = FXMLLoader.load(Objects.requireNonNull(
                     getClass().getResource("/org/example/btl/Menu.fxml")));
             Stage stage = (Stage) backButton.getScene().getWindow();

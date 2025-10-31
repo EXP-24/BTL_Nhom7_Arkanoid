@@ -6,10 +6,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 
-import static org.example.btl.GameApplication.PLAY_AREA_X;
-import static org.example.btl.GameApplication.PLAY_AREA_Y;
-import static org.example.btl.GameApplication.PLAY_AREA_WIDTH;
-import static org.example.btl.GameApplication.PLAY_AREA_HEIGHT;
+import static org.example.btl.Config.*;
 
 
 public class Ball extends MovableObject {

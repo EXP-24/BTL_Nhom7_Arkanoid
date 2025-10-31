@@ -6,16 +6,15 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.ImageCursor;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.canvas.Canvas;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
+import org.example.btl.game.sounds.MusicManager;
 
 import java.io.IOException;
 import java.util.Objects;
 
-import static org.example.btl.GameApplication.MAX_HEIGHT;
-import static org.example.btl.GameApplication.MAX_WIDTH;
+import static org.example.btl.Config.*;
 
 public class MenuController {
 
@@ -39,10 +38,13 @@ public class MenuController {
 
     @FXML
     public void initialize() {
+        MusicManager.playMusic("menu.mp3", true);
+
         mouseImage = loadImage("mouse");
         Platform.runLater(() -> {
             playButton.getScene().setCursor(new ImageCursor(mouseImage));
         });
+
         playButtonImage = loadImage("start");
         playButtonHover = loadImage("startHover");
         exitButtonImage = loadImage("exit");
@@ -57,11 +59,10 @@ public class MenuController {
         setHoverEffect(collectionButton, collectionButtonImage, collectionButtonHover);
         setHoverEffect(creditsButton, creditsButtonImage, creditsButtonHover);
 
-        playButton.setOnMouseClicked(e -> startgame());
-        exitButton.setOnMouseClicked(e -> System.exit(0));
+        playButton.setOnMouseClicked(e -> startGame());
+        exitButton.setOnMouseClicked(e -> exitGame());
         collectionButton.setOnMouseClicked(e -> openCollection());
         creditsButton.setOnMouseClicked(e -> openCredits());
-
     }
 
     private Image loadImage(String filename) {
@@ -74,12 +75,15 @@ public class MenuController {
         button.setOnMouseExited(e -> button.setImage(normal));
     }
 
-    private void startgame() {
+    private void startGame() {
         try {
-            Parent gameroot = FXMLLoader.load(Objects.requireNonNull(
+
+            MusicManager.stopMusic();
+
+            Parent gameRoot = FXMLLoader.load(Objects.requireNonNull(
                     getClass().getResource("/org/example/btl/Game.fxml")));
             Stage stage = (Stage) playButton.getScene().getWindow();
-            stage.setScene(new Scene(gameroot, MAX_WIDTH, MAX_HEIGHT));
+            stage.setScene(new Scene(gameRoot, MAX_WIDTH, MAX_HEIGHT));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -87,10 +91,11 @@ public class MenuController {
 
     private void openCollection() {
         try {
-            Parent gameroot = FXMLLoader.load(Objects.requireNonNull(
+            MusicManager.stopMusic();
+            Parent gameRoot = FXMLLoader.load(Objects.requireNonNull(
                     getClass().getResource("/org/example/btl/Collections.fxml")));
             Stage stage = (Stage) collectionButton.getScene().getWindow();
-            stage.setScene(new Scene(gameroot, MAX_WIDTH, MAX_HEIGHT));
+            stage.setScene(new Scene(gameRoot, MAX_WIDTH, MAX_HEIGHT));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -98,12 +103,18 @@ public class MenuController {
 
     private void openCredits() {
         try {
-            Parent gameroot = FXMLLoader.load(Objects.requireNonNull(
+            MusicManager.stopMusic();
+            Parent gameRoot = FXMLLoader.load(Objects.requireNonNull(
                     getClass().getResource("/org/example/btl/Credits.fxml")));
             Stage stage = (Stage) creditsButton.getScene().getWindow();
-            stage.setScene(new Scene(gameroot, MAX_WIDTH, MAX_HEIGHT));
+            stage.setScene(new Scene(gameRoot, MAX_WIDTH, MAX_HEIGHT));
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private void exitGame() {
+        MusicManager.stopMusic();
+        System.exit(0);
     }
 }

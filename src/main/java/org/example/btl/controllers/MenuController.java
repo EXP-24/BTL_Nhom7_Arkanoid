@@ -14,8 +14,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.Objects;
 
-import static org.example.btl.GameApplication.MAX_HEIGHT;
-import static org.example.btl.GameApplication.MAX_WIDTH;
+import static org.example.btl.Config.*;
 
 public class MenuController {
 

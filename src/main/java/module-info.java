@@ -14,7 +14,6 @@ module org.example.btl {
     requires javafx.graphics;
     requires annotations;
     requires javafx.media;
-    requires com.gluonhq.attach.lifecycle;
 
     opens org.example.btl to javafx.fxml;
     exports org.example.btl;

@@ -1,38 +1,29 @@
 package org.example.btl.game;
 
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.Text;
-import javafx.scene.text.TextAlignment;
+import javafx.application.Platform;
 import org.example.btl.controllers.GameController;
-import org.example.btl.game.bricks.MapBrick;
-import org.example.btl.game.Brick;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Objects;
 
-import javafx.application.Platform;
-import javafx.scene.image.Image;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import org.example.btl.game.powerups.*;
 import org.example.btl.game.sounds.SoundManager;
 import org.example.btl.lives.LifeManage;
+import org.example.btl.game.Brick;
 
-import static org.example.btl.GameApplication.*;
+import static org.example.btl.Config.*;
 
 public class GameManager {
 
-    private static GameController controller;
     private Renderer renderer;
     private Paddle paddle;
     private Ball ball;
     private List<Ball> balls;
-    private MapBrick map;
+    private LevelManager levelManager;
     private LifeManage lifeManage;
     private List<GameObject> objects;
     private List<PowerUp> activePowerUps;
@@ -40,58 +31,16 @@ public class GameManager {
     private boolean leftPressed = false;
     private boolean rightPressed = false;
     private int currentLevel;
-    private boolean gameWon = false;
     private GraphicsContext gc;
-    private Image winnerImage;
-    private boolean isWinnerScreenActive = false;
+    private GameController gameController;
     private ScoreManager scoreManager;
 
-    public GameManager(GraphicsContext gc, GameController controller, ScoreManager scoreManager) {
+    public GameManager(GraphicsContext gc, GameController gameController, ScoreManager scoreManager) {
         this.renderer = new Renderer(gc);
         this.gc = gc;
-        this.controller = controller;
+        this.gameController = gameController;
         this.scoreManager = scoreManager;
         initGame();
-    }
-
-    private void nextLevel() {
-        for (Ball currentBall : balls) {
-            currentBall.setAttached(true);
-        }
-        this.currentLevel++;
-        if (controller != null) {
-            Platform.runLater(() -> controller.updateLevel(this.currentLevel));
-        }
-        loadLevel(this.currentLevel);
-    }
-
-
-    private void checkLevelCompletion() {
-        if (gameWon) {
-            return;
-        }
-        for (Brick brick : map.getBricks()) {
-            if (brick.getBrickType() != 9) {
-                return;
-            }
-        }
-        if (!map.getBricks().isEmpty()) {
-            nextLevel();
-        } else {
-            nextLevel();
-        }
-    }
-
-    private void loadLevel(int levelNumber) {
-
-        int[][] layout = MapBrick.loadMap(levelNumber);
-
-        if (layout != null) {
-            map.createMap(layout, PLAY_AREA_X, PLAY_AREA_Y);
-            //resetLevelState();
-        } else {
-            this.gameWon = true;
-        }
     }
 
     private void initGame() {
@@ -99,36 +48,15 @@ public class GameManager {
         ball = new Ball(0, 0, 12, 12, 2, -2, 1);
         balls = new ArrayList<>();
         balls.add(ball);
-        map = new MapBrick();
-        this.currentLevel = 1;
-        if (controller != null) {
-            Platform.runLater(() -> controller.updateLevel(this.currentLevel));
-        }
-        loadLevel(currentLevel);
+        levelManager = new LevelManager();
+        currentLevel = 1;
+        levelManager.loadLevel(currentLevel);
         activePowerUps = new ArrayList<>();
         appliedPowerUps = new ArrayList<>();
         lifeManage = new LifeManage(5);
-
-        try {
-            String imagePath = "/org/example/btl/images/winDemo.png";
-            winnerImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream(imagePath)));
-        } catch (Exception e) {
-            System.err.println("Không thể tải ảnh 'winDemo.png'");
-            e.printStackTrace();
-        }
     }
 
     public void handleKeyPressed(KeyEvent event) {
-        if (gameWon) {
-            if (event.getCode() == KeyCode.ENTER) {
-                if (controller != null) {
-                    Platform.runLater(() -> controller.backToMenu());
-                }
-            }
-
-            return;
-        }
-
         if (event.getCode() == KeyCode.A) {
             leftPressed = true;
         } else if (event.getCode() == KeyCode.D) {
@@ -139,6 +67,8 @@ public class GameManager {
                     b.setAttached(false);
                 }
             }
+        } else if (event.getCode() == KeyCode.ESCAPE) {
+            gameController.pauseGame();
         }
     }
 
@@ -147,6 +77,17 @@ public class GameManager {
             leftPressed = false;
         } else if (event.getCode() == KeyCode.D) {
             rightPressed = false;
+        }
+    }
+
+    private void checkLevelCompletion() {
+        if (levelManager.isLevelCleared()) {
+            resetLevelState();
+            this.currentLevel++;
+            levelManager.loadLevel(this.currentLevel);
+            if (gameController != null) {
+                Platform.runLater(() -> gameController.updateLevel(this.currentLevel));
+            }
         }
     }
 
@@ -168,7 +109,6 @@ public class GameManager {
             if (currentball.isAttached()) {
                 currentball.setX(paddle.getX() + (paddle.getWidth() / 2) - ball.getWidth()/2);
                 currentball.setY(paddle.getY() - 10);
-                continue;
             }
             else {
                 currentball.update();
@@ -192,9 +132,8 @@ public class GameManager {
         }
     }
 
-
     public void checkBrickCollisions() {
-        Iterator<Brick> brickIterator = map.getBricks().iterator();
+        Iterator<Brick> brickIterator = levelManager.getMap().getBricks().iterator();
         while (brickIterator.hasNext()) {
             Brick brick = brickIterator.next();
             if (brick.isDestroyed()) continue;
@@ -210,7 +149,14 @@ public class GameManager {
                         } else {
                             this.scoreManager.addScore(3);
                         }
-                    } else {
+                        if (brick.getBrickType() == 20) {
+
+                            // khi gạch boss vỡ
+                            levelManager.setGameWon(true);
+                            return;
+                        }
+                    }
+                    else {
                         SoundManager.playBrickHitSound();
                     }
 
@@ -218,11 +164,11 @@ public class GameManager {
                         PowerUp newPowerUp;
                         switch (brick.getPowerUpType()) {
                             case 1:
-                                newPowerUp = new TinyBallPowerUp(brick.getX(), brick.getY(), balls);
+                                newPowerUp = new ShrinkPaddlePowerUp(brick.getX(), brick.getY());
                                 activePowerUps.add(newPowerUp);
                                 break;
                             case 2:
-                                newPowerUp = new FastBallPowerUp(brick.getX(), brick.getY(), balls);
+                                newPowerUp = new ExpandPaddlePowerUp(brick.getX(), brick.getY());
                                 activePowerUps.add(newPowerUp);
                                 break;
                             case 3:
@@ -230,20 +176,20 @@ public class GameManager {
                                 activePowerUps.add(newPowerUp);
                                 break;
                             case 4:
-                                newPowerUp = new ExpandPaddlePowerUp(brick.getX(), brick.getY());
+                                newPowerUp = new FastBallPowerUp(brick.getX(), brick.getY(), balls);
                                 activePowerUps.add(newPowerUp);
                                 break;
                             case 5:
-                                newPowerUp = new GunPowerUp(brick.getX(), brick.getY(), this);
+                                newPowerUp = new GunPowerUp(brick.getX(), brick.getY());
                                 activePowerUps.add(newPowerUp);
                                 break;
                         }
                     }
                 }
-                if (brick.isDestroyed()) {
-                    brickIterator.remove();
-                    break;
-                }
+            }
+            if (brick.isDestroyed()) {
+                brickIterator.remove();
+                break;
             }
         }
     }
@@ -255,6 +201,7 @@ public class GameManager {
             powerUp.update();
 
             if (powerUp.isColliding(paddle)) {
+                SoundManager.playPowerUpSound();
                 boolean effectExist = false;
 
                 for(PowerUp existingEffect : appliedPowerUps) {
@@ -287,7 +234,7 @@ public class GameManager {
             }
             else if (powerUp instanceof GunPowerUp) {
                 GunPowerUp gun = (GunPowerUp) powerUp;
-                gun.updateWhileActive(paddle, map.getBricks(), balls);
+                gun.updateWhileActive(paddle, levelManager.getMap().getBricks(), balls);
                 activePowerUps.addAll(gun.consumePendingDrops());
             }
         }
@@ -297,52 +244,34 @@ public class GameManager {
         lifeManage.loseLife(ball);
     }
 
-    public boolean win() {
-        return isWinnerScreenActive || (lifeManage.getLives() <= 0);
+    public void resetLevelState() {
+        for (PowerUp powerUp : appliedPowerUps) {
+            powerUp.removeEffect(paddle);
+        }
+        appliedPowerUps.clear();
+        activePowerUps.clear();
+        balls.clear();
+
+        Ball newBall;
+        newBall = new Ball(0, 0, 12, 12, 2, -2, 1);
+        newBall.setAttached(true);
+        balls.add(newBall);
     }
 
     public void renderGame() {
-        if (gameWon) {
-            if (!isWinnerScreenActive) {
-                isWinnerScreenActive = true;
+        if (levelManager.isGameWon()) {
+            levelManager.nextLevel();
+            if (currentLevel == 12) {
+                System.out.println("You win");
             }
-
-            renderer.clear();
-
-            if (winnerImage != null) {
-                double x = (gc.getCanvas().getWidth() - winnerImage.getWidth()) / 2;
-                double y = (gc.getCanvas().getHeight() - winnerImage.getHeight()) / 2;
-                gc.drawImage(winnerImage, x, y);
-            }
-            double canvasWidth = gc.getCanvas().getWidth();
-            double canvasHeight = gc.getCanvas().getHeight();
-
-            // 2. Thiết lập font và màu sắc y hệt
-            gc.setFont(Font.font("Consolas", 20)); // Dùng Font (cần import)
-            gc.setFill(Color.GRAY);                // Dùng Color (cần import)
-            gc.setTextAlign(TextAlignment.CENTER); // Dùng TextAlignment (cần import)
-
-            // 3. Chuẩn bị nội dung và vị trí
-            String text = "Nhấn ENTER để quay lại Menu";
-            double textX = canvasWidth / 2;      // Căn giữa theo chiều ngang
-            double textY = canvasHeight - 30;    // Đặt ở gần cuối màn hình
-
-            // 4. Vẽ văn bản lên canvas
-            gc.fillText(text, textX, textY);
-            return;
         }
-
-        if (currentLevel == 10) {
-            // map boss
-        }
-
         objects = new ArrayList<>();
         objects.addAll(lifeManage.getLiveIcons());
         objects.add(paddle);
         objects.addAll(balls);
         objects.addAll(activePowerUps);
         renderer.clear();
-        renderer.renderMap(map);
+        renderer.renderMap(levelManager.getMap());
         renderer.renderAll(objects);
         checkLevelCompletion();
 
@@ -352,5 +281,4 @@ public class GameManager {
             }
         }
     }
-
 }

@@ -1,9 +1,10 @@
 package org.example.btl.game.powerups;
 
 import javafx.scene.canvas.GraphicsContext;
-import org.example.btl.controllers.GameController;
 import org.example.btl.game.*;
 import org.example.btl.game.Brick;
+import org.example.btl.game.sounds.SoundManager;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -13,16 +14,13 @@ public class GunPowerUp extends PowerUp {
     private long lastFireTime;
     private final List<Bullet> bullets;
     private boolean isPickedUp = false;
-
-    private final List<PowerUp> pendingDrops = new ArrayList<>();
-    private GameController controller;
-    private final GameManager gameManager;
     private ScoreManager scoreManager;
 
-    public GunPowerUp(double x, double y, GameManager gameManager) {
+    private final List<PowerUp> pendingDrops = new ArrayList<>();
+
+    public GunPowerUp(double x, double y) {
         super(x, y, "Gun", 5000);
         this.bullets = new ArrayList<>();
-        this.gameManager = gameManager;
     }
 
     @Override
@@ -52,11 +50,15 @@ public class GunPowerUp extends PowerUp {
             while (brickIterator.hasNext()) {
                 Brick brick = brickIterator.next();
                 if (b.isColliding(brick)) {
-                    brickIterator.remove();
-                    if (brick.getBrickType() == 7 || brick.getBrickType() == 8)
-                        scoreManager.addScore(6);
-                    else
-                        scoreManager.addScore(3);
+                    brick.takeDamage();
+                    if (brick.isDestroyed()) {
+                        SoundManager.playGunFire();
+                        brickIterator.remove();
+                        if (brick.getBrickType() == 7 || brick.getBrickType() == 8)
+                            scoreManager.addScore(6);
+                        else
+                            scoreManager.addScore(3);
+                    }
                     b.deactivate();
 
                     if (brick.getBrickType() == 2) {
@@ -75,7 +77,7 @@ public class GunPowerUp extends PowerUp {
                                 newPowerUp = new ExpandPaddlePowerUp(brick.getX(), brick.getY());
                                 break;
                             case 5:
-                                newPowerUp = new GunPowerUp(brick.getX(), brick.getY(),gameManager);
+                                newPowerUp = new GunPowerUp(brick.getX(), brick.getY());
                                 break;
                         }
                         if (newPowerUp != null) {

@@ -1,4 +1,3 @@
-
 package org.example.btl.game.bricks;
 
 import org.example.btl.game.*;
@@ -84,27 +83,25 @@ public class MapBrick {
         List<int[]> mapList = new ArrayList<>();
         String filePath = "/org/example/btl/Map/Map" + level + ".txt";
 
-        try (InputStream is = MapBrick.class.getResourceAsStream(filePath);
-             BufferedReader reader = new BufferedReader(new InputStreamReader(is))) {
-
+        try (InputStream is = MapBrick.class.getResourceAsStream(filePath)) {
             if (is == null) {
                 System.err.println("Không tìm thấy file map tại: " + filePath);
                 return new int[0][0];
             }
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(is))) {
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    line = line.trim();
+                    if (line.isEmpty()) continue;
 
-            String line;
-            while ((line = reader.readLine()) != null) {
-                line = line.trim();
-                if (line.isEmpty()) continue;
-
-                String[] numbers = line.split("\\s+");
-                int[] row = new int[numbers.length];
-                for (int i = 0; i < numbers.length; i++) {
-                    row[i] = Integer.parseInt(numbers[i]);
+                    String[] numbers = line.split("\\s+");
+                    int[] row = new int[numbers.length];
+                    for (int i = 0; i < numbers.length; i++) {
+                        row[i] = Integer.parseInt(numbers[i]);
+                    }
+                    mapList.add(row);
                 }
-                mapList.add(row);
             }
-
         } catch (IOException | NumberFormatException e) {
             System.err.println("Lỗi khi đọc file map: " + filePath);
             e.printStackTrace();
@@ -126,5 +123,4 @@ public class MapBrick {
 
         bricks.add(bossBrick);
     }
-
 }

@@ -10,6 +10,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
@@ -18,8 +19,7 @@ import javafx.util.Duration;
 import java.io.IOException;
 import java.util.Objects;
 
-import static org.example.btl.GameApplication.MAX_HEIGHT;
-import static org.example.btl.GameApplication.MAX_WIDTH;
+import static org.example.btl.Config.*;
 
 public class CreditsController {
     @FXML
@@ -29,6 +29,7 @@ public class CreditsController {
 
     @FXML
     private void initialize() {
+        Font.loadFont(Objects.requireNonNull(getClass().getResource("/org/example/btl/fonts/PixelPurl.ttf")).toExternalForm(), 30);
 
         Text creditsText = new Text("""
                GAME: ARKANOID!
@@ -38,26 +39,26 @@ public class CreditsController {
                Developed by: TEAM 7
                
                
-               Leader, Game Logic, Menu & Audio Developer
-               Phạm Đức Cường 
+               Leader, Game Logic, Menu & Sound Effects
+               Pham Duc Cuong 
                
                
                
                
                Level Designer & Map System Developer
-               Đỗ Trọng An 
+               Do Trong An 
                
                
                
                
-               Score and Power-up System Developer
-               Nguyễn Tuấn Anh
+               Score & Paddle Power-up System Developer
+               Nguyen Tuan Anh
                
                
                
                
                Pause Menu & Game Over System Developer
-               Khương Tuấn Anh
+               Khuong Tuan Anh
                 
                 
                 
@@ -95,7 +96,7 @@ public class CreditsController {
         thanksText.setStyle("""
             -fx-font-size: 36px;
             -fx-fill: white;
-            -fx-font-family: 'Consolas';
+            -fx-font-family: 'PixelPurl';
         """);
 
         thanksText.setWrappingWidth(1152);
@@ -104,11 +105,11 @@ public class CreditsController {
         thanksText.setLayoutY(MAX_HEIGHT / 2.0);
         thanksText.setVisible(false);
 
-        Text guideText = new Text("Nhấn ENTER để quay lại Menu");
+        Text guideText = new Text("Press ENTER to return to Menu");
         guideText.setStyle("""
             -fx-font-size: 20px;
             -fx-fill: gray;
-            -fx-font-family: 'Consolas';
+            -fx-font-family: 'PixelPurl';
         """);
         guideText.setWrappingWidth(1152);
         guideText.setTextAlignment(TextAlignment.CENTER);

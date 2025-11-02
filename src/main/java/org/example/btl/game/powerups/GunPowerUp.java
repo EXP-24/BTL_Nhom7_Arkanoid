@@ -15,11 +15,14 @@ public class GunPowerUp extends PowerUp {
     private final List<Bullet> bullets;
     private boolean isPickedUp = false;
 
-    private final List<PowerUp> pendingDrops = new ArrayList<>();
+    private final List<PowerUp> pendingDrops;
+    private ScoreManager scoreManager;
 
-    public GunPowerUp(double x, double y) {
+    public GunPowerUp(double x, double y, ScoreManager scoreManager) {
         super(x, y, "Gun", 5000);
         this.bullets = new ArrayList<>();
+        this.pendingDrops = new ArrayList<>();
+        this.scoreManager = scoreManager;
     }
 
     @Override
@@ -52,7 +55,11 @@ public class GunPowerUp extends PowerUp {
                     brick.takeDamage();
                     if (brick.isDestroyed()) {
                         SoundManager.playGunFire();
+                        scoreManager.addScore(100);
                         brickIterator.remove();
+                    }
+                    else {
+                        scoreManager.addScore(50);
                     }
                     b.deactivate();
 
@@ -72,7 +79,13 @@ public class GunPowerUp extends PowerUp {
                                 newPowerUp = new ExpandPaddlePowerUp(brick.getX(), brick.getY());
                                 break;
                             case 5:
-                                newPowerUp = new GunPowerUp(brick.getX(), brick.getY());
+                                newPowerUp = new GunPowerUp(brick.getX(), brick.getY(), scoreManager);
+                                break;
+                            case 6:
+                                newPowerUp = new SlowBallPowerUp(brick.getX(), brick.getY(), balls);
+                                break;
+                            case 7:
+                                newPowerUp = new ShrinkPaddlePowerUp(brick.getX(), brick.getY());
                                 break;
                         }
                         if (newPowerUp != null) {

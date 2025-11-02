@@ -175,7 +175,15 @@ public class GameManager {
                                 activePowerUps.add(newPowerUp);
                                 break;
                             case 5:
-                                newPowerUp = new GunPowerUp(brick.getX(), brick.getY());
+                                newPowerUp = new GunPowerUp(brick.getX(), brick.getY(), scoreManager);
+                                activePowerUps.add(newPowerUp);
+                                break;
+                            case 6:
+                                newPowerUp = new SlowBallPowerUp(brick.getX(), brick.getY(), balls);
+                                activePowerUps.add(newPowerUp);
+                                break;
+                            case 7:
+                                newPowerUp = new TinyBallPowerUp(brick.getX(), brick.getY(), balls);
                                 activePowerUps.add(newPowerUp);
                                 break;
                         }

@@ -76,7 +76,6 @@ public class GameController {
         gameLoop = new AnimationTimer() {
             @Override
             public void handle(long now) {
-
                 gameManager.updatePaddle();
                 gameManager.updateBall();
                 gameManager.checkBrickCollisions();

@@ -1,6 +1,7 @@
 package org.example.btl.controllers;
 
 import javafx.animation.AnimationTimer;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Cursor;
@@ -55,6 +56,7 @@ public class GameController {
 
     @FXML
     public void initialize() {
+
         gc = canvas.getGraphicsContext2D();
         scoreManager = new ScoreManager();
         gameManager = new GameManager(gc, this, scoreManager);
@@ -77,6 +79,15 @@ public class GameController {
         gameLoop = new AnimationTimer() {
             @Override
             public void handle(long now) {
+
+                if (gameManager.win()) {
+                    gameLoop.stop();
+                    scoreManager.saveCurrentScoreToBoard();
+                    displayScoresOnBoard();
+                    showWinnerScreen();
+                    return;
+                }
+
                 gameManager.updatePaddle();
                 gameManager.updateBall();
                 gameManager.checkBrickCollisions();
@@ -139,6 +150,18 @@ public class GameController {
             primaryStage.setScene(previousScene);
         }
         gameLoop.start();
+    }
+
+    private void showWinnerScreen() {
+        try {
+            gameLoop.stop(); // Dừng game
+            Parent winnerRoot = FXMLLoader.load(Objects.requireNonNull(
+                    getClass().getResource("/org/example/btl/winGame.fxml")));
+            Stage stage = (Stage) canvas.getScene().getWindow();
+            stage.setScene(new Scene(winnerRoot));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void handleKeyPressed(KeyEvent event) {

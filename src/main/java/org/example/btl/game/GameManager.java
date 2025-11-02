@@ -54,6 +54,7 @@ public class GameManager {
         activePowerUps = new ArrayList<>();
         appliedPowerUps = new ArrayList<>();
         lifeManage = new LifeManage(5);
+        levelManager.setGameWon(true);
     }
 
     public void handleKeyPressed(KeyEvent event) {
@@ -242,6 +243,10 @@ public class GameManager {
 
     public void lose() {
         lifeManage.loseLife(ball);
+    }
+
+    public boolean win() {
+        return levelManager.isGameWon();
     }
 
     public void resetLevelState() {

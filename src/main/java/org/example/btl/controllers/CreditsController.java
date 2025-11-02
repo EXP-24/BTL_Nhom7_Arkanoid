@@ -69,6 +69,7 @@ public class CreditsController {
                 
                 
                 
+                
                Course Project:
                Object-Oriented Programming
                Semester: 2025
@@ -97,7 +98,7 @@ public class CreditsController {
         creditsText.setTextAlignment(TextAlignment.CENTER);
         creditsText.setLayoutX(0);
 
-        // Dòng cảm ơn cuối
+
         Text thanksText = new Text("THANK YOU FOR PLAYING!");
         thanksText.setStyle("""
             -fx-font-size: 36px;
@@ -160,7 +161,6 @@ public class CreditsController {
 
     private void returnToMenu() {
         try {
-            // ✅ Dừng nhạc credits khi thoát
             MusicManager.stopMusic();
 
             Parent menuRoot = FXMLLoader.load(Objects.requireNonNull(

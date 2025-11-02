@@ -9,6 +9,7 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
+import org.example.btl.game.sounds.MusicManager;
 
 import java.io.IOException;
 import java.util.Objects;
@@ -30,6 +31,7 @@ public class GameOverController {
 
     @FXML
     public void initialize() {
+        MusicManager.playMusic("gameover.mp3", true);
         mouseImage = loadImage("mouse");
         Platform.runLater(() -> {
             restartButton.getScene().setCursor(new ImageCursor(mouseImage));
@@ -59,6 +61,7 @@ public class GameOverController {
     }
     private void onRestart(){
         try{
+            MusicManager.stopMusic();
             Parent gameRoot = FXMLLoader.load(Objects.requireNonNull(
                     getClass().getResource("/org/example/btl/Game.fxml")));
             Stage stage = (Stage) restartButton.getScene().getWindow();
@@ -71,6 +74,7 @@ public class GameOverController {
 
     private void onQuit(){
         try{
+            MusicManager.stopMusic();
             Parent gameRoot = FXMLLoader.load(Objects.requireNonNull(
                     getClass().getResource("/org/example/btl/Menu.fxml")));
             Stage stage = (Stage) restartButton.getScene().getWindow();

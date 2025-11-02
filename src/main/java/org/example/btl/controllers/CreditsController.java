@@ -30,7 +30,6 @@ public class CreditsController {
 
     @FXML
     private void initialize() {
-        // ✅ Phát nhạc nền credits (loop)
         MusicManager.playMusic("credits.mp3", true);
 
         // Load font

@@ -26,6 +26,7 @@ public class GameApplication extends Application {
         Parent root = FXMLLoader.load(fxmlUrl);
         Scene scene = new Scene(root, MAX_WIDTH, MAX_HEIGHT);
 
+
         URL iconUrl = Objects.requireNonNull(
                 getClass().getResource("/org/example/btl/images/arkanoid_512.png"),
                 "Cannot find arkanoid_512.png"

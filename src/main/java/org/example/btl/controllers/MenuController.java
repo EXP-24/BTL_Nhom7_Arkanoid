@@ -9,8 +9,7 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
-import org.example.btl.game.sounds.MusicManager; // ✅ import MusicManager
-
+import org.example.btl.game.sounds.MusicManager;
 import java.io.IOException;
 import java.util.Objects;
 

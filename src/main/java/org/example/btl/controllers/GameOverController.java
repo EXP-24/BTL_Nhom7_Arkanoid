@@ -87,8 +87,4 @@ public class GameOverController {
     public void setGameController(GameController controller) {
         this.gameController = controller;
     }
-
-    private void onResume() {
-        gameController.resumeGame();
-    }
 }

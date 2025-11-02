@@ -7,4 +7,5 @@ public class Config {
     public static final double PLAY_AREA_Y = 64;
     public static final double PLAY_AREA_WIDTH = 544;
     public static final double PLAY_AREA_HEIGHT = 608;
+    public static final int START_LIVES = 5;
 }

@@ -31,11 +31,13 @@ public class GameManager {
     private boolean rightPressed = false;
     private GraphicsContext gc;
     private GameController gameController;
+    private ScoreManager scoreManager;
 
-    public GameManager(GraphicsContext gc, GameController gameController) {
+    public GameManager(GraphicsContext gc, GameController gameController, ScoreManager scoreManager) {
         this.renderer = new Renderer(gc);
         this.gc = gc;
         this.gameController = gameController;
+        this.scoreManager = scoreManager;
         initGame();
     }
 
@@ -48,7 +50,7 @@ public class GameManager {
         levelManager.loadLevel(levelManager.getCurrentLevel());
         activePowerUps = new ArrayList<>();
         appliedPowerUps = new ArrayList<>();
-        lifeManage = new LifeManage(5);
+        lifeManage = new LifeManage(START_LIVES);
     }
 
     public void handleKeyPressed(KeyEvent event) {
@@ -79,6 +81,7 @@ public class GameManager {
         if (levelManager.isLevelCleared()) {
             resetLevelState();
             levelManager.nextLevel();
+            gameController.updateLevel(levelManager.getCurrentLevel());
         }
     }
 
@@ -129,7 +132,9 @@ public class GameManager {
         Iterator<Brick> brickIterator = levelManager.getMap().getBricks().iterator();
         while (brickIterator.hasNext()) {
             Brick brick = brickIterator.next();
-            if (brick.isDestroyed()) continue;
+            if (brick.isDestroyed()) {
+                continue;
+            }
 
             for (Ball ball : balls) {
                 if (ball.isColliding(brick)) {
@@ -138,15 +143,16 @@ public class GameManager {
                     if (brick.isDestroyed()) {
                         SoundManager.playBrickDestroySound();
 
+                        scoreManager.addScore(100);
                         if (brick.getBrickType() == 20) {
-
-                            // khi gạch boss vỡ
+                            //khi brick boss vỡ
                             levelManager.setGameWon(true);
                             return;
                         }
                     }
                     else {
                         SoundManager.playBrickHitSound();
+                        scoreManager.addScore(50);
                     }
 
                     if (brick.getBrickType() == 2) {
@@ -231,13 +237,11 @@ public class GameManager {
 
     public void lose() {
         lifeManage.loseLife();
-
         // Khi hết mạng, hiện GameOver
         if (lifeManage.getLives() <= 0) {
+            scoreManager.saveCurrentScoreToBoard();
             gameController.gameOver();
-            return;
         }
-
     }
 
 
@@ -257,7 +261,8 @@ public class GameManager {
 
     public void renderGame() {
         if (levelManager.isGameWon()) {
-            System.out.println("You win");
+            scoreManager.saveCurrentScoreToBoard();
+            gameController.showWinnerScreen();
         }
         objects = new ArrayList<>();
         objects.addAll(lifeManage.getLiveIcons());

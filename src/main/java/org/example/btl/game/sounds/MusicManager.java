@@ -10,10 +10,8 @@ public class MusicManager {
 
     private static MediaPlayer currentPlayer;
 
-
     public static void playMusic(String fileName, boolean loop) {
-        stopMusic(); // Dừng nhạc đang phát (nếu có)
-
+        stopMusic();
         try {
             Media media = new Media(Objects.requireNonNull(
                     MusicManager.class.getResource("/org/example/btl/M&S/" + fileName)

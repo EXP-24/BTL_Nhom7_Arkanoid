@@ -14,7 +14,8 @@ Project được chia thành nhiều package và class để dễ cho việc qu�
 
 ## UML
 Dưới đây là sơ đồ UML của project để dễ hình dung mối quan hệ giữa các lớp:
-<img width="2671" height="2804" alt="UML_table" src="https://github.com/user-attachments/assets/358496d9-0dff-47fc-9d98-8486176fba18" />
+<img width="2671" height="2783" alt="UML" src="https://github.com/user-attachments/assets/f2bd4f66-d25e-4eb4-a4ef-a37195a5589b" />
+
 
 ## Các tính năng chính:
 - Điều khiển paddle bằng A (Trái), D (Phải)

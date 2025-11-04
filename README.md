@@ -14,13 +14,14 @@ Project được chia thành nhiều package và class để dễ cho việc qu�
 
 ## UML
 Dưới đây là sơ đồ UML của project để dễ hình dung mối quan hệ giữa các lớp:
-<img width="1293" height="745" alt="Screenshot 2025-10-23 112020" src="https://github.com/user-attachments/assets/2cf5d6c5-3b1a-46ae-bd7c-0f5131e95985" />
+<img width="2671" height="2804" alt="UML_table" src="https://github.com/user-attachments/assets/358496d9-0dff-47fc-9d98-8486176fba18" />
 
 ## Các tính năng chính:
 - Điều khiển paddle bằng A (Trái), D (Phải)
 - Bắt đầu game / tiếp tục: SPACE
 - Pause game: ESC
 - Nhiều loại gạch với cơ chế khác nhau (NormalBrick, Strong Brick,...)
+
 - Power-up đa dạng: tăng/giảm tốc độ bóng, thêm bóng phụ,...
 - Có nhạc nền và các hiệu ứng âm thanh
 - Quản lý điểm số, restart game, và nhiều level

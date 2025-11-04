@@ -10,6 +10,7 @@ import java.util.Iterator;
 import java.util.List;
 
 public class GunPowerUp extends PowerUp {
+
     private static final long FIRE_INTERVAL = 300;
     private long lastFireTime;
     private final List<Bullet> bullets;
@@ -116,9 +117,13 @@ public class GunPowerUp extends PowerUp {
         updateBullets(bricks, balls);
     }
 
-    /** Trả về các powerup được sinh ra khi đạn phá gạch */
+    /**
+     * Trả về các powerup được sinh ra khi đạn phá gạch.
+     */
     public List<PowerUp> consumePendingDrops() {
-        if (pendingDrops.isEmpty()) return List.of();
+        if (pendingDrops.isEmpty()){
+            return List.of();
+        }
         List<PowerUp> result = new ArrayList<>(pendingDrops);
         pendingDrops.clear();
         return result;
@@ -141,6 +146,4 @@ public class GunPowerUp extends PowerUp {
     public List<Bullet> getBullets() {
         return bullets;
     }
-
-
 }

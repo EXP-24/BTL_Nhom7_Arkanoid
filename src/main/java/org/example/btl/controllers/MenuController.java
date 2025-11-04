@@ -10,6 +10,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import org.example.btl.game.sounds.MusicManager;
+import org.example.btl.game.sounds.SoundManager;
+
 import java.io.IOException;
 import java.util.Objects;
 
@@ -113,7 +115,8 @@ public class MenuController {
     }
 
     private void exitGame() {
-        MusicManager.stopMusic();
+        MusicManager.shutdown();
+        SoundManager.shutdown();
         System.exit(0);
     }
 }

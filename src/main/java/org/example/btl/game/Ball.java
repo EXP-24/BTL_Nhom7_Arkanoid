@@ -79,9 +79,6 @@ public class Ball extends MovableObject {
             setX(PLAY_AREA_X + PLAY_AREA_WIDTH - getWidth());
             directionX *= -1;
         } else if (getY() + getHeight() >= PLAY_AREA_Y + PLAY_AREA_HEIGHT) {
-            //setAttached(true);
-            //setY(PLAY_AREA_Y + PLAY_AREA_HEIGHT - getHeight());
-            //directionY *= -1;
             return;
         } else if (getY() <= PLAY_AREA_Y) {
             setY(PLAY_AREA_Y);
@@ -99,7 +96,7 @@ public class Ball extends MovableObject {
         }
 
         if (object instanceof Paddle) {
-            setY(object.getY() - getHeight() - 1);
+            setY(object.getY() - getHeight() - 5);
             directionY = -Math.abs(directionY);
             updateVelocity();
             return;

@@ -131,7 +131,7 @@
             <Font name=".VnArial Bold Italic" size="18.0" />
         </font>
     </Label>
-    <Label layoutX="57.0" layoutY="603.0" prefHeight="46.0" prefWidth="110.0" text="Group 7" textFill="#04ef18" textOverrun="WORD_ELLIPSIS">
+    <Label layoutX="57.0" layoutY="603.0" prefHeight="46.0" prefWidth="110.0" text="TEAM 7" textFill="#04ef18" textOverrun="WORD_ELLIPSIS">
         <font>
             <Font size="30.0" />
         </font>

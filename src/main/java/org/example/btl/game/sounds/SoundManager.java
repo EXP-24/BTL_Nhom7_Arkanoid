@@ -2,8 +2,9 @@ package org.example.btl.game.sounds;
 
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
-
 import java.util.Objects;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class SoundManager {
 
@@ -12,6 +13,13 @@ public class SoundManager {
     private static final String BRICK_HIT_PATH = "/org/example/btl/M&S/brick_hit.wav";
     private static final String POWERUP_PATH = "/org/example/btl/M&S/powerUp.wav";
     private static final String GUN_FIRE_PATH = "/org/example/btl/M&S/gunFire.wav";
+
+    private static final ExecutorService soundExecutor = Executors.newSingleThreadExecutor(r -> {
+        Thread t = new Thread(r);
+        t.setDaemon(true); // để không ngăn chương trình thoát
+        t.setName("Sound-Thread");
+        return t;
+    });
 
     private static Media bounceMedia;
     private static Media brickDestroyMedia;
@@ -31,7 +39,7 @@ public class SoundManager {
         try {
             return new Media(Objects.requireNonNull(SoundManager.class.getResource(path)).toExternalForm());
         } catch (Exception e) {
-            System.err.println("Không thể tải được file âm thanh: " + path);
+            System.err.println("Không thể tải file âm thanh: " + path);
             e.printStackTrace();
             return null;
         }
@@ -39,10 +47,16 @@ public class SoundManager {
 
     private static void play(Media media) {
         if (media == null) return;
-        MediaPlayer player = new MediaPlayer(media);
-        player.setVolume(1.0);
-        player.setOnEndOfMedia(player::dispose);
-        player.play();
+        soundExecutor.submit(() -> {
+            try {
+                MediaPlayer player = new MediaPlayer(media);
+                player.setVolume(1.0);
+                player.setOnEndOfMedia(player::dispose);
+                player.play();
+            } catch (Exception e) {
+                System.err.println("Lỗi phát âm thanh: " + e.getMessage());
+            }
+        });
     }
 
     public static void playBounce() {
@@ -63,5 +77,9 @@ public class SoundManager {
 
     public static void playGunFire() {
         play(gunFireMedia);
+    }
+
+    public static void shutdown() {
+        soundExecutor.shutdownNow();
     }
 }

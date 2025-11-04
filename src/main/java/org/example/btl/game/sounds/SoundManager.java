@@ -46,7 +46,9 @@ public class SoundManager {
     }
 
     private static void play(Media media) {
-        if (media == null) return;
+        if (media == null) {
+            return;
+        }
         soundExecutor.submit(() -> {
             try {
                 MediaPlayer player = new MediaPlayer(media);

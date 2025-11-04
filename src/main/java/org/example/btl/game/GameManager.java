@@ -11,8 +11,9 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import org.example.btl.game.powerups.*;
 import org.example.btl.game.sounds.SoundManager;
-import org.example.btl.lives.LifeManage;
+import org.example.btl.game.lives.LifeManage;
 import org.example.btl.game.Brick;
+
 
 import static org.example.btl.Config.*;
 

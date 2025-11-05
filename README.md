@@ -36,7 +36,7 @@ Dưới đây là sơ đồ UML của project để dễ hình dung mối quan h
 
 ## Phân công nhiệm vụ
 - Phạm Đức Cường (Nhóm trưởng): Quản lí paddle, bóng, va chạm, các chức năng của Menu chính,  thiết kế giao diện.
-- Đỗ Trọng An: Quản lí gạch, thiết kế level, boss level, chức năng chuyển map, load map.
+- Đỗ Trọng An: Quản lí gạch, thiết kế level, boss level, chức năng chuyển map, load map, JUnit test.
 - Nguyễn Tuấn Anh: Quản lí các power-up của paddle, chức năng của Score, phần Victory, thiết kế UML.
 - Khương Tuấn Anh: Quản lí các power-up của bóng, Pause menu, phần âm thanh, phần Game Over.
 

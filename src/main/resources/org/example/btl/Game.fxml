@@ -6,13 +6,12 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="704.0" prefWidth="1152.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.btl.controllers.GameController">
+<AnchorPane prefHeight="704.0" prefWidth="1152.0" styleClass="PixelPure" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.btl.controllers.GameController">
     <ImageView fitHeight="704.0" fitWidth="1152.0" pickOnBounds="true" preserveRatio="true">
         <image>
             <Image url="@images/background.png" />
         </image>
     </ImageView>
-    <Canvas fx:id="canvas" height="714.0" layoutX="0" layoutY="0" width="1152.0" />
     <Label fx:id="scoreLabel" layoutX="961.0" layoutY="89.0" style="-fx-text-fill: yellow; -fx-font-size: 24px; -fx-font-weight: bold;" text="Score: 0" />
 
     <Label fx:id="topScoreLabel" alignment="CENTER" layoutX="892.0" layoutY="229.0" prefHeight="84.0" prefWidth="228.0" style="-fx-text-fill: cyan; -fx-font-size: 24px; -fx-font-weight: bold;" text="Top Score: 0" />
@@ -136,4 +135,5 @@
             <Font size="30.0" />
         </font>
     </Label>
+    <Canvas fx:id="canvas" height="714.0" layoutX="0" layoutY="0" width="1152.0" />
 </AnchorPane>

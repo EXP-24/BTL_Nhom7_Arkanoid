@@ -8,6 +8,7 @@ import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import org.example.btl.game.sounds.MusicManager;
 
 import java.io.IOException;
 import java.util.Objects;
@@ -19,7 +20,7 @@ public class WinnerScreenController {
 
     @FXML
     public void initialize() {
-
+        MusicManager.playMusic("11 Journey's End.mp3", true);
         Platform.runLater(() -> {
             if (anchorPane != null) {
                 anchorPane.requestFocus();
@@ -35,6 +36,7 @@ public class WinnerScreenController {
     }
 
     private void loadCreditScreen() {
+        MusicManager.stopMusic();
         try {
             Parent creditRoot = FXMLLoader.load(Objects.requireNonNull(
                     getClass().getResource("/org/example/btl/Credits.fxml")));

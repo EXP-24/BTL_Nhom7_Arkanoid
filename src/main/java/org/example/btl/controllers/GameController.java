@@ -15,6 +15,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import org.example.btl.game.GameManager;
 import org.example.btl.game.ScoreManager;
+import org.example.btl.game.sounds.MusicManager;
 import org.example.btl.game.sounds.SoundManager;
 
 import java.io.IOException;
@@ -53,6 +54,7 @@ public class GameController {
 
     @FXML
     public void initialize() {
+        MusicManager.playMusic("06. shining eyes (In-game BGM).mp3", true);
         gc = canvas.getGraphicsContext2D();
         scoreManager = new ScoreManager();
         gameManager = new GameManager(gc, this, scoreManager);
@@ -121,6 +123,7 @@ public class GameController {
     }
 
     public void pauseGame() {
+        MusicManager.pauseMusic();
         gameLoop.stop();
 
         primaryStage = (Stage) canvas.getScene().getWindow();
@@ -141,6 +144,7 @@ public class GameController {
     }
 
     public void resumeGame() {
+        MusicManager.resumeMusic();
         if (primaryStage != null && previousScene != null) {
             primaryStage.setScene(previousScene);
         }

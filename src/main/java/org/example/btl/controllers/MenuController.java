@@ -78,9 +78,7 @@ public class MenuController {
 
     private void startGame() {
         try {
-
             MusicManager.stopMusic();
-
             Parent gameRoot = FXMLLoader.load(Objects.requireNonNull(
                     getClass().getResource("/org/example/btl/Game.fxml")));
             Stage stage = (Stage) playButton.getScene().getWindow();

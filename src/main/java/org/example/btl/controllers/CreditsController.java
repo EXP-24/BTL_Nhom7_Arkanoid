@@ -157,7 +157,7 @@ public class CreditsController {
 
     private void returnToMenu() {
         try {
-            // ✅ Dừng nhạc credits khi thoát
+            //Dừng nhạc credits khi thoát
             MusicManager.stopMusic();
 
             Parent menuRoot = FXMLLoader.load(Objects.requireNonNull(

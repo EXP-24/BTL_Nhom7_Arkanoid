@@ -14,7 +14,8 @@ Project được chia thành nhiều package và class để dễ cho việc qu�
 
 ## UML
 Dưới đây là sơ đồ UML của project để dễ hình dung mối quan hệ giữa các lớp:
-<img width="2931" height="2504" alt="UML" src="https://github.com/user-attachments/assets/6264ce24-1d2e-4798-b794-b46b94ed99ce" />
+<img width="2831" height="2504" alt="UML" src="https://github.com/user-attachments/assets/ee56cb34-4609-4f2d-a9f0-b9dd9a603cc2" />
+
 
 
 

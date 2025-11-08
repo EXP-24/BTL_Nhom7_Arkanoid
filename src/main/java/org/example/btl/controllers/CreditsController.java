@@ -15,12 +15,12 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import org.example.btl.game.sounds.MusicManager; // ✅ import thêm
 
 import java.io.IOException;
 import java.util.Objects;
 
-import static org.example.btl.GameApplication.MAX_HEIGHT;
-import static org.example.btl.GameApplication.MAX_WIDTH;
+import static org.example.btl.Config.*;
 
 public class CreditsController {
     @FXML
@@ -30,8 +30,14 @@ public class CreditsController {
 
     @FXML
     private void initialize() {
-        Font.loadFont(Objects.requireNonNull(getClass().getResource("/org/example/btl/fonts/PixelPurl.ttf")).toExternalForm(), 30);
+        MusicManager.playMusic("credits.mp3", true);
 
+        // Load font
+        Font.loadFont(Objects.requireNonNull(getClass()
+                        .getResource("/org/example/btl/fonts/PixelPurl.ttf"))
+                .toExternalForm(), 30);
+
+        // Nội dung credits
         Text creditsText = new Text("""
                GAME: ARKANOID!
                 
@@ -63,7 +69,6 @@ public class CreditsController {
                 
                 
                 
-                
                Course Project:
                Object-Oriented Programming
                Semester: 2025
@@ -92,7 +97,7 @@ public class CreditsController {
         creditsText.setTextAlignment(TextAlignment.CENTER);
         creditsText.setLayoutX(0);
 
-
+        // Dòng cảm ơn cuối
         Text thanksText = new Text("THANK YOU FOR PLAYING!");
         thanksText.setStyle("""
             -fx-font-size: 36px;
@@ -106,6 +111,7 @@ public class CreditsController {
         thanksText.setLayoutY(MAX_HEIGHT / 2.0);
         thanksText.setVisible(false);
 
+        // Hướng dẫn bấm Enter
         Text guideText = new Text("Press ENTER to return to Menu");
         guideText.setStyle("""
             -fx-font-size: 20px;
@@ -116,8 +122,10 @@ public class CreditsController {
         guideText.setTextAlignment(TextAlignment.CENTER);
         guideText.setLayoutX(0);
         guideText.setLayoutY(MAX_HEIGHT - 30);
+
         creditsPane.getChildren().addAll(creditsText, thanksText, guideText);
 
+        // Hiệu ứng chạy chữ
         Platform.runLater(() -> {
             double paneHeight = creditsPane.getHeight();
             double textHeight = creditsText.getBoundsInLocal().getHeight();
@@ -152,6 +160,9 @@ public class CreditsController {
 
     private void returnToMenu() {
         try {
+            // ✅ Dừng nhạc credits khi thoát
+            MusicManager.stopMusic();
+
             Parent menuRoot = FXMLLoader.load(Objects.requireNonNull(
                     getClass().getResource("/org/example/btl/Menu.fxml")));
             Stage stage = (Stage) creditsPane.getScene().getWindow();

@@ -1,21 +1,20 @@
 package org.example.btl.game;
 
-import org.example.btl.game.bricks.MapBrick;
-import org.example.btl.game.Brick;
+import org.example.btl.controllers.GameController;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Objects;
 
-import javafx.scene.image.Image;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import org.example.btl.game.powerups.*;
 import org.example.btl.game.sounds.SoundManager;
 import org.example.btl.lives.LifeManage;
+import org.example.btl.game.Brick;
 
-import static org.example.btl.GameApplication.*;
+import static org.example.btl.Config.*;
 
 public class GameManager {
 
@@ -23,34 +22,55 @@ public class GameManager {
     private Paddle paddle;
     private Ball ball;
     private List<Ball> balls;
-    private MapBrick map;
+    private LevelManager levelManager;
     private LifeManage lifeManage;
     private List<GameObject> objects;
     private List<PowerUp> activePowerUps;
     private List<PowerUp> appliedPowerUps;
     private boolean leftPressed = false;
     private boolean rightPressed = false;
-    private int currentLevel;
-    private boolean gameWon = false;
     private GraphicsContext gc;
+    private GameController gameController;
+    private ScoreManager scoreManager;
 
-    public GameManager(GraphicsContext gc) {
+    public GameManager(GraphicsContext gc, GameController gameController, ScoreManager scoreManager) {
         this.renderer = new Renderer(gc);
         this.gc = gc;
+        this.gameController = gameController;
+        this.scoreManager = scoreManager;
         initGame();
     }
 
+    public Paddle getPaddle() {
+        return this.paddle;
+    }
+
+    public List<Ball> getBalls() {
+        return this.balls;
+    }
+
+    public LevelManager getLevelManager() {
+        return this.levelManager;
+    }
+
+    public List<PowerUp> getActivePowerUps() {
+        return activePowerUps;
+    }
+
+    public ScoreManager getScoreManager() {
+        return this.scoreManager;
+    }
+
     private void initGame() {
         paddle = new Paddle(540, 614, 64, 24, 3);
         ball = new Ball(0, 0, 12, 12, 2, -2, 1);
         balls = new ArrayList<>();
         balls.add(ball);
-        map = new MapBrick();
-        this.currentLevel = 8;
-        loadLevel(currentLevel);
+        levelManager = new LevelManager();
+        levelManager.loadLevel(levelManager.getCurrentLevel());
         activePowerUps = new ArrayList<>();
         appliedPowerUps = new ArrayList<>();
-        lifeManage = new LifeManage(5);
+        lifeManage = new LifeManage(START_LIVES);
     }
 
     public void handleKeyPressed(KeyEvent event) {
@@ -64,112 +84,27 @@ public class GameManager {
                     b.setAttached(false);
                 }
             }
+        } else if (event.getCode() == KeyCode.ESCAPE) {
+            gameController.pauseGame();
         }
     }
 
-    public void handleKeyRealeased(KeyEvent event) {
+    public void handleKeyReleased(KeyEvent event) {
         if (event.getCode() == KeyCode.A) {
             leftPressed = false;
         } else if (event.getCode() == KeyCode.D) {
             rightPressed = false;
         }
     }
-
-    private void nextLevel() {
-        for (Ball currentBall : balls) {
-            currentBall.setAttached(true);
-        }
-        this.currentLevel++;
-        loadLevel(this.currentLevel);
-    }
-
 
     private void checkLevelCompletion() {
-        for (Brick brick : map.getBricks()) {
-            if (brick.getBrickType() != 9) {
-                return;
-            }
-        }
-        if (!map.getBricks().isEmpty()) {
-            nextLevel();
-        } else {
-            nextLevel();
+        if (levelManager.isLevelCleared()) {
+            resetLevelState();
+            levelManager.nextLevel();
+            gameController.updateLevel(levelManager.getCurrentLevel());
         }
     }
 
-    private void resetLevelState(){
-        activePowerUps.clear();
-
-        for (PowerUp p : appliedPowerUps) {
-            p.removeEffect(paddle);
-        }
-        appliedPowerUps.clear();
-
-        paddle = new Paddle(540, 614, 64, 24, 3);
-
-        // Đặt lại bóng về mặc định
-        balls.clear();
-        ball = new Ball(0, 0, 12, 12, 2, -2, 1);
-        ball.setAttached(true);
-        balls.add(ball);
-
-    }
-
-
-    private void loadLevel(int levelNumber) {
-        if (levelNumber == 11) {
-            map.createBossMap(1152, 704);
-            return;
-        }
-
-        int[][] layout = MapBrick.loadMap(levelNumber);
-
-        if (layout != null) {
-            map.createMap(layout, PLAY_AREA_X, PLAY_AREA_Y);
-        } else {
-            this.gameWon = true;
-        }
-    }
-
-    private void initGame() {
-        paddle = new Paddle(540, 614, 64, 24, 3);
-        ball = new Ball(0, 0, 12, 12, 2, -2, 1);
-        balls = new ArrayList<>();
-        balls.add(ball);
-        map = new MapBrick();
-
-
-        //chinh thu cong tesst
-        this.currentLevel = 5;
-
-        loadLevel(currentLevel);
-        activePowerUps = new ArrayList<>();
-        appliedPowerUps = new ArrayList<>();
-        lifeManage = new LifeManage(5);
-        background = new Image(Objects.requireNonNull(getClass().getResource("/org/example/btl/images/background.png")).toExternalForm());
-    }
-
-    public void handleKeyPressed(KeyEvent event) {
-        if (event.getCode() == KeyCode.A) {
-            leftPressed = true;
-        } else if (event.getCode() == KeyCode.D) {
-            rightPressed = true;
-        } else if (event.getCode() == KeyCode.SPACE) {
-            for (Ball b : balls) {
-                if (b.isAttached()) {
-                    b.setAttached(false);
-                }
-            }
-        }
-    }
-
-    public void handleKeyRealeased(KeyEvent event) {
-        if (event.getCode() == KeyCode.A) {
-            leftPressed = false;
-        } else if (event.getCode() == KeyCode.D) {
-            rightPressed = false;
-        }
-    }
 
     public void updatePaddle() {
         if (leftPressed && !rightPressed) {
@@ -187,7 +122,7 @@ public class GameManager {
         while (ballIterator.hasNext()){
             Ball currentball = ballIterator.next();
             if (currentball.isAttached()) {
-                currentball.setX(paddle.getX() + (paddle.getWidth() / 2) - ball.getWidth()/2);
+                currentball.setX(paddle.getX() + (paddle.getWidth() / 2) - currentball.getWidth()/2);
                 currentball.setY(paddle.getY() - 10);
             }
             else {
@@ -205,18 +140,22 @@ public class GameManager {
 
         if (balls.isEmpty()) {
             lose();
-            Ball newBall = new Ball(paddle.getX() + paddle.getWidth() / 2 - 6,
-                    paddle.getY() - 12, 12, 12, 2, -2, 1);
-            newBall.setAttached(true);
-            balls.add(newBall);
+            if (lifeManage.getLives() > 0) {
+                Ball newBall = new Ball(paddle.getX() + paddle.getWidth() / 2 - 6,
+                        paddle.getY() - 12, 12, 12, 2, -2, 1);
+                newBall.setAttached(true);
+                balls.add(newBall);
+            }
         }
     }
 
     public void checkBrickCollisions() {
-        Iterator<Brick> brickIterator = map.getBricks().iterator();
+        Iterator<Brick> brickIterator = levelManager.getMap().getBricks().iterator();
         while (brickIterator.hasNext()) {
             Brick brick = brickIterator.next();
-            if (brick.isDestroyed()) continue;
+            if (brick.isDestroyed()) {
+                continue;
+            }
 
             for (Ball ball : balls) {
                 if (ball.isColliding(brick)) {
@@ -225,16 +164,16 @@ public class GameManager {
                     if (brick.isDestroyed()) {
                         SoundManager.playBrickDestroySound();
 
+                        scoreManager.addScore(100);
                         if (brick.getBrickType() == 20) {
-
-                            // khi gạch boss vỡ
-                            currentLevel = 5;
-                            loadLevel(currentLevel);
+                            //khi brick boss vỡ
+                            levelManager.setGameWon(true);
                             return;
                         }
                     }
                     else {
                         SoundManager.playBrickHitSound();
+                        scoreManager.addScore(50);
                     }
 
                     if (brick.getBrickType() == 2) {
@@ -257,7 +196,15 @@ public class GameManager {
                                 activePowerUps.add(newPowerUp);
                                 break;
                             case 5:
-                                newPowerUp = new GunPowerUp(brick.getX(), brick.getY());
+                                newPowerUp = new GunPowerUp(brick.getX(), brick.getY(), scoreManager);
+                                activePowerUps.add(newPowerUp);
+                                break;
+                            case 6:
+                                newPowerUp = new SlowBallPowerUp(brick.getX(), brick.getY(), balls);
+                                activePowerUps.add(newPowerUp);
+                                break;
+                            case 7:
+                                newPowerUp = new TinyBallPowerUp(brick.getX(), brick.getY(), balls);
                                 activePowerUps.add(newPowerUp);
                                 break;
                         }
@@ -311,15 +258,21 @@ public class GameManager {
             }
             else if (powerUp instanceof GunPowerUp) {
                 GunPowerUp gun = (GunPowerUp) powerUp;
-                gun.updateWhileActive(paddle, map.getBricks(), balls);
+                gun.updateWhileActive(paddle, levelManager.getMap().getBricks(), balls);
                 activePowerUps.addAll(gun.consumePendingDrops());
             }
         }
     }
 
     public void lose() {
-        lifeManage.loseLife(ball);
+        lifeManage.loseLife();
+        // Khi hết mạng, hiện GameOver
+        if (lifeManage.getLives() <= 0) {
+            scoreManager.saveCurrentScoreToBoard();
+            gameController.gameOver();
+        }
     }
+
 
     public void resetLevelState() {
         for (PowerUp powerUp : appliedPowerUps) {
@@ -336,14 +289,9 @@ public class GameManager {
     }
 
     public void renderGame() {
-        if (gameWon) {
-            checkLevelCompletion();
-            resetLevelState();
-        }
-
-        if (currentLevel == 11 && gameWon) {
-            // hien chien thang
-            return;
+        if (levelManager.isGameWon()) {
+            scoreManager.saveCurrentScoreToBoard();
+            gameController.showWinnerScreen();
         }
         objects = new ArrayList<>();
         objects.addAll(lifeManage.getLiveIcons());
@@ -351,7 +299,7 @@ public class GameManager {
         objects.addAll(balls);
         objects.addAll(activePowerUps);
         renderer.clear();
-        renderer.renderMap(map);
+        renderer.renderMap(levelManager.getMap());
         renderer.renderAll(objects);
         checkLevelCompletion();
 

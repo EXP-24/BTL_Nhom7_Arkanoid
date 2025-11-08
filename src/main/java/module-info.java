@@ -15,6 +15,7 @@ module org.example.btl {
     requires annotations;
     requires javafx.media;
 
+
     opens org.example.btl to javafx.fxml;
     exports org.example.btl;
     exports org.example.btl.controllers;

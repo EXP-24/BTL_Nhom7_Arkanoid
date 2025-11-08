@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import static org.example.btl.GameApplication.*;
+import static org.example.btl.Config.*;
 
 public class LifeManage {
 
@@ -32,13 +32,11 @@ public class LifeManage {
         }
     }
 
-    public void loseLife(Ball ball) {
-        if (ball.getY() + ball.getHeight() >= PLAY_AREA_Y + PLAY_AREA_HEIGHT) {
-            if (lives > 0) {
-                lives--;
-                if (!liveIcons.isEmpty()) {
-                    liveIcons.remove(liveIcons.size() - 1);
-                }
+    public void loseLife() {
+        if (lives > 0) {
+            lives--;
+            if (!liveIcons.isEmpty()) {
+                liveIcons.remove(liveIcons.size() - 1);
             }
         }
     }

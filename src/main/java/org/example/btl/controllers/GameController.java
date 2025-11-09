@@ -15,6 +15,8 @@ import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import org.example.btl.game.GameManager;
 import org.example.btl.game.ScoreManager;
+import org.example.btl.game.sounds.MusicManager;
+import org.example.btl.game.sounds.SoundManager;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -50,29 +52,16 @@ public class GameController {
     private ScoreManager scoreManager;
     private List<Integer> scoreBoard;
 
-    private static final String SCORE_FILE = "/org/example/btl/images/texts/score.txt";
-
     @FXML
     public void initialize() {
-
+        MusicManager.playMusic("06. shining eyes (In-game BGM).mp3", true);
         gc = canvas.getGraphicsContext2D();
         scoreManager = new ScoreManager();
         gameManager = new GameManager(gc, this, scoreManager);
 
-        this.scoreBoard = new ArrayList<>();
-
-        Image mouseImage = new Image(Objects.requireNonNull(
-                getClass().getResourceAsStream("/org/example/btl/images/texts/mouse.png")));
-        canvas.setCursor(new ImageCursor(mouseImage));
-        canvas.setFocusTraversable(true);
-        canvas.setOnKeyPressed(event -> handleKeyPressed(event));
-        canvas.setOnKeyReleased(event -> handleKeyReleased(event));
-
-        this.scoreLabels = new Label[]{score1, score2, score3, score4, score5,
-                score6, score7, score8, score9, score10};
-        this.scoreBoard = new ArrayList<>();
-
+        setUpCanvasInput();
         refreshScoreBoard();
+
         gameLoop = new AnimationTimer() {
             @Override
             public void handle(long now) {
@@ -88,11 +77,26 @@ public class GameController {
         gameLoop.start();
     }
 
+    private void setUpCanvasInput() {
+        this.scoreBoard = new ArrayList<>();
+
+        Image mouseImage = new Image(Objects.requireNonNull(
+                getClass().getResourceAsStream("/org/example/btl/images/texts/mouse.png")));
+        canvas.setCursor(new ImageCursor(mouseImage));
+        canvas.setFocusTraversable(true);
+        canvas.setOnKeyPressed(event -> handleKeyPressed(event));
+        canvas.setOnKeyReleased(event -> handleKeyReleased(event));
+
+        this.scoreLabels = new Label[]{score1, score2, score3, score4, score5,
+                score6, score7, score8, score9, score10};
+        this.scoreBoard = new ArrayList<>();
+    }
+
     public void updateLevel(int level) {
         levelLabel.setText(String.valueOf(level));
     }
 
-    public void refreshScoreBoard() {
+    private void refreshScoreBoard() {
         updateScoreLabels();
         displayScoresOnBoard();
     }
@@ -119,6 +123,7 @@ public class GameController {
     }
 
     public void pauseGame() {
+        MusicManager.pauseMusic();
         gameLoop.stop();
 
         primaryStage = (Stage) canvas.getScene().getWindow();
@@ -139,6 +144,7 @@ public class GameController {
     }
 
     public void resumeGame() {
+        MusicManager.resumeMusic();
         if (primaryStage != null && previousScene != null) {
             primaryStage.setScene(previousScene);
         }

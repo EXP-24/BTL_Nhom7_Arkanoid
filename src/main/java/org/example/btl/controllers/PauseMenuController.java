@@ -9,6 +9,7 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
+import org.example.btl.game.sounds.SoundManager;
 
 import java.io.IOException;
 import java.util.Objects;
@@ -79,6 +80,7 @@ public class PauseMenuController {
     }
 
     private void onQuit(){
+        SoundManager.shutdown();
         try{
             Parent gameRoot = FXMLLoader.load(Objects.requireNonNull(
                     getClass().getResource("/org/example/btl/Menu.fxml")));

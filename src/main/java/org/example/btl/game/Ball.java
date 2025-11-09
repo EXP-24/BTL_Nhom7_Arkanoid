@@ -70,7 +70,12 @@ public class Ball extends MovableObject {
         this.attached = attached;
     }
 
-    //Ball va cham voi gioi han man hinh
+    /**
+     * Xử lý bóng nảy lại khi chạm biên màn chơi.
+     * - Nếu chạm mép trái/phải: đảo hướng X
+     * - Nếu chạm mép trên: đảo hướng Y
+     * - Nếu rơi xuống dưới: không nảy (được xử lý trong GameManager)
+     */
     public void bounceOff() {
         if (getX() <= PLAY_AREA_X) {
             setX(PLAY_AREA_X);
@@ -79,9 +84,6 @@ public class Ball extends MovableObject {
             setX(PLAY_AREA_X + PLAY_AREA_WIDTH - getWidth());
             directionX *= -1;
         } else if (getY() + getHeight() >= PLAY_AREA_Y + PLAY_AREA_HEIGHT) {
-            //setAttached(true);
-            //setY(PLAY_AREA_Y + PLAY_AREA_HEIGHT - getHeight());
-            //directionY *= -1;
             return;
         } else if (getY() <= PLAY_AREA_Y) {
             setY(PLAY_AREA_Y);
@@ -90,6 +92,12 @@ public class Ball extends MovableObject {
         updateVelocity();
     }
 
+    /**
+     * Xử lý va chạm giữa bóng và đối tượng khác (Paddle hoặc Brick).
+     * - Nếu va chạm Paddle: luôn nảy lên trên.
+     * - Nếu va chạm Brick:
+     *   + Dựa vào vị trí va chạm (trên/dưới hoặc trái/phải) để đảo hướng phù hợp.
+     */
     public void bounce(@NotNull GameObject object) {
         Rectangle ballBounds = getRec();
         Rectangle objectBounds = object.getRec();
@@ -98,19 +106,22 @@ public class Ball extends MovableObject {
             return;
         }
 
+        // Nếu là Paddle -> bóng bật ngược lên
         if (object instanceof Paddle) {
-            setY(object.getY() - getHeight() - 1);
+            setY(object.getY() - getHeight() - 5);
             directionY = -Math.abs(directionY);
             updateVelocity();
             return;
         }
 
+        // Nếu là Brick -> xác định hướng va chạm để đảo đúng trục
         double ballOldBottom = getOldY() + getHeight();
 
+        // Va từ trên xuống hoặc từ dưới lên
         if (ballOldBottom <= object.getY() || getOldY() >= object.getY() + object.getHeight()) {
             setY(getOldY());
             directionY *= -1;
-        } else {
+        } else { // Va bên trái hoặc phải
             if (getX() < object.getX()) {
                 setX(getOldX() - 5);
             } else {
@@ -121,6 +132,10 @@ public class Ball extends MovableObject {
         updateVelocity();
     }
 
+    /**
+     * Cập nhật vị trí bóng mỗi khung hình.
+     * Lưu lại tọa độ cũ (oldX, oldY) để phục vụ tính toán va chạm chính xác.
+     */
     @Override
     public void update() {
         oldX = getX();

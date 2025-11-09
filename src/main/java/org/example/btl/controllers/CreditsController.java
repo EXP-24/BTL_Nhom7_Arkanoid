@@ -46,9 +46,8 @@ public class CreditsController {
                Developed by: TEAM 7
                
                
-               Leader, Game Logic, Menu & Sound Effects
+               Leader, Game Logic & Game Design
                Pham Duc Cuong 
-               
                
                
                
@@ -57,14 +56,12 @@ public class CreditsController {
                
                
                
-               
                Score & Paddle Power-up System Developer
                Nguyen Tuan Anh
                
                
                
-               
-               Pause Menu & Game Over System Developer
+               Ball Power-up & Game Over System Developer
                Khuong Tuan Anh
                 
                 
@@ -84,7 +81,7 @@ public class CreditsController {
                 
                 
                Special Thanks:
-               Caffeine and Deadline
+               Caffeine and Deadlines
                """);
 
         creditsText.setStyle("""
@@ -160,7 +157,7 @@ public class CreditsController {
 
     private void returnToMenu() {
         try {
-            // ✅ Dừng nhạc credits khi thoát
+            //Dừng nhạc credits khi thoát
             MusicManager.stopMusic();
 
             Parent menuRoot = FXMLLoader.load(Objects.requireNonNull(

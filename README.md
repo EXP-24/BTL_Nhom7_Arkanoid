@@ -14,13 +14,18 @@ Project được chia thành nhiều package và class để dễ cho việc qu�
 
 ## UML
 Dưới đây là sơ đồ UML của project để dễ hình dung mối quan hệ giữa các lớp:
-<img width="1293" height="745" alt="Screenshot 2025-10-23 112020" src="https://github.com/user-attachments/assets/2cf5d6c5-3b1a-46ae-bd7c-0f5131e95985" />
+<img width="2831" height="2504" alt="UML" src="https://github.com/user-attachments/assets/ee56cb34-4609-4f2d-a9f0-b9dd9a603cc2" />
+
+
+
+
 
 ## Các tính năng chính:
 - Điều khiển paddle bằng A (Trái), D (Phải)
 - Bắt đầu game / tiếp tục: SPACE
 - Pause game: ESC
 - Nhiều loại gạch với cơ chế khác nhau (NormalBrick, Strong Brick,...)
+
 - Power-up đa dạng: tăng/giảm tốc độ bóng, thêm bóng phụ,...
 - Có nhạc nền và các hiệu ứng âm thanh
 - Quản lý điểm số, restart game, và nhiều level
@@ -31,7 +36,7 @@ Dưới đây là sơ đồ UML của project để dễ hình dung mối quan h
 
 ## Phân công nhiệm vụ
 - Phạm Đức Cường (Nhóm trưởng): Quản lí paddle, bóng, va chạm, các chức năng của Menu chính,  thiết kế giao diện.
-- Đỗ Trọng An: Quản lí gạch, thiết kế level, boss level, chức năng chuyển map, load map.
+- Đỗ Trọng An: Quản lí gạch, thiết kế level, boss level, chức năng chuyển map, load map, JUnit test.
 - Nguyễn Tuấn Anh: Quản lí các power-up của paddle, chức năng của Score, phần Victory, thiết kế UML.
 - Khương Tuấn Anh: Quản lí các power-up của bóng, Pause menu, phần âm thanh, phần Game Over.
 

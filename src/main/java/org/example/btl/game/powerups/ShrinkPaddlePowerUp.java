@@ -6,7 +6,7 @@ import org.example.btl.game.SkinManager;
 
 public class ShrinkPaddlePowerUp extends PowerUp {
     private static final double SCALE_FACTOR = 1.5;
-    private int skinIndexSelected = SkinManager.getSkinIndex();
+    private final int skinIndexSelected = SkinManager.getSkinIndex();
 
     public ShrinkPaddlePowerUp(double x, double y) {
         super(x, y, "Shrink", 10000);

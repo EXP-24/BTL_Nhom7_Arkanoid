@@ -13,6 +13,21 @@ public class Brick extends GameObject {
         super(x, y, width, height);
         this.brickType = brickType;
         this.powerUpType = powerUpType;
+
+        switch (brickType) {
+            case 1,2,3,4,5:
+                this.healthBrick = 1;
+                break;
+            case 7,8:
+                this.healthBrick = 2;
+                break;
+            case 9:
+                this.healthBrick = 999999;
+                break;
+            default:
+                this.healthBrick = 1;
+                break;
+        }
     }
 
     public void takeDamage() {

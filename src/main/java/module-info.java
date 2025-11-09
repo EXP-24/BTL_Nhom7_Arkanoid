@@ -20,4 +20,5 @@ module org.example.btl {
     exports org.example.btl;
     exports org.example.btl.controllers;
     opens org.example.btl.controllers to javafx.fxml;
+
 }

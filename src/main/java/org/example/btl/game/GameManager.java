@@ -355,4 +355,28 @@ public class GameManager {
             }
         }
     }
+
+    /**
+     * Các hàm get để test
+     */
+    public void setPaddle(Paddle paddle) {
+        this.paddle = paddle;
+    }
+
+    public Ball getBall() {
+        return ball;
+    }
+
+    public Paddle getPaddle() {
+        return paddle;
+    }
+
+    public void setBall(Ball ball) {
+        this.ball = ball;
+    }
+
+    public LevelManager getLevelManager() {
+        return levelManager;
+    }
+
 }

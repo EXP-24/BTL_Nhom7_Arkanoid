@@ -80,7 +80,6 @@ public class PauseMenuController {
     }
 
     private void onQuit(){
-        SoundManager.shutdown();
         try{
             Parent gameRoot = FXMLLoader.load(Objects.requireNonNull(
                     getClass().getResource("/org/example/btl/Menu.fxml")));
@@ -91,6 +90,7 @@ public class PauseMenuController {
             e.printStackTrace();
         }
     }
+
     public void setGameController(GameController controller) {
         this.gameController = controller;
     }

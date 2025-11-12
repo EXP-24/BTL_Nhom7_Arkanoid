@@ -17,6 +17,9 @@ public class Renderer {
     }
 
     public void clear() {
+        if (gc == null) {
+            return;
+        }
         gc.clearRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
     }
 

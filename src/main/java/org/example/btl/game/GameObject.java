@@ -56,8 +56,8 @@ public abstract class GameObject {
         return new Rectangle((int) x, (int) y, (int) width, (int) height);
     }
 
-    public boolean isColliding(GameObject orther) {
-        return getRec().intersects(orther.getRec());
+    public boolean isColliding(GameObject other) {
+        return getRec().intersects(other.getRec());
     }
 
     public Image loadImage(String imagePath) {

@@ -16,7 +16,7 @@ public class Life extends GameObject {
     }
 
     @Override
-    public void update(){
+    public void update() {
     }
 
     @Override

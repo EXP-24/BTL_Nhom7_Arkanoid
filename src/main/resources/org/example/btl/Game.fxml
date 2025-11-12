@@ -12,7 +12,7 @@
             <Image url="@images/background.png" />
         </image>
     </ImageView>
-    <Label fx:id="scoreLabel" layoutX="961.0" layoutY="89.0" style="-fx-text-fill: yellow; -fx-font-size: 24px; -fx-font-weight: bold;" text="Score: 0" />
+    <Label fx:id="scoreLabel" layoutX="952.0" layoutY="89.0" prefHeight="35.0" prefWidth="155.0" style="-fx-text-fill: yellow; -fx-font-size: 24px; -fx-font-weight: bold;" text="Score: 0" />
 
     <Label fx:id="topScoreLabel" alignment="CENTER" layoutX="892.0" layoutY="229.0" prefHeight="84.0" prefWidth="228.0" style="-fx-text-fill: cyan; -fx-font-size: 24px; -fx-font-weight: bold;" text="Top Score: 0" />
     <Label alignment="TOP_CENTER" layoutX="954.0" layoutY="597.0" prefHeight="30.0" prefWidth="110.0" text="Level" textFill="#efd404">

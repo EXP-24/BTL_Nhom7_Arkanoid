@@ -46,8 +46,8 @@ public class GameManager {
      * Paddle, Ball, Level, PowerUp, Mạng sống
      */
     private void initGame() {
-        paddle = new Paddle(540, 614, 64, 24, 3);
-        ball = new Ball(0, 0, 12, 12, 2, -2, 1);
+        paddle = new Paddle(540, 614, 64, 24, PADDLE_SPEED);
+        ball = new Ball(0, 0, 12, 12, 2, -2, BALL_SPEED);
         balls = new ArrayList<>();
         balls.add(ball);
         levelManager = new LevelManager();

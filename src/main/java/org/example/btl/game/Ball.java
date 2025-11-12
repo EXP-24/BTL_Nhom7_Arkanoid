@@ -99,13 +99,6 @@ public class Ball extends MovableObject {
      *   + Dựa vào vị trí va chạm (trên/dưới hoặc trái/phải) để đảo hướng phù hợp.
      */
     public void bounce(@NotNull GameObject object) {
-        Rectangle ballBounds = getRec();
-        Rectangle objectBounds = object.getRec();
-
-        if (!ballBounds.intersects(objectBounds)) {
-            return;
-        }
-
         // Nếu là Paddle -> bóng bật ngược lên
         if (object instanceof Paddle) {
             setY(object.getY() - getHeight() - 5);

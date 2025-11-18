@@ -1,4 +1,4 @@
-# ARKANOID!
+<img width="2832" height="2944" alt="BackUML" src="https://github.com/user-attachments/assets/8be9999a-af78-41ff-8bed-c68dc469cf72" /># ARKANOID!
 Thể loại: Arcade / Brick Breaker
 
 ## Giới thiệu:
@@ -14,8 +14,7 @@ Project được chia thành nhiều package và class để dễ cho việc qu�
 
 ## UML
 Dưới đây là sơ đồ UML của project để dễ hình dung mối quan hệ giữa các lớp:
-<img width="2831" height="2504" alt="UML" src="https://github.com/user-attachments/assets/ee56cb34-4609-4f2d-a9f0-b9dd9a603cc2" />
-
+<img width="2832" height="2944" alt="BackUML" src="https://github.com/user-attachments/assets/1acc9a61-0f0c-4556-95da-176a4adc5897" />
 
 
 
@@ -67,4 +66,8 @@ Dưới đây là sơ đồ UML của project để dễ hình dung mối quan h
         + Quit: Khi ấn nút sẽ quay lại Menu chính.
     + Game Over: Người chơi sẽ thua khi số mạng trở về 0 và sẽ hiện ra màn hình game over, người chơi có thể lựa chọn chơi lại hoặc quay về menu chính
     + Music & Sound: Thêm các loại nhạc nền cho game như nhạc Main Menu, Credits, Gameplay, Game Over, Victory cũng như các loại sound effect cho việc bóng va chạm, ăn power up
-
+##Tỉ lệ đóng góp
+- Phạm Đức Cường: 27%
+- Đỗ Trọng An: 25%
+- Nguyễn Tuấn Anh: 25%
+- Khương Tuấn Anh: 23%

@@ -1,4 +1,4 @@
-<img width="2832" height="2944" alt="BackUML" src="https://github.com/user-attachments/assets/8be9999a-af78-41ff-8bed-c68dc469cf72" /># ARKANOID!
+# ARKANOID!
 Thể loại: Arcade / Brick Breaker
 
 ## Giới thiệu:

@@ -66,7 +66,7 @@ Dưới đây là sơ đồ UML của project để dễ hình dung mối quan h
         + Quit: Khi ấn nút sẽ quay lại Menu chính.
     + Game Over: Người chơi sẽ thua khi số mạng trở về 0 và sẽ hiện ra màn hình game over, người chơi có thể lựa chọn chơi lại hoặc quay về menu chính
     + Music & Sound: Thêm các loại nhạc nền cho game như nhạc Main Menu, Credits, Gameplay, Game Over, Victory cũng như các loại sound effect cho việc bóng va chạm, ăn power up
-##Tỉ lệ đóng góp
+## Tỉ lệ đóng góp
 - Phạm Đức Cường: 27%
 - Đỗ Trọng An: 25%
 - Nguyễn Tuấn Anh: 25%
